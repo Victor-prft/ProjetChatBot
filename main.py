@@ -1,4 +1,4 @@
 from math import *
+from function import *
 
-print("cc")
-
+print(nom())
