@@ -1,3 +1,4 @@
 from math import *
 
-print("coucou")
+print("cc")
+
