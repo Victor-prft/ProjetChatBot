@@ -1,4 +1,4 @@
 from math import *
 from function import *
 
-print(nom())
+print(nom_president())
