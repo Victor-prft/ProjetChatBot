@@ -1,4 +1,5 @@
 from math import *
 from function import *
 
-print(nom_president())
+minuscule("Nomination_Chirac1.txt")
+ponctuation("Nomination_Chirac1.txt")
