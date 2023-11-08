@@ -25,7 +25,7 @@ def nom_president():
 def minuscule(fichier):
     new_fichier = f"./Cleaned/{fichier}"
     old_fichier = f"./Speeches/{fichier}"
-    with open(old_fichier, "r") as old, open(new_fichier,"w") as new:
+    with open(old_fichier, "r") as old, open(new_fichier, "w") as new:
         for ligne in old:
             for caractere in ligne:
                 if 65 <= ord(caractere) <= 90:
@@ -34,25 +34,22 @@ def minuscule(fichier):
 
 
 def ponctuation(f1):
-    tab_a_garder = [ord("é"), ord("à"), ord("è"), ord("ù"), ord("ê"), ord("ç")]
-    print(tab_a_garder)
-    texte = ""
+    tab_a_garder = ["é", "à", "è", "ù", "ê", "ç"]
+    tab_espace = [" ", "-", "'"]
+    texte = u""
     fichier = f"./Cleaned/{f1}"
-    print(tab_a_garder)
     with open(fichier, "r") as fichier_1:
         for ligne in fichier_1:
-            for indice in range(len(ligne)):
-                if not(97 <= ord(ligne[indice]) <= 122):
-                    if ligne[indice] == " " and len(ligne)-1 != indice:
-                        if ligne[indice + 1] != " ":
+            for element in ligne:
+                if (0 <= ord(element) < 97) or (122 < ord(element) <= 127):
+                    if element in tab_espace:
+                        if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
                             texte += " "
-
-                    elif ligne[indice] == "é":
-                        print("passage")
-                        texte += ligne[indice]
                 else:
-                    texte += ligne[indice]
+                    texte += element
             texte += "\n"
         print(texte)
 
-
+    with open(fichier, 'w') as fichier_1:
+        for caractere in texte:
+            fichier_1.write(caractere)
