@@ -56,6 +56,7 @@ def ponctuation(f1):
             fichier_1.write(caractere)
 
 
+
 def est_present(f, mot_rechercher):
     fichier = f"./Cleaned/{f}"
     with open(fichier, "r", encoding="utf-8") as f1:
