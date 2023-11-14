@@ -25,7 +25,7 @@ def nom_president():
 def minuscule(fichier):
     new_fichier = f"./Cleaned/{fichier}"
     old_fichier = f"./Speeches/{fichier}"
-    with open(old_fichier, "r") as old, open(new_fichier, "w") as new:
+    with open(old_fichier, "r", encoding="utf-8") as old, open(new_fichier, "w", encoding="utf-8") as new:
         for ligne in old:
             for caractere in ligne:
                 if 65 <= ord(caractere) <= 90:
@@ -38,7 +38,7 @@ def ponctuation(f1):
     tab_espace = [" ", "-", "'"]
     texte = u""
     fichier = f"./Cleaned/{f1}"
-    with open(fichier, "r") as fichier_1:
+    with open(fichier, "r", encoding="utf-8") as fichier_1:
         for ligne in fichier_1:
             for element in ligne:
                 if (0 <= ord(element) < 97) or (122 < ord(element) <= 127):
@@ -48,8 +48,24 @@ def ponctuation(f1):
                 else:
                     texte += element
             texte += "\n"
-        print(texte)
 
-    with open(fichier, 'w') as fichier_1:
+    with open(fichier, 'w', encoding="utf-8") as fichier_1:
         for caractere in texte:
             fichier_1.write(caractere)
+
+
+def tf(f, mot_rechercher):
+    fichier = f"./Cleaned/{f}"
+    compteur = 0
+    with open(fichier, "r", encoding="utf-8") as f1:
+        for ligne in f1:
+            tab_mot = ligne.split(" ")
+            print(tab_mot)
+            for mot in tab_mot:
+                if mot[-1] == "\n":
+                    mot = mot[:-1]
+                if mot == mot_rechercher:
+                    compteur += 1
+        return compteur
+
+
