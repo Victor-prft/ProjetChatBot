@@ -1,5 +1,5 @@
 import os
-
+print("change")
 
 def prenom_president(nom):
     prenom = {"Sarkozy": "Nicolas", "Chirac": "Jacques", "Macron": "Emmanuel", "Giscard dEstaing": "Valéry",
@@ -15,7 +15,7 @@ def nom_president():
         tab_temp = tab_temp[1].split(".")
         nom = tab_temp[0]
         for indice in range(len(nom))[::-1]:
-            if not (65 <= ord(nom[indice]) <= 90 or 97 <= ord(nom[indice]) <= 122 or ord(nom[indice]) == 32):
+            if not ('A' <= ord(nom[indice]) <= 'Z' or 'a' <= ord(nom[indice]) <= 'z' or ord(nom[indice]) == ' '):
                 nom = nom[:indice] + nom[indice + 1:]
         if nom not in tab_nom:
             tab_nom.append(nom)
@@ -50,7 +50,7 @@ def minuscule(fichier):
     with open(old_fichier, "r", encoding="utf-8") as old, open(new_fichier, "w", encoding="utf-8") as new:
         for ligne in old:
             for caractere in ligne:
-                if 65 <= ord(caractere) <= 90:
+                if  'A'= ord(caractere) <= 'Z':
                     caractere = chr(ord(caractere) + 32)
                 new.write(caractere)
 
