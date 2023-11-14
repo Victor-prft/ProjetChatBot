@@ -60,7 +60,6 @@ def tf(f, mot_rechercher):
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
             tab_mot = ligne.split(" ")
-            print(tab_mot)
             for mot in tab_mot:
                 if mot[-1] == "\n":
                     mot = mot[:-1]
