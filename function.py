@@ -1,5 +1,5 @@
 import os
-
+print("change")
 
 def prenom_president(nom):
     prenom = {"Sarkozy": "Nicolas", "Chirac": "Jacques", "Macron": "Emmanuel", "Giscard dEstaing": "Valéry",
