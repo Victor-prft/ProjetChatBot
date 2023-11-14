@@ -56,9 +56,8 @@ def ponctuation(f1):
             fichier_1.write(caractere)
 
 
-def occurence(f, mot_rechercher):
+def est_present(f, mot_rechercher):
     fichier = f"./Cleaned/{f}"
-    compteur = 0
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
             tab_mot = ligne.split(" ")
@@ -66,8 +65,8 @@ def occurence(f, mot_rechercher):
                 if mot[-1] == "\n":
                     mot = mot[:-1]
                 if mot == mot_rechercher:
-                    compteur += 1
-        return compteur
+                    return True
+        return False
 
 def list_of_files(directory):
     files_names = []
@@ -84,7 +83,7 @@ def idf(repertoire):
         if fichier.endswith(".txt"):
             liste_fichier.append(fichier)
     for i in range (len(liste_fichier)):
-        with open(liste_fichier[i], "r", encoding="utf-8") as f1:
+        with open(repertoire +"./" + liste_fichier[i], "r", encoding="utf-8") as f1:
             for ligne in f1:
                 tab_mot = ligne.split(" ")
                 for mot in tab_mot:
@@ -93,7 +92,9 @@ def idf(repertoire):
                     if mot not in dictionnaire.keys():
                         somme = 0
                         for f in range(i,len(liste_fichier)):
-                            if occurence(liste_fichier[f], mot) != 0:
+                            if est_present(liste_fichier[f], mot) == True:
                                 somme+=1
                         dictionnaire[mot] = math.log(1/somme)
     return dictionnaire
+
+print(idf("./Cleaned"))
