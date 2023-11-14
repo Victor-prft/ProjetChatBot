@@ -1,6 +1,7 @@
 import os
 import math
 
+
 def prenom_president(nom):
     prenom = {"Sarkozy": "Nicolas", "Chirac": "Jacques", "Macron": "Emmanuel", "Giscard dEstaing": "Valéry",
               "Mitterand": "François"}
@@ -15,7 +16,7 @@ def nom_president():
         tab_temp = tab_temp[1].split(".")
         nom = tab_temp[0]
         for indice in range(len(nom))[::-1]:
-            if not (65 <= ord(nom[indice]) <= 90 or 97 <= ord(nom[indice]) <= 122 or ord(nom[indice]) == 32):
+            if not ('A' <= nom[indice] <= 'Z' or 'a' <= nom[indice] <= 'z' or nom[indice] == ' '):
                 nom = nom[:indice] + nom[indice + 1:]
         if nom not in tab_nom:
             tab_nom.append(nom)
@@ -30,21 +31,23 @@ def minuscule(fichier):
     with open(old_fichier, "r", encoding="utf-8") as old, open(new_fichier, "w", encoding="utf-8") as new:
         for ligne in old:
             for caractere in ligne:
-                if 65 <= ord(caractere) <= 90:
+                if 'A' <= caractere <= 'Z':
                     caractere = chr(ord(caractere) + 32)
                 new.write(caractere)
 
 
 def ponctuation(f1):
-    tab_a_garder = ["é", "à", "è", "ù", "ê", "ç"]
     tab_espace = [" ", "-", "'"]
-    texte = u""
+    texte = ""
     fichier = f"./Cleaned/{f1}"
     with open(fichier, "r", encoding="utf-8") as fichier_1:
         for ligne in fichier_1:
             for element in ligne:
-                if (0 <= ord(element) < 97) or (122 < ord(element) <= 127):
+                print(ord(" "))
+                if (0 <= ord(element) < ord('a')) or (ord('z') < ord(element) <= 127):
+
                     if element in tab_espace:
+
                         if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
                             texte += " "
                 else:
@@ -52,10 +55,26 @@ def ponctuation(f1):
             texte += "\n"
 
     with open(fichier, 'w', encoding="utf-8") as fichier_1:
+        print(texte)
         for caractere in texte:
             fichier_1.write(caractere)
 
 
+
+def tf(f):
+    fichier = f"./Cleaned/{f}"
+    dico = {}
+    with open(fichier, "r", encoding="utf-8") as f1:
+        for ligne in f1:
+            tab_mot = ligne.split(" ")
+            for mot in tab_mot:
+                if mot[-1] == "\n":
+                    mot = mot[:-1]
+                if mot in dico.keys():
+                    dico[mot] += 1
+                else:
+                    dico[mot] = 1
+        return dico
 
 def est_present(f, mot_rechercher):
     fichier = f"./Cleaned/{f}"
@@ -69,16 +88,8 @@ def est_present(f, mot_rechercher):
                     return True
         return False
 
-def list_of_files(directory):
-    files_names = []
-    for filename in os.listdir(directory):
-        if filename.endswith(".txt"):
-            files_names.append(filename)
-    return
-
 def idf(repertoire):
     dictionnaire = {}
-    dictionnaire_final = {}
     liste_fichier = []
     for fichier in os.listdir(repertoire):
         if fichier.endswith(".txt"):
@@ -97,7 +108,8 @@ def idf(repertoire):
                                 somme+=1
                         dictionnaire[mot] = math.log(1/somme)
     return dictionnaire
-
+              
+              
 
 def moins_important(repertoire):
     dico = idf(repertoire)
@@ -106,6 +118,4 @@ def moins_important(repertoire):
         if dico[i] == 0:
             liste_mot_moins_important.append(i)
     return liste_mot_moins_important
-
-print(moins_important("./Cleaned"))
 
