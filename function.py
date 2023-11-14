@@ -98,4 +98,14 @@ def idf(repertoire):
                         dictionnaire[mot] = math.log(1/somme)
     return dictionnaire
 
-print(idf("./Cleaned"))
+
+def moins_important(repertoire):
+    dico = idf(repertoire)
+    liste_mot_moins_important = []
+    for i in dico.keys():
+        if dico[i] == 0:
+            liste_mot_moins_important.append(i)
+    return liste_mot_moins_important
+
+print(moins_important("./Cleaned"))
+
