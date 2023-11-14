@@ -1,5 +1,5 @@
 import os
-
+import math
 
 def prenom_president(nom):
     prenom = {"Sarkozy": "Nicolas", "Chirac": "Jacques", "Macron": "Emmanuel", "Giscard dEstaing": "Valéry",
@@ -56,7 +56,7 @@ def ponctuation(f1):
             fichier_1.write(caractere)
 
 
-def tf(f, mot_rechercher):
+def occurence(f, mot_rechercher):
     fichier = f"./Cleaned/{f}"
     compteur = 0
     with open(fichier, "r", encoding="utf-8") as f1:
@@ -78,10 +78,22 @@ def list_of_files(directory):
 
 def idf(repertoire):
     dictionnaire = {}
+    dictionnaire_final = {}
     liste_fichier = []
     for fichier in os.listdir(repertoire):
         if fichier.endswith(".txt"):
             liste_fichier.append(fichier)
-
-
+    for i in range (len(liste_fichier)):
+        with open(liste_fichier[i], "r", encoding="utf-8") as f1:
+            for ligne in f1:
+                tab_mot = ligne.split(" ")
+                for mot in tab_mot:
+                    if mot[-1] == "\n":
+                        mot = mot[:-1]
+                    if mot not in dictionnaire.keys():
+                        somme = 0
+                        for f in range(i,len(liste_fichier)):
+                            if occurence(liste_fichier[f], mot) != 0:
+                                somme+=1
+                        dictionnaire[mot] = math.log(1/somme)
     return dictionnaire
