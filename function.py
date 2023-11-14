@@ -6,6 +6,7 @@ def prenom_president(nom):
               "Mitterand": "François"}
     return prenom[nom]
 
+
 def nom_president():
     tab_nom = []
     tab_fichier = os.listdir("./Speeches")
