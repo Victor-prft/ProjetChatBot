@@ -1,5 +1,5 @@
 import os
-print("change")
+import math
 
 
 def prenom_president(nom):
@@ -23,27 +23,6 @@ def nom_president():
     return tab_nom
 
 
-def list_of_files(directory):
-    files_names = []
-    for filename in os.listdir(directory):
-        if filename.endswith(".txt"):
-            files_names.append(filename)
-    return
-
-
-def idf(repertoire):
-    dictionnaire = {}
-    liste_fichier = []
-    for fichier in os.listdir(repertoire):
-        if fichier.endswith(".txt"):
-            liste_fichier.append(fichier)
-    for fichier in liste_fichier:
-        for mot in fichier:
-            if mot in dictionnaire.keys:
-                dictionnaire.update({mot: dictionnaire[mot] + 1})
-            else:
-                dictionnaire[mot] = 1
-    return dictionnaire
 
 
 def minuscule(fichier):
@@ -81,6 +60,7 @@ def ponctuation(f1):
             fichier_1.write(caractere)
 
 
+
 def tf(f):
     fichier = f"./Cleaned/{f}"
     dico = {}
@@ -96,30 +76,46 @@ def tf(f):
                     dico[mot] = 1
         return dico
 
+def est_present(f, mot_rechercher):
+    fichier = f"./Cleaned/{f}"
+    with open(fichier, "r", encoding="utf-8") as f1:
+        for ligne in f1:
+            tab_mot = ligne.split(" ")
+            for mot in tab_mot:
+                if mot[-1] == "\n":
+                    mot = mot[:-1]
+                if mot == mot_rechercher:
+                    return True
+        return False
 
-
-"""
-def tf(directory):
-    matrice = []
-    files_names = []
-    for fichier in os.listdir(directory):
-        files_names.append(fichier)
-    for fichier in files_names:
-        with open(fichier, 'r', encoding="utf-8") as f:
-            for ligne in f:
+def idf(repertoire):
+    dictionnaire = {}
+    liste_fichier = []
+    for fichier in os.listdir(repertoire):
+        if fichier.endswith(".txt"):
+            liste_fichier.append(fichier)
+    for i in range (len(liste_fichier)):
+        with open(repertoire +"./" + liste_fichier[i], "r", encoding="utf-8") as f1:
+            for ligne in f1:
                 tab_mot = ligne.split(" ")
                 for mot in tab_mot:
                     if mot[-1] == "\n":
                         mot = mot[:-1]
-                    for ind_ligne in range(len(matrice)):
-                        presence = False
-                        if matrice[ind_ligne][0] == "mot":
-                            presence = True
-                    if not presence:
-                        new_ligne = [mot]
-                        for f in files_names:
-                            new_ligne.append(occurence(f, mot))
-                        matrice.append(new_ligne)
-    return matrice
-"""
+                    if mot not in dictionnaire.keys():
+                        somme = 0
+                        for f in range(i,len(liste_fichier)):
+                            if est_present(liste_fichier[f], mot) == True:
+                                somme+=1
+                        dictionnaire[mot] = math.log(1/somme)
+    return dictionnaire
+              
+              
+
+def moins_important(repertoire):
+    dico = idf(repertoire)
+    liste_mot_moins_important = []
+    for i in dico.keys():
+        if dico[i] == 0:
+            liste_mot_moins_important.append(i)
+    return liste_mot_moins_important
 
