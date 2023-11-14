@@ -3,6 +3,5 @@ from function import *
 
 minuscule("Nomination_Chirac1.txt")
 ponctuation("Nomination_Chirac1.txt")
-"""
-print(tf("./Cleaned"))"""
+print(tf("Nomination_Chirac1.txt"))
 

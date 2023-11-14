@@ -81,18 +81,20 @@ def ponctuation(f1):
             fichier_1.write(caractere)
 
 
-def tf(f, mot_rechercher):
+def tf(f):
     fichier = f"./Cleaned/{f}"
-    compteur = 0
+    dico = {}
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
             tab_mot = ligne.split(" ")
             for mot in tab_mot:
                 if mot[-1] == "\n":
                     mot = mot[:-1]
-                if mot == mot_rechercher:
-                    compteur += 1
-        return compteur
+                if mot in dico.keys():
+                    dico[mot] += 1
+                else:
+                    dico[mot] = 1
+        return dico
 
 
 
