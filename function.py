@@ -22,6 +22,28 @@ def nom_president():
     return tab_nom
 
 
+def list_of_files(directory):
+    files_names = []
+    for filename in os.listdir(directory):
+        if filename.endswith(".txt"):
+            files_names.append(filename)
+    return
+
+def idf(repertoire):
+    dictionnaire = {}
+    liste_fichier = []
+    for fichier in os.listdir(repertoire):
+        if fichier.endswith(".txt"):
+            liste_fichier.append(fichier)
+    for fichier in liste_fichier:
+        for mot in fichier:
+            if mot in dictionnaire.keys:
+                dictionnaire.update({mot: dictionnaire[mot] + 1 })
+            else:
+                dictionnaire[mot] = 1
+    return dictionnaire
+
+
 def minuscule(fichier):
     new_fichier = f"./Cleaned/{fichier}"
     old_fichier = f"./Speeches/{fichier}"
@@ -66,5 +88,3 @@ def tf(f, mot_rechercher):
                 if mot == mot_rechercher:
                     compteur += 1
         return compteur
-
-
