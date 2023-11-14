@@ -19,3 +19,13 @@ def nom_president():
                 nom = nom[:indice] + nom[indice + 1:]
         tab_nom.append(nom)
     return tab_nom
+
+
+def idf(repertoire):
+    dictionnaire = {}
+    for fichier in repertoire:
+        for mot in fichier:
+            if mot in dico.keys:
+
+            else:
+                dictionnaire[mot] = 1
