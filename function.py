@@ -20,12 +20,23 @@ def nom_president():
         tab_nom.append(nom)
     return tab_nom
 
+def list_of_files(directory):
+    files_names = []
+    for filename in os.listdir(directory):
+        if filename.endswith(".txt"):
+            files_names.append(filename)
+    return
 
 def idf(repertoire):
     dictionnaire = {}
-    for fichier in repertoire:
+    liste_fichier = []
+    for fichier in os.listdir(repertoire):
+        if fichier.endswith(".txt"):
+            liste_fichier.append(fichier)
+    for fichier in liste_fichier:
         for mot in fichier:
-            if mot in dico.keys:
-
+            if mot in dictionnaire.keys:
+                dictionnaire.update({mot: dictionnaire[mot] + 1 })
             else:
                 dictionnaire[mot] = 1
+    return dictionnaire
