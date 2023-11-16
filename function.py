@@ -119,3 +119,14 @@ def moins_important(repertoire):
             liste_mot_moins_important.append(i)
     return liste_mot_moins_important
 
+
+def transformation_fichier(repertoire):
+    if not os.path.exists("Cleaned"):
+        os.makedirs("Cleaned")
+    for fichier in os.listdir(repertoire):
+        if fichier.endswith(".txt"):
+            minuscule(fichier)
+            ponctuation(fichier)
+
+
+
