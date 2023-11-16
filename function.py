@@ -23,7 +23,12 @@ def nom_president():
     return tab_nom
 
 
-
+def liste_fichier(repertoire):
+    tab_fichier = []
+    for fichier in os.listdir(repertoire):
+        if fichier.endswith(".txt"):
+            tab_fichier.append(fichier)
+    return tab_fichier
 
 def minuscule(fichier):
     new_fichier = f"./Cleaned/{fichier}"
@@ -60,7 +65,6 @@ def ponctuation(f1):
             fichier_1.write(caractere)
 
 
-
 def tf(f):
     fichier = f"./Cleaned/{f}"
     dico = {}
@@ -76,6 +80,7 @@ def tf(f):
                     dico[mot] = 1
         return dico
 
+
 def est_present(f, mot_rechercher):
     fichier = f"./Cleaned/{f}"
     with open(fichier, "r", encoding="utf-8") as f1:
@@ -88,14 +93,12 @@ def est_present(f, mot_rechercher):
                     return True
         return False
 
+
 def idf(repertoire):
     dictionnaire = {}
-    liste_fichier = []
-    for fichier in os.listdir(repertoire):
-        if fichier.endswith(".txt"):
-            liste_fichier.append(fichier)
-    for i in range (len(liste_fichier)):
-        with open(repertoire +"./" + liste_fichier[i], "r", encoding="utf-8") as f1:
+    tab_fichier = liste_fichier(repertoire)
+    for i in range(len(tab_fichier)):
+        with open(repertoire + "./" + tab_fichier[i], "r", encoding="utf-8") as f1:
             for ligne in f1:
                 tab_mot = ligne.split(" ")
                 for mot in tab_mot:
@@ -103,14 +106,13 @@ def idf(repertoire):
                         mot = mot[:-1]
                     if mot not in dictionnaire.keys():
                         somme = 0
-                        for f in range(i,len(liste_fichier)):
-                            if est_present(liste_fichier[f], mot) == True:
-                                somme+=1
+                        for f in range(i, len(tab_fichier)):
+                            if est_present(tab_fichier[f], mot):
+                                somme += 1
                         dictionnaire[mot] = math.log(1/somme)
     return dictionnaire
               
               
-
 def moins_important(repertoire):
     dico = idf(repertoire)
     liste_mot_moins_important = []
@@ -123,10 +125,35 @@ def moins_important(repertoire):
 def transformation_fichier(repertoire):
     if not os.path.exists("Cleaned"):
         os.makedirs("Cleaned")
-    for fichier in os.listdir(repertoire):
+    tab_fichier = liste_fichier(repertoire)
+    for fichier in tab_fichier:
         if fichier.endswith(".txt"):
             minuscule(fichier)
             ponctuation(fichier)
 
 
+def creation_tf_idf():
+    tab_fichier = liste_fichier("./Cleaned")
+    dico_idf = idf("./Cleaned")
+    nb_ligne = len(dico_idf)
+    nb_colonne = len(tab_fichier)
+    matrice = [[0 for _ in range(nb_colonne)] for _ in range(nb_ligne)]
+    cle = []
+    for valeur in dico_idf.keys():
+        cle.append(valeur)
+    for colonne in range(nb_colonne):
+        dico_tf = tf(tab_fichier[colonne])
+        for element in dico_tf.keys():
+            ligne = indice_tab(cle, element)
+            if ligne != -1:
+                matrice[ligne][colonne] = dico_tf[element] * dico_idf[element]
+    return matrice
 
+
+
+
+def indice_tab(tab, element):
+    for indice in range(len(tab)):
+        if tab[indice] == element:
+            return indice
+    return -1
