@@ -107,7 +107,7 @@ def idf(repertoire):
                         for f in range(i, len(tab_fichier)):
                             if est_present(tab_fichier[f], mot):
                                 somme += 1
-                        dictionnaire[mot] = math.log(somme)
+                        dictionnaire[mot] = math.log(len(tab_fichier)/somme)
     return dictionnaire
 
 
@@ -165,11 +165,21 @@ def moins_important(matrice,correspondance_mot):
 
 def plus_élevé(matrice,correspondance_mot):
     liste_plus_important = []
-    max = matrice[0][0]
-    for indice_ligne in matrice:
-        for score in indice_ligne:
-        if i == len(ligne) - 1:
-            liste_moins_important.append(correspondance_mot[indice_ligne])
+    max = -1
+    liste_plus_important.append(max)
+    for indice_ligne in range(len(matrice)):
+        for score in range(len(matrice[indice_ligne])):
+            if matrice[indice_ligne][score] == max:
+                liste_plus_important.append(correspondance_mot[indice_ligne])
+            elif matrice[indice_ligne][score] > max:
+                print(correspondance_mot[indice_ligne])
+                liste_plus_important = []
+                liste_plus_important.append(correspondance_mot[indice_ligne])
+                max = score
+    return liste_plus_important,max
+
+
+
     return liste_plus_important
 
 
