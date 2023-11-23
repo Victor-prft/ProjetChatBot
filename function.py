@@ -3,9 +3,15 @@ import math
 
 
 def prenom_president(nom):
-    prenom = {"Sarkozy": "Nicolas", "Chirac": "Jacques", "Macron": "Emmanuel", "Giscard dEstaing": "Valéry",
-              "Mitterand": "François"}
-    return prenom[nom]
+    fichier = "./Ressource/nom_president.txt"
+    with open(fichier, "r", encoding="utf-8") as f:
+        for ligne in f:
+            tab = ligne.split("/")
+            if tab[0] == nom:
+                if tab[1][-1] == "\n":
+                    return tab[1][:len(tab[1])-1]
+                else:
+                    return tab[1]
 
 
 def nom_president():
@@ -30,6 +36,7 @@ def liste_fichier(repertoire):
             tab_fichier.append(fichier)
     return tab_fichier
 
+
 def minuscule(fichier):
     new_fichier = f"./Cleaned/{fichier}"
     old_fichier = f"./Speeches/{fichier}"
@@ -43,40 +50,43 @@ def minuscule(fichier):
 
 def ponctuation(f1):
     tab_espace = [" ", "-", "'"]
+    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê"]
     texte = ""
     fichier = f"./Cleaned/{f1}"
+    l_actuel = 0
+    l_possible = ["a", "e"]
     with open(fichier, "r", encoding="utf-8") as fichier_1:
         for ligne in fichier_1:
             for element in ligne:
-                if (0 <= ord(element) < ord('a')) or (ord('z') < ord(element) <= 127):
-
+                if 'a' <= element <= 'z' or element in tab_garder:
+                    texte += element
+                else:
                     if element in tab_espace:
-
+                        if element == "'":
+                            if texte[-1] == 'l':
+                                texte = texte + l_possible[l_actuel % 2]
+                                l_actuel += 1
+                            else:
+                                texte = texte + "e"
                         if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
                             texte += " "
-                else:
-                    texte += element
             texte += "\n"
-
     with open(fichier, 'w', encoding="utf-8") as fichier_1:
         for caractere in texte:
             fichier_1.write(caractere)
 
 
-def tf(f):
-    fichier = f"./Cleaned/{f}"
+def tf(texte):
     dico = {}
-    with open(fichier, "r", encoding="utf-8") as f1:
-        for ligne in f1:
-            tab_mot = ligne.split(" ")
-            for mot in tab_mot:
-                if mot[-1] == "\n":
-                    mot = mot[:-1]
-                if mot in dico.keys():
-                    dico[mot] += 1
-                else:
-                    dico[mot] = 1
-        return dico
+    tab_mot = texte.split(" ")
+    for mot in tab_mot:
+        if mot[-1] == "\n":
+            mot = mot[:-1]
+        if mot in dico.keys():
+            dico[mot] += 1
+        else:
+            dico[mot] = 1
+    return dico
 
 
 def est_present(f, mot_rechercher):
@@ -132,19 +142,20 @@ def creation_tf_idf(repertoire):
     for valeur in dico_idf.keys():
         cle.append(valeur)
     for colonne in range(nb_colonne):
-        dico_tf = tf(tab_fichier[colonne])
+        texte = recuperation_texte(tab_fichier[colonne])
+        dico_tf = tf(texte)
         for element in dico_tf.keys():
             ligne = indice_tab(cle, element)
             if ligne != -1:
                 matrice[ligne][colonne] = dico_tf[element] * dico_idf[element]
     return matrice
 
+  
 def correspondance_mot(dico):
     cle = []
     for valeur in dico.keys():
         cle.append(valeur)
     return cle
-
 
 def indice_tab(tab, element):
     for indice in range(len(tab)):
@@ -152,6 +163,7 @@ def indice_tab(tab, element):
             return indice
     return -1
 
+  
 def moins_important(matrice,correspondance_mot):
     liste_moins_important = []
     for indice_ligne in range(len(matrice)):
@@ -178,8 +190,13 @@ def plus_élevé(matrice,correspondance_mot):
     return liste_plus_important
 
 
-
-
+def recuperation_texte(fichier):
+    texte = ""
+    path = f"./Cleaned/{fichier}"
+    with  open(path, "r", encoding="utf-8") as f1:
+        for ligne in f1:
+            texte = texte + ligne
+    return texte
 
 
 
