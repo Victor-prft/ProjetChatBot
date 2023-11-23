@@ -166,7 +166,6 @@ def moins_important(matrice,correspondance_mot):
 def plus_élevé(matrice,correspondance_mot):
     liste_plus_important = []
     max = -1
-    liste_plus_important.append(max)
     for indice_ligne in range(len(matrice)):
         for score in range(len(matrice[indice_ligne])):
             if matrice[indice_ligne][score] == max:
@@ -175,11 +174,7 @@ def plus_élevé(matrice,correspondance_mot):
                 print(correspondance_mot[indice_ligne])
                 liste_plus_important = []
                 liste_plus_important.append(correspondance_mot[indice_ligne])
-                max = score
-    return liste_plus_important,max
-
-
-
+                max = matrice[indice_ligne][score]
     return liste_plus_important
 
 
