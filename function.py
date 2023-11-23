@@ -30,6 +30,7 @@ def liste_fichier(repertoire):
             tab_fichier.append(fichier)
     return tab_fichier
 
+
 def minuscule(fichier):
     new_fichier = f"./Cleaned/{fichier}"
     old_fichier = f"./Speeches/{fichier}"
@@ -43,24 +44,29 @@ def minuscule(fichier):
 
 def ponctuation(f1):
     tab_espace = [" ", "-", "'"]
+    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê"]
     texte = ""
     fichier = f"./Cleaned/{f1}"
+    l_actuel = 0
+    l_possible = ["a", "e"]
     with open(fichier, "r", encoding="utf-8") as fichier_1:
         for ligne in fichier_1:
             for element in ligne:
-                print(ord(" "))
-                if (0 <= ord(element) < ord('a')) or (ord('z') < ord(element) <= 127):
-
+                if 'a' <= element <= 'z' or element in tab_garder:
+                    texte += element
+                else:
                     if element in tab_espace:
-
+                        if element == "'":
+                            if texte[-1] == 'l':
+                                texte = texte + l_possible[l_actuel % 2]
+                                l_actuel += 1
+                            else:
+                                texte = texte + "e"
                         if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
                             texte += " "
-                else:
-                    texte += element
             texte += "\n"
 
     with open(fichier, 'w', encoding="utf-8") as fichier_1:
-        print(texte)
         for caractere in texte:
             fichier_1.write(caractere)
 
@@ -150,10 +156,10 @@ def creation_tf_idf():
     return matrice
 
 
-
-
 def indice_tab(tab, element):
     for indice in range(len(tab)):
         if tab[indice] == element:
             return indice
     return -1
+
+
