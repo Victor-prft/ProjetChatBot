@@ -1,7 +1,6 @@
 import os
 import math
 
-
 def prenom_president(nom):
     fichier = "./Ressource/nom_president.txt"
     with open(fichier, "r", encoding="utf-8") as f:
@@ -27,6 +26,8 @@ def nom_president():
         if nom not in tab_nom:
             tab_nom.append(nom)
     return tab_nom
+
+
 
 
 def liste_fichier(repertoire):
@@ -100,6 +101,17 @@ def est_present(f, mot_rechercher):
                 if mot == mot_rechercher:
                     return True
         return False
+
+
+
+def maxi_dico(dico):
+    maxi = -float('inf')
+    for cle in dico.keys():
+        if maxi <= dico[cle]:
+            cle_max = cle
+            maxi = dico[cle_max]
+    return [cle_max, maxi]
+
 
 
 def idf(repertoire):
@@ -199,6 +211,20 @@ def recuperation_texte(fichier):
     return texte
 
 
+def fichier_discours(repertoire,president):
+    liste_discours = []
+    for discours in liste_fichier(repertoire):
+        if president in discours:
+            liste_discours.append(discours)
+    return liste_discours
 
+def repete_president(repertoire,nom_president):
+    liste_discours = fichier_discours(repertoire,nom_president)
+    texte_total = ""
+    for fichier in liste_discours:
+            texte = recuperation_texte(fichier)
+            texte_total+= texte
+    dico_occurence = tf(texte_total)
+    return maxi_dico(dico_occurence)[0]
 
 
