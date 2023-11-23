@@ -200,3 +200,5 @@ def recuperation_texte(fichier):
 
 
 
+
+
