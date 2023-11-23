@@ -1,3 +1,6 @@
 from function import *
-transformation_fichier("./Cleaned")
-print(prenom_president("Bonaparte"))
+transformation_fichier("./Speeches")
+matrice = creation_tf_idf("./Cleaned")
+dico_idf = idf("./Cleaned")
+liste_cle_dico = correspondance_mot(dico_idf)
+
