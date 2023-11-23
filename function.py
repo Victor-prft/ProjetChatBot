@@ -3,9 +3,15 @@ import math
 
 
 def prenom_president(nom):
-    prenom = {"Sarkozy": "Nicolas", "Chirac": "Jacques", "Macron": "Emmanuel", "Giscard dEstaing": "Valéry",
-              "Mitterand": "François"}
-    return prenom[nom]
+    fichier = "./Ressource/nom_president.txt"
+    with open(fichier, "r", encoding="utf-8") as f:
+        for ligne in f:
+            tab = ligne.split("/")
+            if tab[0] == nom:
+                if tab[1][-1] == "\n":
+                    return tab[1][:len(tab[1])-1]
+                else:
+                    return tab[1]
 
 
 def nom_president():
@@ -161,5 +167,4 @@ def indice_tab(tab, element):
         if tab[indice] == element:
             return indice
     return -1
-
 
