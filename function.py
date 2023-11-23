@@ -77,20 +77,17 @@ def ponctuation(f1):
             fichier_1.write(caractere)
 
 
-def tf(f):
-    fichier = f"./Cleaned/{f}"
+def tf(texte):
     dico = {}
-    with open(fichier, "r", encoding="utf-8") as f1:
-        for ligne in f1:
-            tab_mot = ligne.split(" ")
-            for mot in tab_mot:
-                if mot[-1] == "\n":
-                    mot = mot[:-1]
-                if mot in dico.keys():
-                    dico[mot] += 1
-                else:
-                    dico[mot] = 1
-        return dico
+    tab_mot = texte.split(" ")
+    for mot in tab_mot:
+        if mot[-1] == "\n":
+            mot = mot[:-1]
+        if mot in dico.keys():
+            dico[mot] += 1
+        else:
+            dico[mot] = 1
+    return dico
 
 
 def est_present(f, mot_rechercher):
@@ -154,7 +151,8 @@ def creation_tf_idf():
     for valeur in dico_idf.keys():
         cle.append(valeur)
     for colonne in range(nb_colonne):
-        dico_tf = tf(tab_fichier[colonne])
+        texte = recuperation_texte(tab_fichier[colonne])
+        dico_tf = tf(texte)
         for element in dico_tf.keys():
             ligne = indice_tab(cle, element)
             if ligne != -1:
@@ -167,4 +165,14 @@ def indice_tab(tab, element):
         if tab[indice] == element:
             return indice
     return -1
+
+
+def recuperation_texte(fichier):
+    texte = ""
+    path = f"./Cleaned/{fichier}"
+    with  open(path, "r", encoding="utf-8") as f1:
+        for ligne in f1:
+            texte = texte + ligne
+    return texte
+
 
