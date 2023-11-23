@@ -48,7 +48,6 @@ def ponctuation(f1):
     with open(fichier, "r", encoding="utf-8") as fichier_1:
         for ligne in fichier_1:
             for element in ligne:
-                print(ord(" "))
                 if (0 <= ord(element) < ord('a')) or (ord('z') < ord(element) <= 127):
 
                     if element in tab_espace:
@@ -60,7 +59,6 @@ def ponctuation(f1):
             texte += "\n"
 
     with open(fichier, 'w', encoding="utf-8") as fichier_1:
-        print(texte)
         for caractere in texte:
             fichier_1.write(caractere)
 
@@ -109,17 +107,9 @@ def idf(repertoire):
                         for f in range(i, len(tab_fichier)):
                             if est_present(tab_fichier[f], mot):
                                 somme += 1
-                        dictionnaire[mot] = math.log(1/somme)
+                        dictionnaire[mot] = math.log(somme)
     return dictionnaire
-              
-              
-def moins_important(repertoire):
-    dico = idf(repertoire)
-    liste_mot_moins_important = []
-    for i in dico.keys():
-        if dico[i] == 0:
-            liste_mot_moins_important.append(i)
-    return liste_mot_moins_important
+
 
 
 def transformation_fichier(repertoire):
@@ -132,9 +122,9 @@ def transformation_fichier(repertoire):
             ponctuation(fichier)
 
 
-def creation_tf_idf():
-    tab_fichier = liste_fichier("./Cleaned")
-    dico_idf = idf("./Cleaned")
+def creation_tf_idf(repertoire):
+    tab_fichier = liste_fichier(repertoire)
+    dico_idf = idf(repertoire)
     nb_ligne = len(dico_idf)
     nb_colonne = len(tab_fichier)
     matrice = [[0 for _ in range(nb_colonne)] for _ in range(nb_ligne)]
@@ -149,7 +139,11 @@ def creation_tf_idf():
                 matrice[ligne][colonne] = dico_tf[element] * dico_idf[element]
     return matrice
 
-
+def correspondance_mot(dico):
+    cle = []
+    for valeur in dico.keys():
+        cle.append(valeur)
+    return cle
 
 
 def indice_tab(tab, element):
@@ -157,3 +151,30 @@ def indice_tab(tab, element):
         if tab[indice] == element:
             return indice
     return -1
+
+def moins_important(matrice,correspondance_mot):
+    liste_moins_important = []
+    for indice_ligne in range(len(matrice)):
+        i = 0
+        ligne = matrice[indice_ligne]
+        while ligne[i] == 0 and i<len(ligne)-1:
+            i+=1
+        if i == len(ligne)-1:
+            liste_moins_important.append(correspondance_mot[indice_ligne])
+    return liste_moins_important
+
+def plus_élevé(matrice,correspondance_mot):
+    liste_plus_important = []
+    max = matrice[0][0]
+    for indice_ligne in matrice:
+        for score in indice_ligne:
+        if i == len(ligne) - 1:
+            liste_moins_important.append(correspondance_mot[indice_ligne])
+    return liste_plus_important
+
+
+
+
+
+
+
