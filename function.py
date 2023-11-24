@@ -83,9 +83,15 @@ def tf(texte):
 
 
 def est_present(f, mot_rechercher):
+    """Cette fonction nous indique si un mot est présent ou non dans un fichier.
+    Entrée : f est le fichier où l'on veut recherche le mot,
+             mot_rechercher est le mot qui est recherché dans le fichier.
+             f : .txt , mot_rechercher : str
+    Sortie : True si le mot_rechercher est dans le fichier f et False si le mot_rechercher n'est pas dans le fichier """
     fichier = f"./Cleaned/{f}"
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
+            # création d'un tableau à partir de la séparation d'un texte où chaque valeur est un mot
             tab_mot = ligne.split(" ")
             for mot in tab_mot:
                 if mot[-1] == "\n":
