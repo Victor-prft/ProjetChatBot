@@ -120,6 +120,12 @@ def maxi_dico(dico):
 
 
 def idf(repertoire):
+    """Cette fonction renvoie un dictoinnaire avec comme clé chaque mot du texte et en valeur sont idf
+            Entrée : le repertoire qu'on veut analyser pour trouver les idf
+                     repertoire : repertoire comtenant des fichiers de type .txt
+            Sortie : la fonction ressort un dictoinnaire :
+                     dictoinnaire.keys() : mot du texte sous type str
+                     dictoinnaaire.values() : float """
     dictionnaire = {}
     tab_fichier = liste_fichier(repertoire)
     for i in range(len(tab_fichier)):
@@ -168,6 +174,11 @@ def creation_tf_idf(repertoire):
 
   
 def correspondance_mot(dico):
+    """ Cette fonction sert à renvoyer toutes les clés d'un dictoinnaire sous forme de liste
+        Entrée : un dictoinnaire
+                dico : dict
+        Sortie : une liste comportant toutes les clés du dictoinnaire
+                cle : list"""
     cle = []
     for valeur in dico.keys():
         cle.append(valeur)
