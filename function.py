@@ -45,7 +45,7 @@ def minuscule(fichier):
 
 def ponctuation(f1):
     tab_espace = [" ", "-", "'"]
-    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê"]
+    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê", "ç"]
     texte = ""
     fichier = f"./Cleaned/{f1}"
     l_actuel = 0
@@ -64,7 +64,7 @@ def ponctuation(f1):
                             else:
                                 texte = texte + "e"
                         if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
-                           texte += " "
+                            texte += " "
             texte += "\n"
     with open(fichier, 'w', encoding="utf-8") as fichier_1:
         for caractere in texte:
@@ -246,19 +246,36 @@ def a_parler(repertoire, mot):
                 dico_parler[auteur] = dico_tf[mot]
             else:
                 dico_parler[auteur] += dico_tf[mot]
-        for cle in dico_parler.keys():
-            tab_parler.append(cle)
-            if dico_parler[cle] > maximum:
-                maximum = dico_parler[cle]
-                a_le_plus_parler = [cle]
-            elif dico_parler[cle] == maximum:
-                a_le_plus_parler.append(cle)
+    for cle in dico_parler.keys():
+        tab_parler.append(cle)
+        if dico_parler[cle] > maximum:
+            maximum = dico_parler[cle]
+            a_le_plus_parler = [cle]
+        elif dico_parler[cle] == maximum:
+            a_le_plus_parler.append(cle)
     return a_le_plus_parler, tab_parler
 
-"""
+
+def premiere_occurence(fichier, mot_recherche):
+    texte = recuperation_texte(fichier)
+    tab_texte = texte.split(" ")
+    for indice_mot in range(len(tab_texte)):
+        if tab_texte[indice_mot] == mot_recherche:
+            return indice_mot
+    return -1
+
+
 def premier_a_parler(repertoire, mot):
     tab_fichier = liste_fichier(repertoire)
     premier = ''
-    indice_premier = -1
+    indice_premier = float("inf")
     for fichier in tab_fichier:
-        """
+        if est_present(fichier, mot):
+            emplacement = premiere_occurence(fichier, mot)
+            if emplacement < indice_premier:
+                indice_premier = emplacement
+                premier = qui_a_ecrit(fichier)
+    if premier == '':
+        return "Personne n'a dit ce mot"
+    else:
+        return premier
