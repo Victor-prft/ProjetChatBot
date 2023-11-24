@@ -1,6 +1,7 @@
 import os
 import math
 
+
 def prenom_president(nom):
     fichier = "./Ressource/nom_president.txt"
     with open(fichier, "r", encoding="utf-8") as f:
@@ -21,8 +22,6 @@ def nom_president():
         if nom not in tab_nom:
             tab_nom.append(nom)
     return tab_nom
-
-
 
 
 def liste_fichier(repertoire):
@@ -65,7 +64,7 @@ def ponctuation(f1):
                             else:
                                 texte = texte + "e"
                         if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
-                            texte += " "
+                           texte += " "
             texte += "\n"
     with open(fichier, 'w', encoding="utf-8") as fichier_1:
         for caractere in texte:
@@ -76,8 +75,6 @@ def tf(texte):
     dico = {}
     tab_mot = texte.split(" ")
     for mot in tab_mot:
-        if mot[-1] == "\n":
-            mot = mot[:-1]
         if mot in dico.keys():
             dico[mot] += 1
         else:
@@ -98,15 +95,14 @@ def est_present(f, mot_rechercher):
         return False
 
 
-
 def maxi_dico(dico):
     maxi = -float('inf')
+    cle_max = ''
     for cle in dico.keys():
         if maxi <= dico[cle]:
             cle_max = cle
             maxi = dico[cle_max]
     return [cle_max, maxi]
-
 
 
 def idf(repertoire):
@@ -201,25 +197,29 @@ def recuperation_texte(fichier):
     path = f"./Cleaned/{fichier}"
     with open(path, "r", encoding="utf-8") as f1:
         for ligne in f1:
+            if ligne[-1] == "\n":
+                ligne = ligne[:len(ligne)-1] + " "
             texte = texte + ligne
     return texte
 
 
-def fichier_discours(repertoire,president):
+def fichier_discours(repertoire, president):
     liste_discours = []
     for discours in liste_fichier(repertoire):
         if president in discours:
             liste_discours.append(discours)
     return liste_discours
 
-def repete_president(repertoire,nom_president):
-    liste_discours = fichier_discours(repertoire,nom_president)
+
+def repete_president(repertoire, president):
+    liste_discours = fichier_discours(repertoire, president)
     texte_total = ""
     for fichier in liste_discours:
-            texte = recuperation_texte(fichier)
-            texte_total+= texte
+        texte = recuperation_texte(fichier)
+        texte_total += texte
     dico_occurence = tf(texte_total)
     return maxi_dico(dico_occurence)[0]
+
 
 def qui_a_ecrit(fichier):
     tab_temp = fichier.split("_")
@@ -229,7 +229,6 @@ def qui_a_ecrit(fichier):
         if not ('A' <= nom[indice] <= 'Z' or 'a' <= nom[indice] <= 'z' or nom[indice] == ' '):
             nom = nom[:indice] + nom[indice + 1:]
     return nom
-
 
 
 def a_parler(repertoire, mot):
@@ -255,3 +254,11 @@ def a_parler(repertoire, mot):
             elif dico_parler[cle] == maximum:
                 a_le_plus_parler.append(cle)
     return a_le_plus_parler, tab_parler
+
+"""
+def premier_a_parler(repertoire, mot):
+    tab_fichier = liste_fichier(repertoire)
+    premier = ''
+    indice_premier = -1
+    for fichier in tab_fichier:
+        """

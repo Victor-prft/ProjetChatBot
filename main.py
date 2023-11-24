@@ -3,8 +3,5 @@ transformation_fichier("./Speeches")
 matrice = creation_tf_idf("./Cleaned")
 dico_idf = idf("./Cleaned")
 liste_cle_dico = correspondance_mot(dico_idf)
-
-print(repete_president("./Cleaned", "Chirac"))
-
-print(a_parler("./Cleaned", "nation"))
-
+texte = recuperation_texte("Nomination_Chirac1.txt")
+print(texte)
