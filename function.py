@@ -18,12 +18,7 @@ def nom_president():
     tab_nom = []
     tab_fichier = os.listdir("./Speeches")
     for element in tab_fichier:
-        tab_temp = element.split("_")
-        tab_temp = tab_temp[1].split(".")
-        nom = tab_temp[0]
-        for indice in range(len(nom))[::-1]:
-            if not ('A' <= nom[indice] <= 'Z' or 'a' <= nom[indice] <= 'z' or nom[indice] == ' '):
-                nom = nom[:indice] + nom[indice + 1:]
+        nom = qui_a_ecrit(element)
         if nom not in tab_nom:
             tab_nom.append(nom)
     return tab_nom
@@ -121,7 +116,6 @@ def idf(repertoire):
     return dictionnaire
 
 
-
 def transformation_fichier(repertoire):
     if not os.path.exists("Cleaned"):
         os.makedirs("Cleaned")
@@ -137,7 +131,7 @@ def creation_tf_idf(repertoire):
     dico_idf = idf(repertoire)
     nb_ligne = len(dico_idf)
     nb_colonne = len(tab_fichier)
-    matrice = [[0 for _ in range(nb_colonne)] for _ in range(nb_ligne)]
+    matrice = [[0.0 for _ in range(nb_colonne)] for _ in range(nb_ligne)]
     cle = []
     for valeur in dico_idf.keys():
         cle.append(valeur)
@@ -157,6 +151,7 @@ def correspondance_mot(dico):
         cle.append(valeur)
     return cle
 
+
 def indice_tab(tab, element):
     for indice in range(len(tab)):
         if tab[indice] == element:
@@ -164,39 +159,70 @@ def indice_tab(tab, element):
     return -1
 
   
-def moins_important(matrice,correspondance_mot):
+def moins_important(matrice, correspondance_ligne):
     liste_moins_important = []
     for indice_ligne in range(len(matrice)):
         i = 0
         ligne = matrice[indice_ligne]
-        while ligne[i] == 0 and i<len(ligne)-1:
-            i+=1
+        while ligne[i] == 0 and i < len(ligne)-1:
+            i += 1
         if i == len(ligne)-1:
-            liste_moins_important.append(correspondance_mot[indice_ligne])
+            liste_moins_important.append(correspondance_ligne[indice_ligne])
     return liste_moins_important
 
-def plus_élevé(matrice,correspondance_mot):
+
+def plus_eleve(matrice, correspondance_ligne):
     liste_plus_important = []
-    max = -1
+    maximum = -float('inf')
     for indice_ligne in range(len(matrice)):
         for score in range(len(matrice[indice_ligne])):
-            if matrice[indice_ligne][score] == max:
-                liste_plus_important.append(correspondance_mot[indice_ligne])
-            elif matrice[indice_ligne][score] > max:
-                print(correspondance_mot[indice_ligne])
-                liste_plus_important = []
-                liste_plus_important.append(correspondance_mot[indice_ligne])
-                max = matrice[indice_ligne][score]
+            if matrice[indice_ligne][score] == maximum:
+                liste_plus_important.append(correspondance_ligne[indice_ligne])
+            elif matrice[indice_ligne][score] > maximum:
+                liste_plus_important = [correspondance_ligne[indice_ligne]]
+                maximum = matrice[indice_ligne][score]
     return liste_plus_important
 
 
 def recuperation_texte(fichier):
     texte = ""
     path = f"./Cleaned/{fichier}"
-    with  open(path, "r", encoding="utf-8") as f1:
+    with open(path, "r", encoding="utf-8") as f1:
         for ligne in f1:
             texte = texte + ligne
     return texte
 
 
+def qui_a_ecrit(fichier):
+    tab_temp = fichier.split("_")
+    tab_temp = tab_temp[1].split(".")
+    nom = tab_temp[0]
+    for indice in range(len(nom))[::-1]:
+        if not ('A' <= nom[indice] <= 'Z' or 'a' <= nom[indice] <= 'z' or nom[indice] == ' '):
+            nom = nom[:indice] + nom[indice + 1:]
+    return nom
 
+
+def a_parler(repertoire, mot):
+    dico_parler = {}
+    tab_fichier = liste_fichier(repertoire)
+    tab_parler = []
+    maximum = 0
+    a_le_plus_parler = []
+    for fichier in tab_fichier:
+        texte = recuperation_texte(fichier)
+        dico_tf = tf(texte)
+        if mot in dico_tf.keys():
+            auteur = qui_a_ecrit(fichier)
+            if auteur not in dico_parler.keys():
+                dico_parler[auteur] = dico_tf[mot]
+            else:
+                dico_parler[auteur] += dico_tf[mot]
+        for cle in dico_parler.keys():
+            tab_parler.append(cle)
+            if dico_parler[cle] > maximum:
+                maximum = dico_parler[cle]
+                a_le_plus_parler = [cle]
+            elif dico_parler[cle] == maximum:
+                a_le_plus_parler.append(cle)
+    return a_le_plus_parler, tab_parler
