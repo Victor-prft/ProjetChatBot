@@ -253,7 +253,40 @@ def a_parler(repertoire, mot):
             a_le_plus_parler = [cle]
         elif dico_parler[cle] == maximum:
             a_le_plus_parler.append(cle)
-    return a_le_plus_parler, tab_parler
+    return [a_le_plus_parler, tab_parler]
+
+
+def plus_petit_dico(liste):
+    mini = float('inf')
+    dico_mini = {}
+    for dico in liste:
+        if len(dico) < mini:
+            mini = len(dico)
+            dico_mini = dico
+    return dico_mini
+
+
+def mot_evoque_par_tous(repertoire, liste_moins_importante):
+    liste_president = nom_president()
+    liste_dico = []
+    mot_finaux = []
+    cle_petit_dico = []
+    for nom in liste_president:
+        liste_discours = fichier_discours(repertoire, nom)
+        texte_total = ""
+        for fichier in liste_discours:
+            texte = recuperation_texte(fichier)
+            texte_total += texte
+        dico_president = tf(texte_total)
+        liste_dico.append(dico_president)
+    petit_dico = plus_petit_dico(liste_dico)
+    for element in petit_dico.keys():
+        if element not in liste_moins_importante and element != '':
+            cle_petit_dico.append(element)
+    for cle in cle_petit_dico:
+        if len(a_parler(repertoire, cle)[1]) == len(liste_president):
+            mot_finaux.append(cle)
+    return mot_finaux
 
 
 def premiere_occurence(fichier, mot_recherche):
