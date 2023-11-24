@@ -1,6 +1,7 @@
 import os
 import math
 
+
 def prenom_president(nom):
     fichier = "./Ressource/nom_president.txt"
     with open(fichier, "r", encoding="utf-8") as f:
@@ -21,8 +22,6 @@ def nom_president():
         if nom not in tab_nom:
             tab_nom.append(nom)
     return tab_nom
-
-
 
 
 def liste_fichier(repertoire):
@@ -76,8 +75,6 @@ def tf(texte):
     dico = {}
     tab_mot = texte.split(" ")
     for mot in tab_mot:
-        if mot[-1] == "\n":
-            mot = mot[:-1]
         if mot in dico.keys():
             dico[mot] += 1
         else:
@@ -98,15 +95,14 @@ def est_present(f, mot_rechercher):
         return False
 
 
-
 def maxi_dico(dico):
     maxi = -float('inf')
+    cle_max = ''
     for cle in dico.keys():
         if maxi <= dico[cle]:
             cle_max = cle
             maxi = dico[cle_max]
     return [cle_max, maxi]
-
 
 
 def idf(repertoire):
@@ -201,25 +197,29 @@ def recuperation_texte(fichier):
     path = f"./Cleaned/{fichier}"
     with open(path, "r", encoding="utf-8") as f1:
         for ligne in f1:
+            if ligne[-1] == "\n":
+                ligne = ligne[:len(ligne)-1] + " "
             texte = texte + ligne
     return texte
 
 
-def fichier_discours(repertoire,president):
+def fichier_discours(repertoire, president):
     liste_discours = []
     for discours in liste_fichier(repertoire):
         if president in discours:
             liste_discours.append(discours)
     return liste_discours
 
-def repete_president(repertoire,nom_president):
-    liste_discours = fichier_discours(repertoire,nom_president)
+
+def repete_president(repertoire, president):
+    liste_discours = fichier_discours(repertoire, president)
     texte_total = ""
     for fichier in liste_discours:
-            texte = recuperation_texte(fichier)
-            texte_total+= texte
+        texte = recuperation_texte(fichier)
+        texte_total += texte
     dico_occurence = tf(texte_total)
     return maxi_dico(dico_occurence)[0]
+
 
 def qui_a_ecrit(fichier):
     tab_temp = fichier.split("_")
@@ -229,7 +229,6 @@ def qui_a_ecrit(fichier):
         if not ('A' <= nom[indice] <= 'Z' or 'a' <= nom[indice] <= 'z' or nom[indice] == ' '):
             nom = nom[:indice] + nom[indice + 1:]
     return nom
-
 
 
 def a_parler(repertoire, mot):
@@ -247,11 +246,44 @@ def a_parler(repertoire, mot):
                 dico_parler[auteur] = dico_tf[mot]
             else:
                 dico_parler[auteur] += dico_tf[mot]
-        for cle in dico_parler.keys():
-            tab_parler.append(cle)
-            if dico_parler[cle] > maximum:
-                maximum = dico_parler[cle]
-                a_le_plus_parler = [cle]
-            elif dico_parler[cle] == maximum:
-                a_le_plus_parler.append(cle)
-    return a_le_plus_parler, tab_parler
+    for cle in dico_parler.keys():
+        tab_parler.append(cle)
+        if dico_parler[cle] > maximum:
+            maximum = dico_parler[cle]
+            a_le_plus_parler = [cle]
+        elif dico_parler[cle] == maximum:
+            a_le_plus_parler.append(cle)
+    return [a_le_plus_parler, tab_parler]
+
+
+def plus_petit_dico(liste):
+    mini = float('inf')
+    dico_mini = {}
+    for dico in liste:
+        if len(dico) < mini:
+            mini = len(dico)
+            dico_mini = dico
+    return dico_mini
+
+
+def mot_evoque_par_tous(repertoire, liste_moins_importante):
+    liste_president = nom_president()
+    liste_dico = []
+    mot_finaux = []
+    cle_petit_dico = []
+    for nom in liste_president:
+        liste_discours = fichier_discours(repertoire, nom)
+        texte_total = ""
+        for fichier in liste_discours:
+            texte = recuperation_texte(fichier)
+            texte_total += texte
+        dico_president = tf(texte_total)
+        liste_dico.append(dico_president)
+    petit_dico = plus_petit_dico(liste_dico)
+    for element in petit_dico.keys():
+        if element not in liste_moins_importante and element != '':
+            cle_petit_dico.append(element)
+    for cle in cle_petit_dico:
+        if len(a_parler(repertoire, cle)[1]) == len(liste_president):
+            mot_finaux.append(cle)
+    return mot_finaux
