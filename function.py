@@ -276,6 +276,6 @@ def premier_a_parler(repertoire, mot):
                 indice_premier = emplacement
                 premier = qui_a_ecrit(fichier)
     if premier == '':
-        return "Personne n'a dit ce mot"
+        return "Ce mot n'est présent dans aucun texte"
     else:
         return premier
