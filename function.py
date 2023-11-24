@@ -45,7 +45,7 @@ def minuscule(fichier):
 
 def ponctuation(f1):
     tab_espace = [" ", "-", "'"]
-    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê"]
+    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê", "ç"]
     texte = ""
     fichier = f"./Cleaned/{f1}"
     l_actuel = 0
@@ -287,3 +287,28 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
         if len(a_parler(repertoire, cle)[1]) == len(liste_president):
             mot_finaux.append(cle)
     return mot_finaux
+
+
+def premiere_occurence(fichier, mot_recherche):
+    texte = recuperation_texte(fichier)
+    tab_texte = texte.split(" ")
+    for indice_mot in range(len(tab_texte)):
+        if tab_texte[indice_mot] == mot_recherche:
+            return indice_mot
+    return -1
+
+
+def premier_a_parler(repertoire, mot):
+    tab_fichier = liste_fichier(repertoire)
+    premier = ''
+    indice_premier = float("inf")
+    for fichier in tab_fichier:
+        if est_present(fichier, mot):
+            emplacement = premiere_occurence(fichier, mot)
+            if emplacement < indice_premier:
+                indice_premier = emplacement
+                premier = qui_a_ecrit(fichier)
+    if premier == '':
+        return "Ce mot n'est présent dans aucun texte"
+    else:
+        return premier
