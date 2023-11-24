@@ -102,6 +102,14 @@ def est_present(f, mot_rechercher):
 
 
 def maxi_dico(dico):
+    """Cette fonction sert a donner la plus grande valeur et la clé d'un dictionnaire
+        Entrée : dico est le dictionnaire où l'on veut savoir le maximum
+                 dico : dict
+        Sortie : une liste de deux valeurs :
+                 cle_max est le cle du dictionnaire ayant la plus grande valeur du dictionnaire
+                 maxi est la valeur la plus grande dans le dictionnaire
+                 cle_max : str
+                 maxi : float"""
     maxi = -float('inf')
     cle_max = ''
     for cle in dico.keys():
