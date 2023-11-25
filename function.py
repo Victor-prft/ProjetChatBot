@@ -193,6 +193,13 @@ def indice_tab(tab, element):
 
   
 def moins_important(matrice, correspondance_ligne):
+    """ Cette fonction sert a trouver le ou les mots moins importants de la matrice. C'est mot sont dient moins
+        important si la valeur dans le tableau est égal à 0
+        Entrée : Matrice qui est une liste de liste comportant la note tf-idf. Correspondance_ligne est la liste de mots
+                matrice : list
+                correspondance_ligne : list
+        Sortie : Cette fonction ressort une liste des mots les moins importants de la matrice (tf-idf = 0).
+                liste_moins_important : list"""
     liste_moins_important = []
     for indice_ligne in range(len(matrice)):
         i = 0
