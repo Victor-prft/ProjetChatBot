@@ -212,6 +212,13 @@ def moins_important(matrice, correspondance_ligne):
 
 
 def plus_eleve(matrice, correspondance_ligne):
+    """ Cette fonction sert a trouver le ou les mots plus importants de la matrice. C'est mot sont dient plus
+            important si la valeur dans le tableau est la plus haute de la matrice
+            Entrée : Matrice qui est une liste de liste comportant la note tf-idf. Correspondance_ligne est la liste de mots
+                    matrice : list
+                    correspondance_ligne : list
+            Sortie : Cette fonction ressort une liste des mots les plus importants de la matrice.
+                    liste_plus_important : list"""
     liste_plus_important = []
     maximum = -float('inf')
     for indice_ligne in range(len(matrice)):
