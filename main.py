@@ -4,7 +4,7 @@ repertoire_propre = "./Cleaned"
 repertoire_non_traiter = "./Speeches"
 demande = """ Veuillez choisir une option:
 -1: Afficher les mots les moins important
--2: Afficher les mots avec le plus grand score tf-idf
+-2: Afficher le mot avec le plus grand score tf-idf
 -3: Afficher le/les mot(s) les plus utilisé par un président
 -4: Afficher le/les président(s) qui a/ont le plus dit un mot
 -5: Afficher tout les présidents qui ont dit un mot
@@ -21,24 +21,30 @@ correspondance_ligne = correspondance_mot(dico_idf)
 
 
 while running:
+    print()
     choix = input(demande)
     if choix == "1":
         print(moins_important(matrice, correspondance_ligne))
+        print()
         running = demande_continuer()
     elif choix == "2":
         print(plus_eleve(matrice, correspondance_ligne))
+        print()
         running = demande_continuer()
     elif choix == "3":
         president = input("Veuillez rentrer le nom d'un président\n")
         print(repete_president(repertoire_propre, president))
+        print()
         running = demande_continuer()
     elif choix == "4" or choix == "5":
         mot_recherche = input("Veuillez choisir un mot\n")
         le_plus, liste_president = a_parler(repertoire_propre, mot_recherche)
         if choix == "4":
             print(le_plus)
+            print()
         else:
             print(liste_president)
+            print()
         running = demande_continuer()
     elif choix == "6":
         nombre_termes = int(input("Combien de termes voulez vous comparer\n"))
@@ -46,11 +52,13 @@ while running:
             nombre_termes = int(input("Combien de termes voulez vous comparer\n"))
         terme = []
         for _ in range(nombre_termes):
-            terme.append(input("Veuillez entrer un terme"))
+            terme.append(input("Veuillez entrer un terme\n"))
         print(premier_dans_une_liste(terme, repertoire_propre))
+        print()
         running = demande_continuer()
     elif choix == "7":
         print(mot_evoque_par_tous(repertoire_propre, moins_important(matrice, correspondance_ligne)))
+        print()
         running = demande_continuer()
     elif choix == "8":
         print("Merci d'avoir utilisé notre programme")
