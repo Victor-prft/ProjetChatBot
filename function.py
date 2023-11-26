@@ -4,11 +4,11 @@ import math
 
 def prenom_president(nom: str) -> str:
     """Cette fonction renvoie le prénom d'un président en fonction du nom mis en argument
-    Entré: nom: str: nom du président pour lequelle on veut le prénom
+    Entrée: nom: str: nom du président pour lequelle on veut le prénom
     Sortie: un str contenant le prénom du président concerné"""
-    #Chemin vers un fichier contenant le nom de tous les présidents associée à leur prénom
+    # Chemin vers un fichier contenant le nom de tous les présidents associée à leur prénom
     fichier = "./Ressource/nom_president.txt"
-    #ouverture du fichier en mode lecture
+    # ouverture du fichier en mode lecture
     with open(fichier, "r", encoding="utf-8") as f:
         for ligne in f:
             # Les nom et prénom des présidents sont stocké sous la forme nom/prénom on crée donc un tableau grâce à la
@@ -26,8 +26,9 @@ def prenom_president(nom: str) -> str:
 def nom_president(repertoire: str) -> list:
     """Fonction qui prend en argument un repertoire et qui va creer une liste contenant tous les noms des présidents
     en les récupérants à partir des noms des fichiers
-    Entré: repertoire: str: chemin vers le dossier contenant les textes
-    Sortie: tab: tableau de str: Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le dossier
+    Entrée: repertoire: str: chemin vers le dossier contenant les textes
+    Sortie: tab: tableau de str: Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le
+                 dossier
     """
     tab_nom = []
     # On récupére dans une liste le nom de tout les fichiers contenu dans le répertoire
@@ -45,7 +46,7 @@ def nom_president(repertoire: str) -> list:
 def liste_fichier(repertoire):
     """Fonction renvoyant à partir d'un répertoire donné un tableau contenant le nom de chacun des fichiers en .txt
     qu'il contient
-    Entré: repertoire: str: chemin du dossier dont on veut extraire les fichiers
+    Entrée: repertoire: str: chemin du dossier dont on veut extraire les fichiers
     Sortie: tableau de str: tableau contenant le nom de tous les fichiers txt présent dans le repertoire"""
     tab_fichier = []
     # On parcourt les fichiers
@@ -59,7 +60,7 @@ def liste_fichier(repertoire):
 def minuscule(fichier):
     """Fonction prenant en argument un fichier et va réecrire le contenu du fichier dans un autre en transformant toute
     les majuscules en minscules
-    Entré: fichier: str: Nom du fichier à transformer
+    Entrée: fichier: str: Nom du fichier à transformer
     Sortie: None"""
     # Chemin des fichiers
     new_fichier = f"./Cleaned/{fichier}"
@@ -80,7 +81,7 @@ def minuscule(fichier):
 def ponctuation(f1):
     """Fonction prenant en argument un fichier et va réecrire le contenu du fichier et le réecrire sans la ponctuation
     et avec chaque mot séparé par des espaces
-    Entré: f1: str: Nom du fichier à transformer
+    Entrée: f1: str: Nom du fichier à transformer
     Sortie: None"""
     # Tableau contenant les caractères à transformer par des espaces
     tab_espace = [" ", "-", "'"]
@@ -116,7 +117,7 @@ def ponctuation(f1):
                             texte += " "
             # On a fini la ligne on passe donc à la ligne suivante
             texte += "\n"
-    #On réouvre le pour réecrire la nouvelle version
+    # On réouvre le pour réecrire la nouvelle version
     with open(fichier, 'w', encoding="utf-8") as fichier_1:
         for caractere in texte:
             fichier_1.write(caractere)
@@ -124,8 +125,9 @@ def ponctuation(f1):
 
 def tf(texte):
     """ Fonction qui prend en argument le contenu d'un texte et associé un score tf à chacun des mot qu'il contient
-    Entré: texte: str: Chaine de caractère correspondant au contenu du texte
-    Sortie: dico: dictionnaire: Dictionnaire associant à chaque mot du texte une valeur entiere correspondant à son score tf
+    Entrée: texte: str: Chaine de caractère correspondant au contenu du texte
+    Sortie: dico: dictionnaire: Dictionnaire associant à chaque mot du texte une valeur entiere correspondant à son
+                  score tf
     """
     dico = {}
     # On va creer un tableau ou chaque élément est un mot. Cela est permis par le processus de prétraitement des textes
@@ -188,11 +190,11 @@ def idf(repertoire):
 def transformation_fichier(repertoire):
     """Fonction permettant d'appeler les fonctions permettant d'effectuer le traitement de tout les fichiers dans un
     répertoire mis en argument
-    Entré: repertoire: str: Chaine de caractère contenant le nom du dossier à traiter
+    Entrée: repertoire: str: Chaine de caractère contenant le nom du dossier à traiter
     Sortie: None"""
     # On vérifie si le fichier Cleaned est créé
     if not os.path.exists("Cleaned"):
-        # Si c'est pas le cas on le Crée
+        # Si c'est pas le cas on le crée
         os.makedirs("Cleaned")
     # On récupére la liste contenant le nom de tout les fichiers
     tab_fichier = liste_fichier(repertoire)
@@ -205,7 +207,7 @@ def transformation_fichier(repertoire):
 
 def creation_tf_idf(repertoire):
     """Fonction renvoyant la matrice tf-idf des documents contenu dans un répertoire mis en argument
-    Entré: repertoire: str: Nom du dossier où sont contenu les fichiers
+    Entrée: repertoire: str: Nom du dossier où sont contenu les fichiers
     Sortie: matrice: Matrice: Matrice contenant les scores tf_idf des mots contenu dans les fichiers du répertoire."""
     # On récupére le nom des fichiers
     tab_fichier = liste_fichier(repertoire)
@@ -244,7 +246,7 @@ def correspondance_mot(dico):
 
 def indice_tab(tab, element):
     """Fonction a partir d'un tableau et d'un élement renvoi son indice dans le tabelau ou -1 si il n'est pas présent
-    Entré: tab: tableau: tableau dans lequelle on cherche l'occurence de l'élément
+    Entrée: tab: tableau: tableau dans lequelle on cherche l'occurence de l'élément
            element: pas de type précis: element dont on cherche à otenir l'occurence
     Sortie: -1: int: Si l'élement n'est pas dans le tableau
             indice: int: indice de l'élément dans le tableau"""
@@ -281,10 +283,10 @@ def plus_eleve(matrice, correspondance_ligne):
 
 def recuperation_texte(fichier):
     """Fonction qui a partir d'un texte va renvoyer une chaine de caractere contenant les mots du texte
-    Entré: fichier: str: Nom du fichier
+    Entrée: fichier: str: Nom du fichier
     Sortie: texte: str: Chaine de caractere contenant le texte"""
     texte = ""
-    # Chemin pour acceder au ficheir
+    # Chemin pour acceder au fichier
     path = f"./Cleaned/{fichier}"
     # Ouverture du fichier
     with open(path, "r", encoding="utf-8") as f1:
@@ -316,7 +318,7 @@ def repete_president(repertoire, president):
 
 def qui_a_ecrit(fichier):
     """Fonction qui a partir d'un fichier va renvoyer son auteur
-    Entré: fichier: str: Nom du fichier
+    Entrée: fichier: str: Nom du fichier
     Sortie: nom: str: Nom de l'auteur du fichier"""
     # On spéare le nom en 2 partie pour enlever le Nomination
     tab_temp = fichier.split("_")
@@ -334,7 +336,7 @@ def qui_a_ecrit(fichier):
 def a_parler(repertoire, mot):
     """Fonction qui à partir d'un mot et d'un répertoire renvoyer l'auteur ayant le plus utilisé le mot et une liste
     contenant le nom de tout les auteurs l'ayant utilsé
-    Entré: repertoire: str: Nom du répertoire à analyser
+    Entrée: repertoire: str: Nom du répertoire à analyser
            mot: str: Mot à rechercher
     Sortie: a_le_plus_parler: str: Nom de la personne ayant le plus parler
             tab_parler: tableau de str: Tableau contenant le nom de tout les auteur ayant mentionner le mot """
@@ -382,7 +384,7 @@ def plus_petit_dico(liste):
 
 
 def mot_evoque_par_tous(repertoire, liste_moins_importante):
-    liste_president = nom_president()
+    liste_president = nom_president(repertoire)
     liste_dico = []
     mot_finaux = []
     cle_petit_dico = []
@@ -406,7 +408,7 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
 
 def premiere_occurence(fichier, mot_recherche):
     """Fonction qui va ernvoyer l'indice de la premiere occurence d'un mot dans un texte
-    Entré: fichier: str: Nom du fichier
+    Entrée: fichier: str: Nom du fichier
            mot_recherche: str: Mot dont on cherche l'indice
     Sortie: -1: int: mot non  trouvé dans le texte
             indice_mot: int: premiere indice du mot recherché
@@ -425,7 +427,7 @@ def premiere_occurence(fichier, mot_recherche):
 def premier_a_parler(repertoire: str, mot: str) -> str and int:
     """Fonction qui va à partir d'un répertoire donné en argument renvoyer le premiere auteur à utiliser un mot ainsi
      que l'emplacement à lequelle il l'utise
-    Entré: répertoire: str: Répertoire que l'on va étudier
+    Entrée: répertoire: str: Répertoire que l'on va étudier
            mot: str: mot que l'on recherche
     Sortie: premier: str: Nom du premier auteur à utiliser ce mot
             indice_premier: int: emplacement de la premiere occurence du mot recherché"""
@@ -444,7 +446,35 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
                 indice_premier = emplacement
                 premier = qui_a_ecrit(fichier)
     # Si personne n'a utilisé le mot
-    if premier == '':
-        return "Ce mot n'est présent dans aucun texte"
+    return premier, indice_premier
+
+
+def demande_continuer():
+    """Fonction qui demande a l'utilisateur si il veut continuer
+    Entrée: None
+    Sortie: """
+    while True:
+        reponse = input("Voulez vous continuer? oui/non\n")
+        if reponse == "oui":
+            return True
+        elif reponse == "non":
+            return False
+
+
+def premier_dans_une_liste(tableau, repertoire):
+    indice_premier = float('inf')
+    premier_president = ''
+    for element in tableau:
+        president, indice = premier_a_parler(repertoire, element)
+        if president != '':
+            if indice < indice_premier:
+                indice_premier = indice
+                premier_president = president
+    if premier_president == "":
+        return "Aucun des mot n'a été cité dans le texte"
     else:
-        return premier, indice_premier
+        return premier_president
+
+
+
+
