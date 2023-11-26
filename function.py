@@ -525,6 +525,11 @@ def demande_continuer():
 
 
 def premier_dans_une_liste(tableau, repertoire):
+    """Fonction qui a partir d'un tableau mis en argument va renvoyer l'auteur ayant utilisé en premier l'un de ces
+    termes
+    Entrée: tableau: tableau: tableau contenant tout les éléments recherché
+            repertoire: str: repertoire dans lequelle on va cherher les fichiers
+    Sortie: premiers_president: str: nom du président ayant utilisé l'un des termes en premier"""
     indice_premier = float('inf')
     premier_president = ''
     for element in tableau:
