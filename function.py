@@ -447,7 +447,7 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
                 liste_moins_importante : list
         Sortie : Cette fonction ressort une liste des mots les moins importants.
                 mot_finaux : list"""
-    liste_president = nom_president()
+    liste_president = nom_president(repertoire)
     liste_dico = []
     mot_finaux = []
     cle_petit_dico = []
