@@ -2,30 +2,53 @@ import os
 import math
 
 
-def prenom_president(nom):
+def prenom_president(nom: str) -> str:
+    """Cette fonction renvoie le prénom d'un président en fonction du nom mis en argument
+    Entré: nom: str: nom du président pour lequelle on veut le prénom
+    Sortie: un str contenant le prénom du président concerné"""
+    #Chemin vers un fichier contenant le nom de tous les présidents associée à leur prénom
     fichier = "./Ressource/nom_president.txt"
+    #ouverture du fichier en mode lecture
     with open(fichier, "r", encoding="utf-8") as f:
         for ligne in f:
+            # Les nom et prénom des présidents sont stocké sous la forme nom/prénom on crée donc un tableau grâce à la
+            # fonction split en désignant / comme séparateur
             tab = ligne.split("/")
+            # On vérifie si le nom correspond
             if tab[0] == nom:
+                # On vérifie qu'il n'y ai pas de retour à la ligne après le prénom associé
                 if tab[1][-1] == "\n":
                     return tab[1][:len(tab[1])-1]
                 else:
                     return tab[1]
 
 
-def nom_president():
+def nom_president(repertoire: str) -> list:
+    """Fonction qui prend en argument un repertoire et qui va creer une liste contenant tous les noms des présidents
+    en les récupérants à partir des noms des fichiers
+    Entré: repertoire: str: chemin vers le dossier contenant les textes
+    Sortie: tab: tableau de str: Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le dossier
+    """
     tab_nom = []
-    tab_fichier = os.listdir("./Speeches")
+    # On récupére dans une liste le nom de tout les fichiers contenu dans le répertoire
+    tab_fichier = os.listdir(repertoire)
+    # On parcour cette liste
     for element in tab_fichier:
+        # On récupére le nom de la personne l'ayant écrit
         nom = qui_a_ecrit(element)
+        # On vérifie si on a pas déjà sont nom dans la liste car on ne veut pas de doublon
         if nom not in tab_nom:
             tab_nom.append(nom)
     return tab_nom
 
 
 def liste_fichier(repertoire):
+    """Fonction renvoyant à partir d'un répertoire donné un tableau contenant le nom de chacun des fichiers en .txt
+    qu'il contient
+    Entré: repertoire: str: chemin du dossier dont on veut extraire les fichiers
+    Sortie: tableau de str: tableau contenant le nom de tous les fichiers txt présent dans le repertoire"""
     tab_fichier = []
+    # On parcour les fichiers
     for fichier in os.listdir(repertoire):
         if fichier.endswith(".txt"):
             tab_fichier.append(fichier)
@@ -298,7 +321,7 @@ def premiere_occurence(fichier, mot_recherche):
     return -1
 
 
-def premier_a_parler(repertoire, mot):
+def premier_a_parler(repertoire: str, mot: str) -> str:
     tab_fichier = liste_fichier(repertoire)
     premier = ''
     indice_premier = float("inf")
