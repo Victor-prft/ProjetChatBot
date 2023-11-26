@@ -83,9 +83,15 @@ def tf(texte):
 
 
 def est_present(f, mot_rechercher):
+    """Cette fonction nous indique si un mot est présent ou non dans un fichier.
+    Entrée : f est le fichier où l'on veut recherche le mot,
+             mot_rechercher est le mot qui est recherché dans le fichier.
+             f : .txt , mot_rechercher : str
+    Sortie : True si le mot_rechercher est dans le fichier f et False si le mot_rechercher n'est pas dans le fichier """
     fichier = f"./Cleaned/{f}"
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
+            # création d'un tableau à partir de la séparation d'un texte où chaque valeur est un mot
             tab_mot = ligne.split(" ")
             for mot in tab_mot:
                 if mot[-1] == "\n":
@@ -96,6 +102,14 @@ def est_present(f, mot_rechercher):
 
 
 def maxi_dico(dico):
+    """Cette fonction sert a donner la plus grande valeur et la clé d'un dictionnaire
+        Entrée : dico est le dictionnaire où l'on veut savoir le maximum
+                 dico : dict
+        Sortie : une liste de deux valeurs :
+                 cle_max est le cle du dictionnaire ayant la plus grande valeur du dictionnaire
+                 maxi est la valeur la plus grande dans le dictionnaire
+                 cle_max : str
+                 maxi : float"""
     maxi = -float('inf')
     cle_max = ''
     for cle in dico.keys():
@@ -106,6 +120,12 @@ def maxi_dico(dico):
 
 
 def idf(repertoire):
+    """Cette fonction renvoie un dictoinnaire avec comme clé chaque mot du texte et en valeur sont idf
+            Entrée : le repertoire qu'on veut analyser pour trouver les idf
+                     repertoire : repertoire comtenant des fichiers de type .txt
+            Sortie : la fonction ressort un dictoinnaire :
+                     dictoinnaire.keys() : mot du texte sous type str
+                     dictoinnaaire.values() : float """
     dictionnaire = {}
     tab_fichier = liste_fichier(repertoire)
     for i in range(len(tab_fichier)):
@@ -154,6 +174,11 @@ def creation_tf_idf(repertoire):
 
   
 def correspondance_mot(dico):
+    """ Cette fonction sert à renvoyer toutes les clés d'un dictoinnaire sous forme de liste
+        Entrée : un dictoinnaire
+                dico : dict
+        Sortie : une liste comportant toutes les clés du dictoinnaire
+                cle : list"""
     cle = []
     for valeur in dico.keys():
         cle.append(valeur)
@@ -168,6 +193,13 @@ def indice_tab(tab, element):
 
   
 def moins_important(matrice, correspondance_ligne):
+    """ Cette fonction sert a trouver le ou les mots moins importants de la matrice. C'est mot sont dient moins
+        important si la valeur dans le tableau est égal à 0
+        Entrée : Matrice qui est une liste de liste comportant la note tf-idf. Correspondance_ligne est la liste de mots
+                matrice : list
+                correspondance_ligne : list
+        Sortie : Cette fonction ressort une liste des mots les moins importants de la matrice (tf-idf = 0).
+                liste_moins_important : list"""
     liste_moins_important = []
     for indice_ligne in range(len(matrice)):
         i = 0
@@ -180,6 +212,13 @@ def moins_important(matrice, correspondance_ligne):
 
 
 def plus_eleve(matrice, correspondance_ligne):
+    """ Cette fonction sert a trouver le ou les mots plus importants de la matrice. C'est mot sont dient plus
+        important si la valeur dans le tableau est la plus haute de la matrice
+        Entrée : Matrice qui est une liste de liste comportant la note tf-idf. Correspondance_ligne est la liste de mots
+                matrice : list
+                correspondance_ligne : list
+        Sortie : Cette fonction ressort une liste des mots les plus importants de la matrice.
+                 liste_plus_important : list"""
     liste_plus_important = []
     maximum = -float('inf')
     for indice_ligne in range(len(matrice)):
@@ -204,6 +243,12 @@ def recuperation_texte(fichier):
 
 
 def fichier_discours(repertoire, president):
+    """ Cette fonction nous donne tous les discours d'un président dans une liste
+        Entrée : un repertoire et le nom du président
+                repertoire : repertoire contenant dans fichier de type .txt
+                president : str
+        Sortie : la sortie est une liste des discours d'un même président
+                liste_discours : list"""
     liste_discours = []
     for discours in liste_fichier(repertoire):
         if president in discours:
@@ -212,6 +257,12 @@ def fichier_discours(repertoire, president):
 
 
 def repete_president(repertoire, president):
+    """ Cette fonction sert  adonner le mot le plus dit par un président peut importe son discours
+        Entrée : un repertoire et le nom du président
+                 repertoire : repertoire contenant dans fichier de type .txt
+                 president : str
+        Sortie : la sortie est le mot le plus répété par un président
+                maxi_dico(dico_occurence)[0] : str"""
     liste_discours = fichier_discours(repertoire, president)
     texte_total = ""
     for fichier in liste_discours:
@@ -257,6 +308,11 @@ def a_parler(repertoire, mot):
 
 
 def plus_petit_dico(liste):
+    """ Cette fonction ressort le dictionnaire le plus petit en terme de nombre de clé dans un dico
+        Entrée : une liste comportant des dictionnaires
+                liste : list
+        Sortie : le dictionnaire ayant le moins de clé
+                 dico_mini : dict"""
     mini = float('inf')
     dico_mini = {}
     for dico in liste:
@@ -267,6 +323,13 @@ def plus_petit_dico(liste):
 
 
 def mot_evoque_par_tous(repertoire, liste_moins_importante):
+    """ Cette focntion sert a donner la liste des mots les moins importants mais à la différence que les différents
+        discours d'un même président sont comptés comme un seul discours
+        Entrée : un repertoire et liste_moins_importante qui est la liste de mots les moins important
+                repertoire : repertoire contenant dans fichier de type .txt
+                liste_moins_importante : list
+        Sortie : Cette fonction ressort une liste des mots les moins importants.
+                mot_finaux : list"""
     liste_president = nom_president()
     liste_dico = []
     mot_finaux = []
