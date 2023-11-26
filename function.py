@@ -257,6 +257,12 @@ def fichier_discours(repertoire, president):
 
 
 def repete_president(repertoire, president):
+    """ Cette fonction sert  adonner le mot le plus dit par un président peut importe son discours
+        Entrée : un repertoire et le nom du président
+                 repertoire : repertoire contenant dans fichier de type .txt
+                 president : str
+        Sortie : la sortie est le mot le plus répété par un président
+                maxi_dico(dico_occurence)[0] : str"""
     liste_discours = fichier_discours(repertoire, president)
     texte_total = ""
     for fichier in liste_discours:
@@ -302,6 +308,11 @@ def a_parler(repertoire, mot):
 
 
 def plus_petit_dico(liste):
+    """ Cette fonction ressort le dictionnaire le plus petit en terme de nombre de clé dans un dico
+        Entrée : une liste comportant des dictionnaires
+                liste : list
+        Sortie : le dictionnaire ayant le moins de clé
+                 dico_mini : dict"""
     mini = float('inf')
     dico_mini = {}
     for dico in liste:
@@ -312,6 +323,13 @@ def plus_petit_dico(liste):
 
 
 def mot_evoque_par_tous(repertoire, liste_moins_importante):
+    """ Cette focntion sert a donner la liste des mots les moins importants mais à la différence que les différents
+        discours d'un même président sont comptés comme un seul discours
+        Entrée : un repertoire et liste_moins_importante qui est la liste de mots les moins important
+                repertoire : repertoire contenant dans fichier de type .txt
+                liste_moins_importante : list
+        Sortie : Cette fonction ressort une liste des mots les moins importants.
+                mot_finaux : list"""
     liste_president = nom_president()
     liste_dico = []
     mot_finaux = []
