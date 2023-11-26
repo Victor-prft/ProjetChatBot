@@ -45,7 +45,7 @@ while running:
         while nombre_termes < 0:
             nombre_termes = int(input("Combien de termes voulez vous comparer\n"))
         terme = []
-        for _ in range (nombre_termes):
+        for _ in range(nombre_termes):
             terme.append(input("Veuillez entrer un terme"))
         print(premier_dans_une_liste(terme, repertoire_propre))
         running = demande_continuer()
