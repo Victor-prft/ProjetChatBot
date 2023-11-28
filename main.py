@@ -20,11 +20,12 @@ dico_idf = idf(repertoire_propre)
 correspondance_ligne = correspondance_mot(dico_idf)
 
 
+
 while running:
     print()
     choix = input(demande)
     if choix == "1":
-        print(moins_important(matrice, correspondance_ligne))
+        print(moins_important(dico_idf))
         print()
         running = demande_continuer()
     elif choix == "2":
