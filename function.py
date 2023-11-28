@@ -318,6 +318,11 @@ def creation_tf_idf(repertoire):
                 matrice[ligne][colonne] = dico_tf[element] * dico_idf[element]
     return matrice
 
+
+def recuperation_tf_idf(mot, matrice, correspondance_ligne):
+    ligne = indice_tab(correspondance_ligne, mot)
+    return matrice[ligne]
+    
   
 def correspondance_mot(dico):
     """ Cette fonction sert à renvoyer toutes les clés d'un dictoinnaire sous forme de liste
