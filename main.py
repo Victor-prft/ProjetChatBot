@@ -20,7 +20,6 @@ dico_idf = idf(repertoire_propre)
 correspondance_ligne = correspondance_mot(dico_idf)
 
 
-
 while running:
     print()
     choix = input(demande)
@@ -58,7 +57,7 @@ while running:
         print()
         running = demande_continuer()
     elif choix == "7":
-        print(mot_evoque_par_tous(repertoire_propre, moins_important(matrice, correspondance_ligne)))
+        print(mot_evoque_par_tous(repertoire_propre, moins_important(dico_idf)))
         print()
         running = demande_continuer()
     elif choix == "8":
