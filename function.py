@@ -43,70 +43,58 @@ def nom_president(repertoire: str) -> list:
     return tab_nom
 
 
-def minuscule(fichier):
-    """Fonction prenant en argument un fichier et va réecrire le contenu du fichier dans un autre en transformant toute
-    les majuscules en minscules
-    Entrée: fichier: str: Nom du fichier à transformer
-    Sortie: None"""
-    # Chemin des fichiers
-    new_fichier = f"./Cleaned/{fichier}"
-    old_fichier = f"./Speeches/{fichier}"
-    # Ouverture des fichiers
-    with open(old_fichier, "r", encoding="utf-8") as old, open(new_fichier, "w", encoding="utf-8") as new:
-        for ligne in old:
-            # On parcourt les caractères
-            for caractere in ligne:
-                # Cas où le caractère est une majuscule
-                if 'A' <= caractere <= 'Z':
-                    # On le transforme en minuscule
-                    caractere = chr(ord(caractere) + 32)
-                # On écrit le caractère dans le nouveau fichier
+def minuscule(contenu, destination=None):
+    texte = ''
+    for caractere in contenu:
+        # Cas où le caractère est une majuscule
+        if 'A' <= caractere <= 'Z':
+            # On le transforme en minuscule
+            caractere = chr(ord(caractere) + 32)
+            # On écrit le caractère dans le nouveau fichier
+        texte = texte + caractere
+    if destination is None:
+        return texte
+    else:
+        with open(destination, "w", encoding="utf-8") as new:
+            for caractere in texte:
                 new.write(caractere)
 
 
-def ponctuation(f1):
-    """Fonction prenant en argument un fichier et va réecrire le contenu du fichier et le réecrire sans la ponctuation
-    et avec chaque mot séparé par des espaces
-    Entrée: f1: str: Nom du fichier à transformer
-    Sortie: None"""
+def ponctuation_fichier(contenu, destination=None):
     # Tableau contenant les caractères à transformer par des espaces
-    tab_espace = [" ", "-", "'"]
+    tab_espace = [" ", "-", "'", "."]
     # Tableau contenant les caractères or alphabétique à conserver
-    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê", "ç"]
+    tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê", "ç", "\n"]
     texte = ""
-    # Chemin vers le fichier
-    fichier = f"./Cleaned/{f1}"
     # Cas du l' on va alterner entre écrire le et la
     l_actuel = 0
     l_possible = ["a", "e"]
-    # Ouverture du fichier
-    with open(fichier, "r", encoding="utf-8") as fichier_1:
-        for ligne in fichier_1:
-            # On parcourt les caractères
-            for element in ligne:
-                # Cas ou l'on doit conservé le caractères
-                if 'a' <= element <= 'z' or element in tab_garder:
-                    texte += element
-                else:
-                    # Cas ou l'on doit potentiellement transformé l'élément en 1 espace
-                    if element in tab_espace:
-                        # Cas des apostrophe que l'on remplace par des e ou des a
-                        if element == "'":
-                            if texte[-1] == 'l':
-                                texte = texte + l_possible[l_actuel % 2]
-                                l_actuel += 1
-                            else:
-                                texte = texte + "e"
-                        # On écrit l'espace unqiuement si il n'est pas précéder par un saut de ligne, un espace ou un
-                        # caractere vide
-                        if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
-                            texte += " "
-            # On a fini la ligne on passe donc à la ligne suivante
-            texte += "\n"
-    # On réouvre le fichier pour réecrire la nouvelle version
-    with open(fichier, 'w', encoding="utf-8") as fichier_1:
-        for caractere in texte:
-            fichier_1.write(caractere)
+    # On parcourt les caractères
+    for element in contenu:
+        # Cas ou l'on doit conservé le caractères
+        if 'a' <= element <= 'z' or element in tab_garder:
+            texte += element
+        else:
+            # Cas ou l'on doit potentiellement transformé l'élément en 1 espace
+            if element in tab_espace:
+                # Cas des apostrophe que l'on remplace par des e ou des a
+                if element == "'":
+                    if texte[-1] == 'l':
+                        texte = texte + l_possible[l_actuel % 2]
+                        l_actuel += 1
+                    else:
+                        texte = texte + "e"
+                # On écrit l'espace unqiuement si il n'est pas précéder par un saut de ligne, un espace ou un
+                # caractere vide
+                if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
+                    texte += " "
+    if destination is None:
+        return texte
+    else:
+        # On réouvre le fichier pour réecrire la nouvelle version
+        with open(destination, 'w', encoding="utf-8") as fichier_1:
+            for caractere in texte:
+                fichier_1.write(caractere)
 
 
 def liste_fichier(repertoire):
@@ -137,17 +125,26 @@ def transformation_fichier(repertoire):
     # On les parcourt
     for fichier in tab_fichier:
         # On appele les fonctions nécessaire au traitement du texte
-        minuscule(fichier)
-        ponctuation(fichier)
+        path = f"./Speeches/{fichier}"
+        texte = recuperation_texte_avec_mise_en_forme(path)
+        path = f"./Cleaned/{fichier}"
+        minuscule(texte, path)
+        texte = recuperation_texte_avec_mise_en_forme(path)
+        ponctuation_fichier(texte, path)
 
 
-def recuperation_texte(fichier):
+def recuperation_texte_avec_mise_en_forme(path):
+    texte = ''
+    with open(path, "r", encoding="utf-8") as f1:
+        for ligne in f1:
+            texte = texte + ligne
+    return texte
+
+def recuperation_texte(path):
     """Fonction qui a partir d'un texte va renvoyer une chaine de caractere contenant les mots du texte
     Entrée: fichier: str: Nom du fichier
     Sortie: texte: str: Chaine de caractere contenant le texte"""
     texte = ""
-    # Chemin pour acceder au fichier
-    path = f"./Cleaned/{fichier}"
     # Ouverture du fichier
     with open(path, "r", encoding="utf-8") as f1:
         for ligne in f1:
@@ -320,7 +317,8 @@ def creation_tf_idf(repertoire):
     # On va remplir les colonnes 11 par une
     for colonne in range(nb_colonne):
         # Chaque colonne correpond à un fichier on va donc récupérer les scores tf associé à ce fichier
-        texte = recuperation_texte(tab_fichier[colonne])
+        path = f"./Cleaned/{tab_fichier[colonne]}"
+        texte = recuperation_texte(path)
         dico_tf = tf(texte)
         # On parcourt les mots possédant un score tf
         for element in dico_tf.keys():
@@ -415,7 +413,8 @@ def repete_president(repertoire, president):
     texte_total = ""
     # On parcours tous les discours d'un même président
     for fichier in liste_discours:
-        texte = recuperation_texte(fichier)
+        path = f"./Cleaned/{fichier}"
+        texte = recuperation_texte(path)
         # Concaténation des textes d'un même président
         texte_total += texte
     dico_occurence = tf(texte_total)
@@ -455,7 +454,8 @@ def a_parler(repertoire, mot):
     # On parcourt les fichiers
     for fichier in tab_fichier:
         # On récupére son tf
-        texte = recuperation_texte(fichier)
+        path = f"./Cleaned/{fichier}"
+        texte = recuperation_texte(path)
         dico_tf = tf(texte)
         # Si le mot est dans le texte
         if mot in dico_tf.keys():
@@ -496,7 +496,8 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
         texte_total = ""
         # On parcours les fichiers
         for fichier in liste_discours:
-            texte = recuperation_texte(fichier)
+            path = f"./Cleaned/{fichier}"
+            texte = recuperation_texte(path)
             texte_total += texte
         dico_president = tf(texte_total)
         liste_dico.append(dico_president)
@@ -520,7 +521,8 @@ def premiere_occurence(fichier, mot_recherche):
             indice_mot: int: premiere indice du mot recherché
     """
     # On récupére le texte sous la forme d'un str
-    texte = recuperation_texte(fichier)
+    path = f"./Cleaned/{fichier}"
+    texte = recuperation_texte(path)
     tab_texte = fct_split(texte, " ")
     # On parcourt le texte
     for indice_mot in range(len(tab_texte)):
@@ -528,6 +530,14 @@ def premiere_occurence(fichier, mot_recherche):
         if tab_texte[indice_mot] == mot_recherche:
             return indice_mot
     return -1
+
+
+def mots_present(phrase, dico_idf):
+    sont_present = []
+    #tab_mot = ...
+    for element in tab_mot:
+        if element in dico_idf.keys():
+            sont_present.append(element)
 
 
 def premier_a_parler(repertoire: str, mot: str) -> str and int:
