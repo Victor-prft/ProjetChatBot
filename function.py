@@ -517,6 +517,14 @@ def premiere_occurence(fichier, mot_recherche):
     return -1
 
 
+def mots_present(phrase, dico_idf):
+    sont_present = []
+    #tab_mot = ...
+    for element in tab_mot:
+        if element in dico_idf.keys():
+            sont_present.append(element)
+
+
 def premier_a_parler(repertoire: str, mot: str) -> str and int:
     """Fonction qui va à partir d'un répertoire donné en argument renvoyer le premiere auteur à utiliser un mot ainsi
      que l'emplacement à lequelle il l'utise
