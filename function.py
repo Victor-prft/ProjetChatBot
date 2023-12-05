@@ -140,6 +140,7 @@ def recuperation_texte_avec_mise_en_forme(path):
             texte = texte + ligne
     return texte
 
+
 def recuperation_texte(path):
     """Fonction qui a partir d'un texte va renvoyer une chaine de caractere contenant les mots du texte
     Entrée: fichier: str: Nom du fichier
@@ -532,14 +533,6 @@ def premiere_occurence(fichier, mot_recherche):
     return -1
 
 
-def mots_present(phrase, dico_idf):
-    sont_present = []
-    #tab_mot = ...
-    for element in tab_mot:
-        if element in dico_idf.keys():
-            sont_present.append(element)
-
-
 def premier_a_parler(repertoire: str, mot: str) -> str and int:
     """Fonction qui va à partir d'un répertoire donné en argument renvoyer le premiere auteur à utiliser un mot ainsi
      que l'emplacement à lequelle il l'utise
@@ -597,5 +590,15 @@ def premier_dans_une_liste(tableau, repertoire):
         return premier_president
 
 
-def token_question(texte_propre):
+def token_question(texte_sale):
+    txt = minuscule(texte_sale)
+    texte_propre = ponctuation_fichier(txt)
     return fct_split(texte_propre)
+
+
+def mots_present(tab_mot, dico_idf):
+    sont_present = []
+    for element in tab_mot:
+        if element in dico_idf.keys():
+            sont_present.append(element)
+    return sont_present
