@@ -13,7 +13,6 @@ demande = """ Veuillez choisir une option:
 -8: Sortir
 """
 
-
 transformation_fichier(repertoire_non_traiter)
 matrice = creation_tf_idf(repertoire_propre)
 dico_idf = idf(repertoire_propre)
