@@ -627,8 +627,20 @@ def norme_vecteur(dicoouliste):
         return None
 
 
-def calcul_similarite(dico_tf_idf_question,liste_doc,correspondance):
-    prt_scal = produit_scalaire(dico_tf_idf_question,liste_doc,correspondance)
+def calcul_similarite(dico_tf_idf_question, liste_doc, correspondance):
+    prt_scal = produit_scalaire(dico_tf_idf_question, liste_doc, correspondance)
     a = norme_vecteur(dico_tf_idf_question)
     b = norme_vecteur(liste_doc)
-    return (prt_scal/(a*b))
+    return prt_scal/(a*b)
+
+
+def doc_pertinent(dico_tf_idf_question, matrice, correspondance, liste_nom_fichier):
+    max = -float('inf')
+    for colonne in range(len(matrice[0])):
+        new_ligne = []
+        for indice_mot in range(len(matrice)):
+            new_ligne.append(matrice[indice_mot][colonne])
+        if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > max:
+            max = calcul_similarite(dico_tf_idf_question,new_ligne, correspondance)
+            indice_doc = colonne
+
