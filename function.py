@@ -627,10 +627,10 @@ def norme_vecteur(dicoouliste):
         return None
 
 
-def calcul_similarite(dico_tf_idf_question, liste_doc, correspondance):
-    prt_scal = produit_scalaire(dico_tf_idf_question, liste_doc, correspondance)
+def calcul_similarite(dico_tf_idf_question, liste_tf_idf_doc, correspondance):
+    prt_scal = produit_scalaire(dico_tf_idf_question, liste_tf_idf_doc, correspondance)
     a = norme_vecteur(dico_tf_idf_question)
-    b = norme_vecteur(liste_doc)
+    b = norme_vecteur(liste_tf_idf_doc)
     return prt_scal/(a*b)
 
 
@@ -644,12 +644,22 @@ def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
         if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > maxi:
             maxi = calcul_similarite(dico_tf_idf_question, new_ligne, correspondance)
             indice_doc = colonne
-    return f'./Speeches/{correspondance[indice_doc]}'
+    return f'./Cleaned/{correspondance[indice_doc]}'
 
+
+def transformation_cleaned_speeches(nom_fichier):
+    liste = fct_split(nom_fichier, '/')
+    return f'./Speeches/{liste[-1]}'
 
 def mot_question_max_tf_idf(question, dico_idf):
     liste_mot_question = token_question(question)
     liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
     dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
     dico_tf_idf_question = calcul_tf_idf(dico_idf, dico_tf_phrase)
-    return maxi_dico(dico_tf_idf_question)
+    return maxi_dico(dico_tf_idf_question), dico_tf_idf_question
+
+
+def generation_reponse(question, dico_idf, matrice, correspondance):
+    mot_question, dico_tf_idf_question = mot_question_max_tf_idf(question, dico_idf)
+    document_pertinent = doc_pertinent(dico_tf_idf_question, matrice, correspondance)
+
