@@ -602,3 +602,17 @@ def mots_present(tab_mot, dico_idf):
         if element in dico_idf.keys():
             sont_present.append(element)
     return sont_present
+
+
+def norme_vecteur(dicoouliste):
+    res = 0
+    if isinstance(dicoouliste, dict):
+        for valeur in dicoouliste.values():
+            res = res + (valeur**2)
+        return math.sqrt(res)
+    elif isinstance(dicoouliste, list):
+        for valeur in dicoouliste:
+            res = res + (valeur ** 2)
+        return math.sqrt(res)
+    else:
+        return None
