@@ -634,13 +634,14 @@ def calcul_similarite(dico_tf_idf_question, liste_doc, correspondance):
     return prt_scal/(a*b)
 
 
-def doc_pertinent(dico_tf_idf_question, matrice, correspondance, liste_nom_fichier):
-    max = -float('inf')
+def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
+    maxi = -float('inf')
+    indice_doc = 0
     for colonne in range(len(matrice[0])):
         new_ligne = []
         for indice_mot in range(len(matrice)):
             new_ligne.append(matrice[indice_mot][colonne])
-        if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > max:
-            max = calcul_similarite(dico_tf_idf_question,new_ligne, correspondance)
+        if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > maxi:
+            maxi = calcul_similarite(dico_tf_idf_question, new_ligne, correspondance)
             indice_doc = colonne
-
+    return correspondance[indice_doc]
