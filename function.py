@@ -604,6 +604,15 @@ def mots_present(tab_mot, dico_idf):
     return sont_present
 
 
+def produit_scalaire(dico_question_a, liste_doc_b, correspondance):
+    res = 0
+    for i in range(len(liste_doc_b)):
+        mot = correspondance[i]
+        a = dico_question_a[mot]
+        res = res + a * liste_doc_b[i]
+    return res
+
+
 def norme_vecteur(dicoouliste):
     res = 0
     if isinstance(dicoouliste, dict):
