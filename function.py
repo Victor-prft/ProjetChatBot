@@ -625,3 +625,10 @@ def norme_vecteur(dicoouliste):
         return math.sqrt(res)
     else:
         return None
+
+
+def calcul_similarite(dico_tf_idf_question,liste_doc,correspondance):
+    prt_scal = produit_scalaire(dico_tf_idf_question,liste_doc,correspondance)
+    a = norme_vecteur(dico_tf_idf_question)
+    b = norme_vecteur(liste_doc)
+    return (prt_scal/(a*b))
