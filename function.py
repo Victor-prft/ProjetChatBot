@@ -645,3 +645,4 @@ def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
             maxi = calcul_similarite(dico_tf_idf_question, new_ligne, correspondance)
             indice_doc = colonne
     return correspondance[indice_doc]
+

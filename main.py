@@ -19,6 +19,7 @@ dico_idf = idf(repertoire_propre)
 correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier('./Cleaned')
 
+
 while running:
     print()
     choix = input(demande)
