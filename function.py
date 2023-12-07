@@ -644,5 +644,12 @@ def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
         if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > maxi:
             maxi = calcul_similarite(dico_tf_idf_question, new_ligne, correspondance)
             indice_doc = colonne
-    return correspondance[indice_doc]
+    return f'./Speeches/{correspondance[indice_doc]}'
 
+
+def mot_question_max_tf_idf(question, dico_idf):
+    liste_mot_question = token_question(question)
+    liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
+    dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
+    dico_tf_idf_question = calcul_tf_idf(dico_idf, dico_tf_phrase)
+    return maxi_dico(dico_tf_idf_question)
