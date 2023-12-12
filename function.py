@@ -662,4 +662,3 @@ def mot_question_max_tf_idf(question, dico_idf):
 def generation_reponse(question, dico_idf, matrice, correspondance):
     mot_question, dico_tf_idf_question = mot_question_max_tf_idf(question, dico_idf)
     document_pertinent = doc_pertinent(dico_tf_idf_question, matrice, correspondance)
-
