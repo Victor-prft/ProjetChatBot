@@ -18,13 +18,14 @@ matrice = creation_tf_idf(repertoire_propre)
 dico_idf = idf(repertoire_propre)
 correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier('./Cleaned')
+mot_les_moins_important = moins_important(dico_idf)
 
 
 while running:
     print()
     choix = input(demande)
     if choix == "1":
-        print(moins_important(dico_idf))
+        print(mot_les_moins_important)
         print()
         running = demande_continuer()
     elif choix == "2":
@@ -33,7 +34,7 @@ while running:
         running = demande_continuer()
     elif choix == "3":
         president = input("Veuillez rentrer le nom d'un président\n")
-        print(repete_president(repertoire_propre, president))
+        print(repete_president(repertoire_propre, president, mot_les_moins_important))
         print()
         running = demande_continuer()
     elif choix == "4" or choix == "5":
