@@ -592,6 +592,7 @@ def tf_phrase(tab_mot, sont_present):
 
 
 def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
+    """g"""
     tab_tf_idf_phrase = []
     for mot in mot_a_traiter:
         tab_tf_idf_phrase.append(dico_tf[mot] * dico_idf[mot])
