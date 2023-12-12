@@ -590,6 +590,31 @@ def premier_dans_une_liste(tableau, repertoire):
         return premier_president
 
 
+
+def tf_phrase(tab_mot, sont_present):
+    nombre_mot = len(tab_mot)
+    dico_tf_question = {}
+    for mot in tab_mot:
+        if mot in sont_present:
+            if mot not in dico_tf_question.keys():
+                dico_tf_question[mot] = 1
+            else:
+                dico_tf_question[mot] += 1
+        else:
+            dico_tf_question[mot] = 0
+    for cle, valeur in dico_tf_question.items():
+        dico_tf_question[cle] = valeur/nombre_mot
+    return dico_tf_question
+
+
+def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
+    """g"""
+    tab_tf_idf_phrase = []
+    for mot in mot_a_traiter:
+        tab_tf_idf_phrase.append(dico_tf[mot] * dico_idf[mot])
+    return tab_tf_idf_phrase, mot_a_traiter
+
+
 def token_question(texte_sale):
     txt = minuscule(texte_sale)
     texte_propre = ponctuation_fichier(txt)
