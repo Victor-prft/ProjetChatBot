@@ -13,7 +13,7 @@ def prenom_president(nom: str) -> str:
         for ligne in f:
             # Les nom et prénom des présidents sont stocké sous la forme nom/prénom on crée donc un tableau grâce à la
             # fonction split en désignant / comme séparateur
-            tab = fct_split(ligne, "/")
+            tab = fct_split(ligne, ["/"])
             # On vérifie si le nom correspond
             if tab[0] == nom:
                 # On vérifie qu'il n'y ai pas de retour à la ligne après le prénom associé
@@ -193,12 +193,12 @@ def maxi_dico(dico):
     return [cle_max, maxi]
 
 
-def fct_split(texte, separateur=' '):
+def fct_split(texte, separateur=[' ']):
     liste = []
     mot = ''
     for element in texte:
-        if element == separateur:
-            if mot != '' or ' ':
+        if element in separateur:
+            if mot != ('' or ' '):
                 liste.append(mot)
             mot = ''
         else:
@@ -237,7 +237,7 @@ def est_present(f, mot_rechercher):
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
             # Création d'un tableau à partir de la séparation d'un texte où chaque valeur est un mot
-            tab_mot = fct_split(ligne, " ")
+            tab_mot = fct_split(ligne, [" "])
             # On parcours le tableau
             for mot in tab_mot:
                 if mot[-1] == "\n":
@@ -255,7 +255,7 @@ def tf(texte):
     """
     dico = {}
     # On va creer un tableau ou chaque élément est un mot. Cela est permis par le processus de prétraitement des textes
-    tab_mot = fct_split(texte, " ")
+    tab_mot = fct_split(texte, [" "])
     # Parcourt les mots
     for mot in tab_mot:
         # Cas ou le mot a déjà été rencontré
@@ -285,7 +285,7 @@ def idf(repertoire):
         with open(repertoire + "./" + tab_fichier[i], "r", encoding="utf-8") as f1:
             for ligne in f1:
                 # Création d'un tableau à partir de la séparation d'une ligne où chaque valeur est un mot
-                tab_mot = fct_split(ligne, " ")
+                tab_mot = fct_split(ligne, [" "])
                 for mot in tab_mot:
                     if mot[-1] == "\n":
                         mot = mot[:-1]
@@ -427,9 +427,9 @@ def qui_a_ecrit(fichier):
     Entrée: fichier: str: Nom du fichier
     Sortie: nom: str: Nom de l'auteur du fichier"""
     # On spéare le nom en 2 partie pour enlever le Nomination
-    tab_temp = fct_split(fichier, "_")
+    tab_temp = fct_split(fichier, ["_"])
     # On resépare en 2 partie ce qui reste pour enlever le .txt
-    tab_temp = fct_split(tab_temp[1], ".")
+    tab_temp = fct_split(tab_temp[1], ["."])
     nom = tab_temp[0]
     # On parcourt ce qu'il reste pour enlever tout les caracteres numérqiues qui sont présent dans le cas où l'auteur à
     # écrit plusieurs texte
@@ -514,7 +514,7 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
     return mot_finaux
 
 
-def premiere_occurence(fichier, mot_recherche):
+def premiere_occurence(path, mot_recherche):
     """Fonction qui va ernvoyer l'indice de la premiere occurence d'un mot dans un texte
     Entrée: fichier: str: Nom du fichier
            mot_recherche: str: Mot dont on cherche l'indice
@@ -522,9 +522,8 @@ def premiere_occurence(fichier, mot_recherche):
             indice_mot: int: premiere indice du mot recherché
     """
     # On récupére le texte sous la forme d'un str
-    path = f"./Cleaned/{fichier}"
     texte = recuperation_texte(path)
-    tab_texte = fct_split(texte, " ")
+    tab_texte = fct_split(texte, [" "])
     # On parcourt le texte
     for indice_mot in range(len(tab_texte)):
         # Si on le trouve le mot
@@ -549,7 +548,8 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
         # Si le mot est dans le fichier
         if est_present(fichier, mot):
             # On récupére l'emplacement de sa premiere occurence
-            emplacement = premiere_occurence(fichier, mot)
+            path = f'./Cleaned/{fichier}'
+            emplacement = premiere_occurence(path, mot)
             # Si c'est la plus petite on la considere comme étant celle qui a été dite en premier
             if emplacement < indice_premier:
                 indice_premier = emplacement
@@ -588,7 +588,6 @@ def premier_dans_une_liste(tableau, repertoire):
         return "Aucun des mot n'a été cité dans le texte"
     else:
         return premier_president
-
 
 
 def tf_phrase(tab_mot, sont_present):
@@ -673,7 +672,7 @@ def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
 
 
 def transformation_cleaned_speeches(nom_fichier):
-    liste = fct_split(nom_fichier, '/')
+    liste = fct_split(nom_fichier, ['/'])
     return f'./Speeches/{liste[-1]}'
 
 
@@ -681,7 +680,7 @@ def mot_question_max_tf_idf(question, dico_idf):
     liste_mot_question = token_question(question)
     liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
     dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
-    dico_tf_idf_question = calcul_tf_idf(dico_idf, dico_tf_phrase)
+    dico_tf_idf_question, correspondance_mot_phrase = tf_idf_phrase(dico_idf, dico_tf_phrase, liste_mot_question_texte)
     return maxi_dico(dico_tf_idf_question), dico_tf_idf_question
 
 
@@ -690,6 +689,24 @@ def generation_reponse(question, dico_idf, matrice, correspondance):
     document_pertinent = doc_pertinent(dico_tf_idf_question, matrice, correspondance)
 
 
+def reponse_question(document_path_cleaned, liste_mot):
+    document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
+    separateur = ["!", ".", "?", "..."]
+    texte_tab = fct_split(recuperation_texte(document_path_speeches), separateur)
+    indice_min = float('inf')
+    mot_min = ''
+    for mot in liste_mot:
+        indice = premiere_occurence(document_path_cleaned, mot)
+        if indice < indice_min:
+            indice_min = indice
+            mot_min = mot
+    for phrase in texte_tab:
+        phrase_cleaned = minuscule(phrase)
+        phrase_cleaned = ponctuation_fichier(phrase)
+        if mot_min in fct_split(phrase_cleaned, [' ']):
+            return phrase
+          
+          
 def affinage_reponse(question, dico_idf, matrice, correspondance):
     question_starters = {"Comment": "Après analyse, ", "Pourquoi": "Car, ", "Peux-tu": "Oui, bien sûr!"}
     tab_question = fct_split(question, ' ')
