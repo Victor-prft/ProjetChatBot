@@ -140,6 +140,7 @@ def recuperation_texte_avec_mise_en_forme(path):
             texte = texte + ligne
     return texte
 
+
 def recuperation_texte(path):
     """Fonction qui a partir d'un texte va renvoyer une chaine de caractere contenant les mots du texte
     Entrée: fichier: str: Nom du fichier
@@ -517,14 +518,6 @@ def premiere_occurence(fichier, mot_recherche):
     return -1
 
 
-def mots_present(phrase, dico_idf):
-    sont_present = []
-    #tab_mot = ...
-    for element in tab_mot:
-        if element in dico_idf.keys():
-            sont_present.append(element)
-
-
 def premier_a_parler(repertoire: str, mot: str) -> str and int:
     """Fonction qui va à partir d'un répertoire donné en argument renvoyer le premiere auteur à utiliser un mot ainsi
      que l'emplacement à lequelle il l'utise
@@ -580,3 +573,27 @@ def premier_dans_une_liste(tableau, repertoire):
         return "Aucun des mot n'a été cité dans le texte"
     else:
         return premier_president
+
+
+def tf_phrase(tab_mot, sont_present):
+    nombre_mot = len(tab_mot)
+    dico_tf_question = {}
+    for mot in tab_mot:
+        if mot in sont_present:
+            if mot not in dico_tf_question.keys():
+                dico_tf_question[mot] = 1
+            else:
+                dico_tf_question[mot] += 1
+        else:
+            dico_tf_question[mot] = 0
+    for cle, valeur in dico_tf_question.items():
+        dico_tf_question[cle] = valeur/nombre_mot
+    return dico_tf_question
+
+
+def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
+    tab_tf_idf_phrase = []
+    for mot in mot_a_traiter:
+        tab_tf_idf_phrase.append(dico_tf[mot] * dico_idf[mot])
+    return tab_tf_idf_phrase, mot_a_traiter
+
