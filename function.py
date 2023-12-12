@@ -208,7 +208,7 @@ def fct_split(texte, separateur):
             mot = ''
         else:
             mot = mot + element
-    if mot != '':
+    if mot != '' and mot != " ":
         liste.append(mot)
     return liste
 
@@ -662,7 +662,7 @@ def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_qu
     return prt_scal/(a*b)
 
 
-def doc_pertinent(liste_tf_idf_question, matrice, correspondance_question, correspondance_liste):
+def doc_pertinent(liste_tf_idf_question, matrice, correspondance_question, correspondance_liste, correspondance_colonne):
     maxi = -float('inf')
     indice_doc = 0
     for colonne in range(len(matrice[0])):
@@ -673,7 +673,7 @@ def doc_pertinent(liste_tf_idf_question, matrice, correspondance_question, corre
         if calcul_sim > maxi:
             maxi = calcul_sim
             indice_doc = colonne
-    return f'./Cleaned/{correspondance[indice_doc]}'
+    return f'./Cleaned/{correspondance_colonne[indice_doc]}'
 
 
 def transformation_cleaned_speeches(nom_fichier):
@@ -703,9 +703,9 @@ def maximum_indice_tableau(tableau):
     return tab_max
 
 
-def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice):
+def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, correspondance_matrice_colonne):
     tab_mot_question, tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
-    document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_matrice)
+    document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question, correspondance_mot_matrice, correspondance_matrice_colonne)
     reponse = reponse_question(document_pertinent, tab_mot_question)
     return affinage_reponse(question, reponse)
 
@@ -713,7 +713,9 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice):
 def reponse_question(document_path_cleaned, liste_mot):
     document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
     separateur = ["!", ".", "?", "..."]
-    texte_tab = fct_split(recuperation_texte(document_path_speeches), separateur)
+    texte = recuperation_texte(document_path_speeches)
+    print(texte)
+    texte_tab = fct_split(texte, separateur)
     indice_min = float('inf')
     mot_min = ''
     for mot in liste_mot:
@@ -721,8 +723,10 @@ def reponse_question(document_path_cleaned, liste_mot):
         if indice < indice_min:
             indice_min = indice
             mot_min = mot
+    print(texte_tab)
     for phrase in texte_tab:
         phrase_cleaned = minuscule(phrase)
+        print(phrase_cleaned)
         phrase_cleaned = ponctuation_fichier(phrase_cleaned)
         if mot_min in fct_split(phrase_cleaned, [' ']):
             return phrase
