@@ -172,7 +172,7 @@ def fichier_discours(repertoire, president):
     return liste_discours
 
 
-def maxi_dico(dico):
+def maxi_dico(dico, exclusion=None):
     """Cette fonction sert a donner la plus grande valeur et la clé d'un dictionnaire
         Entrée : dico est le dictionnaire où l'on veut savoir le maximum
                  dico : dict
@@ -188,8 +188,13 @@ def maxi_dico(dico):
     for cle in dico.keys():
         # On regarde si la valeur dans le dictoinnaire est supérieur à l'ancienne
         if maxi <= dico[cle]:
-            cle_max = cle
-            maxi = dico[cle_max]
+            if exclusion is None:
+                cle_max = cle
+                maxi = dico[cle_max]
+            else:
+                if cle not in exclusion:
+                    cle_max = cle
+                    maxi = dico[cle_max]
     return [cle_max, maxi]
 
 
@@ -403,7 +408,7 @@ def plus_eleve(matrice, correspondance_ligne):
     return liste_plus_important
 
 
-def repete_president(repertoire, president):
+def repete_president(repertoire, president, mot_pas_important):
     """ Cette fonction sert  adonner le mot le plus dit par un président peut importe son discours
         Entrée : un repertoire et le nom du président
                  repertoire : repertoire contenant dans fichier de type .txt
@@ -419,7 +424,7 @@ def repete_president(repertoire, president):
         # Concaténation des textes d'un même président
         texte_total += texte
     dico_occurence = tf(texte_total)
-    return maxi_dico(dico_occurence)[0]
+    return maxi_dico(dico_occurence, mot_pas_important)[0]
 
 
 def qui_a_ecrit(fichier):
@@ -607,7 +612,6 @@ def tf_phrase(tab_mot, sont_present):
 
 
 def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
-    """g"""
     tab_tf_idf_phrase = []
     for mot in mot_a_traiter:
         tab_tf_idf_phrase.append(dico_tf[mot] * dico_idf[mot])
