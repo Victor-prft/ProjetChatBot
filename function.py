@@ -149,10 +149,11 @@ def recuperation_texte(path):
     # Ouverture du fichier
     with open(path, "r", encoding="utf-8") as f1:
         for ligne in f1:
-            # On souhaite enlever les retours à la ligne on les remplace donc par des espaces quand on les rencontres
-            if ligne[-1] == "\n":
-                ligne = ligne[:len(ligne)-1] + " "
-            texte = texte + ligne
+            if ligne != "":
+                if ligne[-1] == "\n":
+                    ligne = ligne[:len(ligne)-1]
+                    ligne += " "
+                texte = texte + ligne
     return texte
 
 
@@ -725,6 +726,7 @@ def reponse_question(document_path_cleaned, liste_mot):
             mot_min = mot
     print(texte_tab)
     for phrase in texte_tab:
+        print(phrase)
         phrase_cleaned = minuscule(phrase)
         print(phrase_cleaned)
         phrase_cleaned = ponctuation_fichier(phrase_cleaned)

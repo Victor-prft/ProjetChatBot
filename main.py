@@ -12,7 +12,7 @@ demande = """ Veuillez choisir une option:
 -7: Afficher tout les mots à la fois important et cité par tout les présidents
 -8: Sortir
 """
-print("salut")
+
 transformation_fichier(repertoire_non_traiter)
 matrice = creation_tf_idf(repertoire_propre)
 dico_idf = idf(repertoire_propre)
@@ -20,9 +20,7 @@ correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier('./Cleaned')
 mot_les_moins_important = moins_important(dico_idf)
 
-#print(recuperation_texte("./Cleaned/Nomination_Macron.txt"))
-#print(affinage_reponse("Peux-tu", "Macron démission"))
-#print(generation_reponse("Peux-tu me dire comment une nation peut-elle prendre soin du climat ?", dico_idf, matrice, correspondance_ligne, correspondance_colonne))
+print(generation_reponse("Peux-tu me dire comment une nation peut-elle prendre soin du climat ?", dico_idf, matrice, correspondance_ligne, correspondance_colonne))
 
 '''
 while running:
