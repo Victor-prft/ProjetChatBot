@@ -20,6 +20,9 @@ correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier('./Cleaned')
 mot_les_moins_important = moins_important(dico_idf)
 
+print(affinage_reponse("Peux-tu", "Macron démission"))
+
+
 
 while running:
     print()
