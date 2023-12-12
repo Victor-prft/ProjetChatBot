@@ -685,13 +685,29 @@ def mot_question_max_tf_idf(question, dico_idf):
     liste_mot_question = token_question(question)
     liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
     dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
-    dico_tf_idf_question, correspondance_mot_phrase = tf_idf_phrase(dico_idf, dico_tf_phrase, liste_mot_question_texte)
-    return maxi_dico(dico_tf_idf_question), dico_tf_idf_question
+    tab_tf_idf_question, correspondance_mot_question = tf_idf_phrase(dico_idf, dico_tf_phrase, liste_mot_question_texte)
+    tab_max_indice = maximum_indice_tableau(tab_tf_idf_question)
+    tab_mot_max = [correspondance_mot_question[i] for i in tab_max_indice]
+    return tab_mot_max, tab_tf_idf_question, correspondance_mot_question
 
 
-def generation_reponse(question, dico_idf, matrice, correspondance):
-    mot_question, dico_tf_idf_question = mot_question_max_tf_idf(question, dico_idf)
-    document_pertinent = doc_pertinent(dico_tf_idf_question, matrice, correspondance)
+def maximum_indice_tableau(tableau):
+    tab_max = [0]
+    element_max = tableau[0]
+    for indice in range(1, len(tableau)):
+        if tableau[indice] > element_max:
+            tab_max = [indice]
+            element_max = tableau[indice]
+        elif tableau[indice] == element_max:
+            tab_max.append(indice)
+    return tab_max
+
+
+def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice):
+    tab_mot_question, tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
+    document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_matrice)
+    reponse = reponse_question(document_pertinent, tab_mot_question)
+    return affinage_reponse(question, reponse)
 
 
 def reponse_question(document_path_cleaned, liste_mot):
@@ -712,17 +728,14 @@ def reponse_question(document_path_cleaned, liste_mot):
             return phrase
           
           
-def affinage_reponse(question, dico_idf, matrice, correspondance):
+def affinage_reponse(question, reponse):
     question_starters = {"Comment": "Après analyse, ", "Pourquoi": "Car, ", "Peux-tu": "Oui, bien sûr!"}
-    tab_question = fct_split(question, ' ')
-    question_partielle = ''
+    reponse_final = ''
+    tab_question = fct_split(question, [" "])
     starter = tab_question[0]
-    if starter in question_starters:
-        starter = question_starters[starter]
-    for i in range(1, len(tab_question) - 1):
-        question_partielle = question_partielle + ' ' + tab_question[i]
-    reponse_partielle = generation_reponse(question_partielle, dico_idf, matrice, correspondance)
-    if starter == "Oui, bien sûr!":
-        reponse_partielle[0] = chr(ord(reponse_partielle) - 32)
-    reponse_finale = starter + ' ' + reponse_partielle
-    return reponse_finale
+    if starter in question_starters.keys():
+        reponse_final = question_starters[starter] + " "
+        if starter != "Peux-tu":
+            reponse[0] = chr(ord(reponse[0]) + 32)
+    reponse_final += reponse
+    return reponse_final
