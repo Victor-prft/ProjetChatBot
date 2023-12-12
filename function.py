@@ -602,3 +602,63 @@ def mots_present(tab_mot, dico_idf):
         if element in dico_idf.keys():
             sont_present.append(element)
     return sont_present
+
+
+def produit_scalaire(dico_question_a, liste_doc_b, correspondance):
+    res = 0
+    for i in range(len(liste_doc_b)):
+        mot = correspondance[i]
+        a = dico_question_a[mot]
+        res = res + a * liste_doc_b[i]
+    return res
+
+
+def norme_vecteur(dicoouliste):
+    res = 0
+    if isinstance(dicoouliste, dict):
+        for valeur in dicoouliste.values():
+            res = res + (valeur**2)
+        return math.sqrt(res)
+    elif isinstance(dicoouliste, list):
+        for valeur in dicoouliste:
+            res = res + (valeur ** 2)
+        return math.sqrt(res)
+    else:
+        return None
+
+
+def calcul_similarite(dico_tf_idf_question, liste_tf_idf_doc, correspondance):
+    prt_scal = produit_scalaire(dico_tf_idf_question, liste_tf_idf_doc, correspondance)
+    a = norme_vecteur(dico_tf_idf_question)
+    b = norme_vecteur(liste_tf_idf_doc)
+    return prt_scal/(a*b)
+
+
+def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
+    maxi = -float('inf')
+    indice_doc = 0
+    for colonne in range(len(matrice[0])):
+        new_ligne = []
+        for indice_mot in range(len(matrice)):
+            new_ligne.append(matrice[indice_mot][colonne])
+        if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > maxi:
+            maxi = calcul_similarite(dico_tf_idf_question, new_ligne, correspondance)
+            indice_doc = colonne
+    return f'./Cleaned/{correspondance[indice_doc]}'
+
+
+def transformation_cleaned_speeches(nom_fichier):
+    liste = fct_split(nom_fichier, '/')
+    return f'./Speeches/{liste[-1]}'
+
+def mot_question_max_tf_idf(question, dico_idf):
+    liste_mot_question = token_question(question)
+    liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
+    dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
+    dico_tf_idf_question = calcul_tf_idf(dico_idf, dico_tf_phrase)
+    return maxi_dico(dico_tf_idf_question), dico_tf_idf_question
+
+
+def generation_reponse(question, dico_idf, matrice, correspondance):
+    mot_question, dico_tf_idf_question = mot_question_max_tf_idf(question, dico_idf)
+    document_pertinent = doc_pertinent(dico_tf_idf_question, matrice, correspondance)
