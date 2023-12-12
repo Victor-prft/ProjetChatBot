@@ -86,8 +86,9 @@ def ponctuation_fichier(contenu, destination=None):
                         texte = texte + "e"
                 # On écrit l'espace unqiuement si il n'est pas précéder par un saut de ligne, un espace ou un
                 # caractere vide
-                if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
-                    texte += " "
+                if len(texte) > 0:
+                    if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
+                        texte += " "
     if destination is None:
         return texte
     else:
@@ -712,25 +713,24 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
 
 
 def reponse_question(document_path_cleaned, liste_mot):
+    print(liste_mot)
     document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
     separateur = ["!", ".", "?", "..."]
     texte = recuperation_texte(document_path_speeches)
-    print(texte)
     texte_tab = fct_split(texte, separateur)
     indice_min = float('inf')
     mot_min = ''
     for mot in liste_mot:
         indice = premiere_occurence(document_path_cleaned, mot)
-        if indice < indice_min:
+        if indice < indice_min and indice != -1:
             indice_min = indice
             mot_min = mot
-    print(texte_tab)
+    print(mot_min)
     for phrase in texte_tab:
-        print(phrase)
         phrase_cleaned = minuscule(phrase)
-        print(phrase_cleaned)
         phrase_cleaned = ponctuation_fichier(phrase_cleaned)
-        if mot_min in fct_split(phrase_cleaned, [' ']):
+        tab_phrase_cleaned = fct_split(phrase_cleaned, [" "])
+        if mot_min in tab_phrase_cleaned:
             return phrase
           
           
