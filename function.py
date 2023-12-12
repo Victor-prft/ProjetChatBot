@@ -13,7 +13,7 @@ def prenom_president(nom: str) -> str:
         for ligne in f:
             # Les nom et prénom des présidents sont stocké sous la forme nom/prénom on crée donc un tableau grâce à la
             # fonction split en désignant / comme séparateur
-            tab = ligne.split("/")
+            tab = fct_split(ligne, "/")
             # On vérifie si le nom correspond
             if tab[0] == nom:
                 # On vérifie qu'il n'y ai pas de retour à la ligne après le prénom associé
@@ -193,6 +193,21 @@ def maxi_dico(dico):
     return [cle_max, maxi]
 
 
+def fct_split(texte, separateur=' '):
+    liste = []
+    mot = ''
+    for element in texte:
+        if element == separateur:
+            if mot != '' or ' ':
+                liste.append(mot)
+            mot = ''
+        else:
+            mot = mot + element
+    if mot != '':
+        liste.append(mot)
+    return liste
+
+
 def plus_petit_dico(liste):
     """ Cette fonction ressort le dictionnaire le plus petit en terme de nombre de clé dans un dico
         Entrée : une liste comportant des dictionnaires
@@ -222,7 +237,7 @@ def est_present(f, mot_rechercher):
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
             # Création d'un tableau à partir de la séparation d'un texte où chaque valeur est un mot
-            tab_mot = ligne.split(" ")
+            tab_mot = fct_split(ligne, " ")
             # On parcours le tableau
             for mot in tab_mot:
                 if mot[-1] == "\n":
@@ -240,7 +255,7 @@ def tf(texte):
     """
     dico = {}
     # On va creer un tableau ou chaque élément est un mot. Cela est permis par le processus de prétraitement des textes
-    tab_mot = texte.split(" ")
+    tab_mot = fct_split(texte, " ")
     # Parcourt les mots
     for mot in tab_mot:
         # Cas ou le mot a déjà été rencontré
@@ -270,7 +285,7 @@ def idf(repertoire):
         with open(repertoire + "./" + tab_fichier[i], "r", encoding="utf-8") as f1:
             for ligne in f1:
                 # Création d'un tableau à partir de la séparation d'une ligne où chaque valeur est un mot
-                tab_mot = ligne.split(" ")
+                tab_mot = fct_split(ligne, " ")
                 for mot in tab_mot:
                     if mot[-1] == "\n":
                         mot = mot[:-1]
@@ -281,7 +296,7 @@ def idf(repertoire):
                         for f in range(i, len(tab_fichier)):
                             if est_present(tab_fichier[f], mot):
                                 somme += 1
-                        dictionnaire[mot] = math.log(len(tab_fichier)/somme)
+                        dictionnaire[mot] = math.log((len(tab_fichier)/somme), 10)
     return dictionnaire
 
 
@@ -321,7 +336,7 @@ def creation_tf_idf(repertoire):
 def recuperation_tf_idf(mot, matrice, correspondance_ligne):
     ligne = indice_tab(correspondance_ligne, mot)
     return matrice[ligne]
-    
+
   
 def correspondance_mot(dico):
     """ Cette fonction sert à renvoyer toutes les clés d'un dictoinnaire sous forme de liste
@@ -412,9 +427,9 @@ def qui_a_ecrit(fichier):
     Entrée: fichier: str: Nom du fichier
     Sortie: nom: str: Nom de l'auteur du fichier"""
     # On spéare le nom en 2 partie pour enlever le Nomination
-    tab_temp = fichier.split("_")
+    tab_temp = fct_split(fichier, "_")
     # On resépare en 2 partie ce qui reste pour enlever le .txt
-    tab_temp = tab_temp[1].split(".")
+    tab_temp = fct_split(tab_temp[1], ".")
     nom = tab_temp[0]
     # On parcourt ce qu'il reste pour enlever tout les caracteres numérqiues qui sont présent dans le cas où l'auteur à
     # écrit plusieurs texte
@@ -509,7 +524,7 @@ def premiere_occurence(fichier, mot_recherche):
     # On récupére le texte sous la forme d'un str
     path = f"./Cleaned/{fichier}"
     texte = recuperation_texte(path)
-    tab_texte = texte.split(" ")
+    tab_texte = fct_split(texte, " ")
     # On parcourt le texte
     for indice_mot in range(len(tab_texte)):
         # Si on le trouve le mot
@@ -575,6 +590,7 @@ def premier_dans_une_liste(tableau, repertoire):
         return premier_president
 
 
+
 def tf_phrase(tab_mot, sont_present):
     nombre_mot = len(tab_mot)
     dico_tf_question = {}
@@ -598,3 +614,76 @@ def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
         tab_tf_idf_phrase.append(dico_tf[mot] * dico_idf[mot])
     return tab_tf_idf_phrase, mot_a_traiter
 
+
+def token_question(texte_sale):
+    txt = minuscule(texte_sale)
+    texte_propre = ponctuation_fichier(txt)
+    return fct_split(texte_propre)
+
+
+def mots_present(tab_mot, dico_idf):
+    sont_present = []
+    for element in tab_mot:
+        if element in dico_idf.keys():
+            sont_present.append(element)
+    return sont_present
+
+
+def produit_scalaire(dico_question_a, liste_doc_b, correspondance):
+    res = 0
+    for i in range(len(liste_doc_b)):
+        mot = correspondance[i]
+        a = dico_question_a[mot]
+        res = res + a * liste_doc_b[i]
+    return res
+
+
+def norme_vecteur(dicoouliste):
+    res = 0
+    if isinstance(dicoouliste, dict):
+        for valeur in dicoouliste.values():
+            res = res + (valeur**2)
+        return math.sqrt(res)
+    elif isinstance(dicoouliste, list):
+        for valeur in dicoouliste:
+            res = res + (valeur ** 2)
+        return math.sqrt(res)
+    else:
+        return None
+
+
+def calcul_similarite(dico_tf_idf_question, liste_tf_idf_doc, correspondance):
+    prt_scal = produit_scalaire(dico_tf_idf_question, liste_tf_idf_doc, correspondance)
+    a = norme_vecteur(dico_tf_idf_question)
+    b = norme_vecteur(liste_tf_idf_doc)
+    return prt_scal/(a*b)
+
+
+def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
+    maxi = -float('inf')
+    indice_doc = 0
+    for colonne in range(len(matrice[0])):
+        new_ligne = []
+        for indice_mot in range(len(matrice)):
+            new_ligne.append(matrice[indice_mot][colonne])
+        if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > maxi:
+            maxi = calcul_similarite(dico_tf_idf_question, new_ligne, correspondance)
+            indice_doc = colonne
+    return f'./Cleaned/{correspondance[indice_doc]}'
+
+
+def transformation_cleaned_speeches(nom_fichier):
+    liste = fct_split(nom_fichier, '/')
+    return f'./Speeches/{liste[-1]}'
+
+def mot_question_max_tf_idf(question, dico_idf):
+    liste_mot_question = token_question(question)
+    liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
+    dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
+    dico_tf_idf_question = calcul_tf_idf(dico_idf, dico_tf_phrase)
+    return maxi_dico(dico_tf_idf_question), dico_tf_idf_question
+
+
+def generation_reponse(question, dico_idf, matrice, correspondance):
+    mot_question, dico_tf_idf_question = mot_question_max_tf_idf(question, dico_idf)
+    document_pertinent = doc_pertinent(dico_tf_idf_question, matrice, correspondance)

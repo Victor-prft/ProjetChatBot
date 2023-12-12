@@ -17,6 +17,7 @@ transformation_fichier(repertoire_non_traiter)
 matrice = creation_tf_idf(repertoire_propre)
 dico_idf = idf(repertoire_propre)
 correspondance_ligne = correspondance_mot(dico_idf)
+correspondance_colonne = liste_fichier('./Cleaned')
 
 
 while running:
