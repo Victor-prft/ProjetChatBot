@@ -198,7 +198,7 @@ def maxi_dico(dico, exclusion=None):
     return [cle_max, maxi]
 
 
-def fct_split(texte, separateur=[' ']):
+def fct_split(texte, separateur):
     liste = []
     mot = ''
     for element in texte:
@@ -621,7 +621,7 @@ def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
 def token_question(texte_sale):
     txt = minuscule(texte_sale)
     texte_propre = ponctuation_fichier(txt)
-    return fct_split(texte_propre)
+    return fct_split(texte_propre, ' ')
 
 
 def mots_present(tab_mot, dico_idf):
@@ -632,45 +632,46 @@ def mots_present(tab_mot, dico_idf):
     return sont_present
 
 
-def produit_scalaire(dico_question_a, liste_doc_b, correspondance):
+def produit_scalaire(liste_question_a, liste_doc_b, correspondance_question, correspondance_liste):
     res = 0
-    for i in range(len(liste_doc_b)):
-        mot = correspondance[i]
-        a = dico_question_a[mot]
-        res = res + a * liste_doc_b[i]
+    for i in range(len(liste_question_a)):
+        mot = correspondance_question[i]
+        b = liste_doc_b[indice_tab(correspondance_liste, mot)]
+        res = res + b * liste_question_a[i]
     return res
 
 
-def norme_vecteur(dicoouliste):
+def norme_vecteur(liste):
     res = 0
-    if isinstance(dicoouliste, dict):
-        for valeur in dicoouliste.values():
+    if isinstance(liste, dict):
+        for valeur in liste.values():
             res = res + (valeur**2)
         return math.sqrt(res)
-    elif isinstance(dicoouliste, list):
-        for valeur in dicoouliste:
+    elif isinstance(liste, list):
+        for valeur in liste:
             res = res + (valeur ** 2)
         return math.sqrt(res)
     else:
         return None
 
 
-def calcul_similarite(dico_tf_idf_question, liste_tf_idf_doc, correspondance):
-    prt_scal = produit_scalaire(dico_tf_idf_question, liste_tf_idf_doc, correspondance)
-    a = norme_vecteur(dico_tf_idf_question)
+def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste):
+    prt_scal = produit_scalaire(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste)
+    a = norme_vecteur(liste_tf_idf_question)
     b = norme_vecteur(liste_tf_idf_doc)
     return prt_scal/(a*b)
 
 
-def doc_pertinent(dico_tf_idf_question, matrice, correspondance):
+def doc_pertinent(liste_tf_idf_question, matrice, correspondance_question, correspondance_liste):
     maxi = -float('inf')
     indice_doc = 0
     for colonne in range(len(matrice[0])):
         new_ligne = []
         for indice_mot in range(len(matrice)):
             new_ligne.append(matrice[indice_mot][colonne])
-        if calcul_similarite(dico_tf_idf_question, new_ligne, correspondance) > maxi:
-            maxi = calcul_similarite(dico_tf_idf_question, new_ligne, correspondance)
+        calcul_sim = calcul_similarite(liste_tf_idf_question, new_ligne, correspondance_question, correspondance_liste)
+        if calcul_sim > maxi:
+            maxi = calcul_sim
             indice_doc = colonne
     return f'./Cleaned/{correspondance[indice_doc]}'
 
@@ -706,7 +707,7 @@ def reponse_question(document_path_cleaned, liste_mot):
             mot_min = mot
     for phrase in texte_tab:
         phrase_cleaned = minuscule(phrase)
-        phrase_cleaned = ponctuation_fichier(phrase)
+        phrase_cleaned = ponctuation_fichier(phrase_cleaned)
         if mot_min in fct_split(phrase_cleaned, [' ']):
             return phrase
           
