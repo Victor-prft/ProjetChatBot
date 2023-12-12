@@ -705,3 +705,19 @@ def reponse_question(document_path_cleaned, liste_mot):
         phrase_cleaned = ponctuation_fichier(phrase)
         if mot_min in fct_split(phrase_cleaned, [' ']):
             return phrase
+          
+          
+def affinage_reponse(question, dico_idf, matrice, correspondance):
+    question_starters = {"Comment": "Après analyse, ", "Pourquoi": "Car, ", "Peux-tu": "Oui, bien sûr!"}
+    tab_question = fct_split(question, ' ')
+    question_partielle = ''
+    starter = tab_question[0]
+    if starter in question_starters:
+        starter = question_starters[starter]
+    for i in range(1, len(tab_question) - 1):
+        question_partielle = question_partielle + ' ' + tab_question[i]
+    reponse_partielle = generation_reponse(question_partielle, dico_idf, matrice, correspondance)
+    if starter == "Oui, bien sûr!":
+        reponse_partielle[0] = chr(ord(reponse_partielle) - 32)
+    reponse_finale = starter + ' ' + reponse_partielle
+    return reponse_finale
