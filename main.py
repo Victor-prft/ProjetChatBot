@@ -85,13 +85,12 @@ while running:
         print(generation_reponse(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne))
         print()
         continuer = demande_continuer()
-        if continuer == True:
+        if continuer:
             choix_menu = demande_mode(message_demande_mode)
-        elif continuer == False:
+        elif not continuer:
             running = False
     elif choix_menu == "3":
         print("Merci d'avoir utilisé notre programme")
         running = False
     else:
         print("Choix non valide veuillez recommencer")
-
