@@ -697,9 +697,7 @@ def mot_question_max_tf_idf(question, dico_idf):
     liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
     dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
     tab_tf_idf_question, correspondance_mot_question = tf_idf_phrase(dico_idf, dico_tf_phrase, liste_mot_question_texte)
-    tab_max_indice = maximum_indice_tableau(tab_tf_idf_question)
-    tab_mot_max = [correspondance_mot_question[i] for i in tab_max_indice]
-    return tab_mot_max, tab_tf_idf_question, correspondance_mot_question
+    return tab_tf_idf_question, correspondance_mot_question
 
 
 def maximum_indice_tableau(tableau):
@@ -715,10 +713,14 @@ def maximum_indice_tableau(tableau):
 
 
 def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, correspondance_matrice_colonne):
-    tab_mot_question, tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
+    tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
+    if len(tab_tf_idf_question) == 0:
+        return "Désolé nous ne pouvons pas vous fournir de réponse"
+    tab_max_indice = maximum_indice_tableau(tab_tf_idf_question)
+    tab_mot_max = [correspondance_mot_question[i] for i in tab_max_indice]
     document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question, correspondance_mot_matrice, correspondance_matrice_colonne)
-    reponse = reponse_question(document_pertinent, tab_mot_question)
-    return reponse
+    reponse = reponse_question(document_pertinent, tab_mot_max)
+    return affinage_reponse(question, reponse)
 
 
 def reponse_question(document_path_cleaned, liste_mot):
