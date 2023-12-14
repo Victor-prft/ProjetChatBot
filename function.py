@@ -597,6 +597,7 @@ def premier_dans_une_liste(tableau, repertoire):
         return premier_president
 
 
+
 def tf_phrase(tab_mot, sont_present):
     nombre_mot = len(tab_mot)
     dico_tf_question = {}
