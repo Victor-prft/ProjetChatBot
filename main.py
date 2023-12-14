@@ -30,7 +30,8 @@ correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier('./Cleaned')
 mot_les_moins_important = moins_important(dico_idf)
 choix_menu = None
-print(generation_reponse("nique ta mere", dico_idf, matrice, correspondance_ligne, correspondance_colonne))
+
+
 """while running:
     if choix_menu is None:
         print()
