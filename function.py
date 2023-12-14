@@ -657,11 +657,7 @@ def produit_scalaire(liste_question_a, liste_doc_b, correspondance_question, cor
 
 def norme_vecteur(liste):
     res = 0
-    if isinstance(liste, dict):
-        for valeur in liste.values():
-            res = res + (valeur**2)
-        return math.sqrt(res)
-    elif isinstance(liste, list):
+    if isinstance(liste, list):
         for valeur in liste:
             res = res + (valeur ** 2)
         return math.sqrt(res)
@@ -684,6 +680,7 @@ def doc_pertinent(liste_tf_idf_question, matrice, correspondance_question, corre
         for indice_mot in range(len(matrice)):
             new_ligne.append(matrice[indice_mot][colonne])
         calcul_sim = calcul_similarite(liste_tf_idf_question, new_ligne, correspondance_question, correspondance_liste)
+        print(calcul_sim)
         if calcul_sim > maxi:
             maxi = calcul_sim
             indice_doc = colonne
@@ -726,7 +723,6 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
 
 
 def reponse_question(document_path_cleaned, liste_mot):
-    print(liste_mot)
     document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
     separateur = ["!", ".", "?", "..."]
     texte = recuperation_texte(document_path_speeches)
@@ -738,7 +734,6 @@ def reponse_question(document_path_cleaned, liste_mot):
         if indice < indice_min and indice != -1:
             indice_min = indice
             mot_min = mot
-    print(mot_min)
     for phrase in texte_tab:
         phrase_cleaned = minuscule(phrase)
         phrase_cleaned = ponctuation_fichier(phrase_cleaned)
@@ -758,3 +753,4 @@ def affinage_reponse(question, reponse):
             reponse[0] = chr(ord(reponse[0]) + 32)
     reponse_final = reponse_final + reponse + '.'
     return reponse_final
+

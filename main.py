@@ -31,8 +31,6 @@ correspondance_colonne = liste_fichier('./Cleaned')
 mot_les_moins_important = moins_important(dico_idf)
 choix_menu = None
 
-#print(generation_reponse("Comment une nation peut-elle prendre soin du climat ?", dico_idf, matrice, correspondance_ligne, correspondance_colonne))
-
 
 while running:
     if choix_menu is None:
@@ -94,4 +92,6 @@ while running:
     elif choix_menu == "3":
         print("Merci d'avoir utilisé notre programme")
         running = False
+    else:
+        print("Choix non valide veuillez recommencer")
 
