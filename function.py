@@ -584,9 +584,9 @@ def demande_mode(message):
     while True:
         reponse = input(message)
         if reponse == "1":
-            return 1
+            return "1"
         elif reponse == "2":
-            return 2
+            return "2"
 
 
 def premier_dans_une_liste(tableau, repertoire):
@@ -680,7 +680,6 @@ def doc_pertinent(liste_tf_idf_question, matrice, correspondance_question, corre
         for indice_mot in range(len(matrice)):
             new_ligne.append(matrice[indice_mot][colonne])
         calcul_sim = calcul_similarite(liste_tf_idf_question, new_ligne, correspondance_question, correspondance_liste)
-        print(calcul_sim)
         if calcul_sim > maxi:
             maxi = calcul_sim
             indice_doc = colonne
@@ -718,7 +717,6 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
     tab_mot_question, tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
     document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question, correspondance_mot_matrice, correspondance_matrice_colonne)
     reponse = reponse_question(document_pertinent, tab_mot_question)
-    print(reponse)
     return reponse
 
 
