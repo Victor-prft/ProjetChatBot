@@ -577,6 +577,18 @@ def demande_continuer():
             return False
 
 
+def demande_mode(message):
+    """Fonction qui demande a l'utilisateur le mode souhaité
+    Entrée: None
+    Sortie: """
+    while True:
+        reponse = input(message)
+        if reponse == "1":
+            return 1
+        elif reponse == "2":
+            return 2
+
+
 def premier_dans_une_liste(tableau, repertoire):
     """Fonction qui a partir d'un tableau mis en argument va renvoyer l'auteur ayant utilisé en premier l'un de ces
     termes
@@ -709,7 +721,8 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
     tab_mot_question, tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
     document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question, correspondance_mot_matrice, correspondance_matrice_colonne)
     reponse = reponse_question(document_pertinent, tab_mot_question)
-    return affinage_reponse(question, reponse)
+    print(reponse)
+    return reponse
 
 
 def reponse_question(document_path_cleaned, liste_mot):
@@ -743,5 +756,5 @@ def affinage_reponse(question, reponse):
         reponse_final = question_starters[starter] + " "
         if starter != "Peux-tu":
             reponse[0] = chr(ord(reponse[0]) + 32)
-    reponse_final += reponse
+    reponse_final = reponse_final + reponse + '.'
     return reponse_final
