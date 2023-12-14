@@ -30,9 +30,8 @@ correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier('./Cleaned')
 mot_les_moins_important = moins_important(dico_idf)
 choix_menu = None
-
-
-while running:
+print(generation_reponse("nique ta mere", dico_idf, matrice, correspondance_ligne, correspondance_colonne))
+"""while running:
     if choix_menu is None:
         print()
         choix_menu = input(demande_menu)
@@ -93,4 +92,4 @@ while running:
         print("Merci d'avoir utilisé notre programme")
         running = False
     else:
-        print("Choix non valide veuillez recommencer")
+        print("Choix non valide veuillez recommencer")"""
