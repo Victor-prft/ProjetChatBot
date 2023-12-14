@@ -20,9 +20,6 @@ correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier('./Cleaned')
 mot_les_moins_important = moins_important(dico_idf)
 
-print(generation_reponse("Peux-tu me dire comment une nation peut-elle prendre soin du climat ?", dico_idf, matrice, correspondance_ligne, correspondance_colonne))
-
-'''
 while running:
     print()
     choix = input(demande)
@@ -67,4 +64,4 @@ while running:
         print("Merci d'avoir utilisé notre programme")
         running = False
     else:
-        print("Choix non valide veuillez recommencer")'''
+        print("Choix non valide veuillez recommencer")
