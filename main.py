@@ -32,7 +32,7 @@ mot_les_moins_important = moins_important(dico_idf)
 choix_menu = None
 
 
-"""while running:
+while running:
     if choix_menu is None:
         print()
         choix_menu = input(demande_menu)
@@ -93,4 +93,4 @@ choix_menu = None
         print("Merci d'avoir utilisé notre programme")
         running = False
     else:
-        print("Choix non valide veuillez recommencer")"""
+        print("Choix non valide veuillez recommencer")
