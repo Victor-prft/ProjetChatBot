@@ -751,7 +751,10 @@ def affinage_reponse(question, reponse):
     if starter in question_starters.keys():
         reponse_final = question_starters[starter] + " "
         if starter != "Peux-tu":
-            reponse = chr(ord(reponse[0]) + 32) + reponse[1:]
+            i = 0
+            while reponse[i] == " ":
+                i += 1
+            reponse = chr(ord(reponse[i]) + 32) + reponse[i + 1:]
     reponse_final = reponse_final + reponse + '.'
     return reponse_final
 
