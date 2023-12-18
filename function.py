@@ -693,6 +693,13 @@ def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_qu
 
 
 def doc_pertinent(tab_tf_idf_question, matrice, correspondance_question, correspondance_liste, correspondance_colonne):
+    """Cette fonction permet de connaitre quel est le document le plus pertinent en fonction de la question
+       Entrée : tab_tf_idf_question : list
+                matrice : list
+                correspondance_question : list
+                correspondance_liste : list
+                correspondance_colonne : list
+       Sortie : f'./Cleaned/{correspondance_colonne[indice_doc]}' : str"""
     maxi = -float('inf')
     indice_doc = 0
     for colonne in range(len(matrice[0])):
@@ -712,6 +719,11 @@ def transformation_cleaned_speeches(nom_fichier):
 
 
 def mot_question_max_tf_idf(question, dico_idf):
+    """ Cette fonction permet de connaitre à partir de la question le mot ayant le plus grand Tf-idf
+        Entrée : question : str
+                 dico_idf : dict
+        Sortie : tab_tf_idf_question : list
+                 correspondance_mot_question : list"""
     liste_mot_question = token_question(question)
     liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
     dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
