@@ -233,13 +233,12 @@ def plus_petit_dico(liste):
     return dico_mini
 
 
-def est_present(f, mot_rechercher):
+def est_present(fichier, mot_rechercher):
     """Cette fonction nous indique si un mot est présent ou non dans un fichier.
     Entrée : f est le fichier où l'on veut recherche le mot,
              mot_rechercher est le mot qui est recherché dans le fichier.
              f : .txt , mot_rechercher : str
     Sortie : True si le mot_rechercher est dans le fichier f et False si le mot_rechercher n'est pas dans le fichier """
-    fichier = f"./Cleaned/{f}"
     # Ouverture du fichier
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
@@ -301,7 +300,7 @@ def idf(repertoire):
                         somme = 0
                         # On regarde si le mot est dans les autres textes
                         for f in range(i, len(tab_fichier)):
-                            if est_present(tab_fichier[f], mot):
+                            if est_present(f"./Cleaned/{tab_fichier[f]}", mot):
                                 somme += 1
                         dictionnaire[mot] = math.log((len(tab_fichier)/somme), 10)
     return dictionnaire
@@ -553,9 +552,9 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
     # Parcourt des fichier
     for fichier in tab_fichier:
         # Si le mot est dans le fichier
+        path = f'./Cleaned/{fichier}'
         if est_present(fichier, mot):
             # On récupére l'emplacement de sa premiere occurence
-            path = f'./Cleaned/{fichier}'
             emplacement = premiere_occurence(path, mot)
             # Si c'est la plus petite on la considere comme étant celle qui a été dite en premier
             if emplacement < indice_premier:
@@ -582,7 +581,7 @@ def demande_mode(message):
     Entrée: None
     Sortie: """
     while True:
-        reponse = input(message)
+        reponse = input(message + "\n")
         if reponse == "1":
             return "1"
         elif reponse == "2":
@@ -609,9 +608,7 @@ def premier_dans_une_liste(tableau, repertoire):
         return premier_president
 
 
-
 def tf_phrase(tab_mot, sont_present):
-    nombre_mot = len(tab_mot)
     dico_tf_question = {}
     for mot in tab_mot:
         if mot in sont_present:
@@ -619,10 +616,6 @@ def tf_phrase(tab_mot, sont_present):
                 dico_tf_question[mot] = 1
             else:
                 dico_tf_question[mot] += 1
-        else:
-            dico_tf_question[mot] = 0
-    for cle, valeur in dico_tf_question.items():
-        dico_tf_question[cle] = valeur/nombre_mot
     return dico_tf_question
 
 
@@ -642,7 +635,7 @@ def token_question(texte_sale):
 def mots_present(tab_mot, dico_idf):
     sont_present = []
     for element in tab_mot:
-        if element in dico_idf.keys():
+        if element in dico_idf.keys() and element not in sont_present:
             sont_present.append(element)
     return sont_present
 
@@ -670,6 +663,8 @@ def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_qu
     prt_scal = produit_scalaire(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste)
     a = norme_vecteur(liste_tf_idf_question)
     b = norme_vecteur(liste_tf_idf_doc)
+    if a == 0:
+        return 0
     return prt_scal/(a*b)
 
 
@@ -700,15 +695,16 @@ def mot_question_max_tf_idf(question, dico_idf):
     return tab_tf_idf_question, correspondance_mot_question
 
 
-def maximum_indice_tableau(tableau):
-    tab_max = [0]
-    element_max = tableau[0]
-    for indice in range(1, len(tableau)):
-        if tableau[indice] > element_max:
-            tab_max = [indice]
-            element_max = tableau[indice]
-        elif tableau[indice] == element_max:
-            tab_max.append(indice)
+def maximum_indice_tableau(tableau, document, correspondance):
+    tab_max = []
+    element_max = -float("inf")
+    for indice in range(len(tableau)):
+        if est_present(document, correspondance[indice]):
+            if tableau[indice] > element_max:
+                tab_max = [indice]
+                element_max = tableau[indice]
+            elif tableau[indice] == element_max:
+                tab_max.append(indice)
     return tab_max
 
 
@@ -716,16 +712,17 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
     tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
     if len(tab_tf_idf_question) == 0:
         return "Désolé nous ne pouvons pas vous fournir de réponse"
-    tab_max_indice = maximum_indice_tableau(tab_tf_idf_question)
+    document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question,
+                                       correspondance_mot_matrice, correspondance_matrice_colonne)
+    tab_max_indice = maximum_indice_tableau(tab_tf_idf_question, document_pertinent, correspondance_mot_question)
     tab_mot_max = [correspondance_mot_question[i] for i in tab_max_indice]
-    document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question, correspondance_mot_matrice, correspondance_matrice_colonne)
     reponse = reponse_question(document_pertinent, tab_mot_max)
     return affinage_reponse(question, reponse)
 
 
 def reponse_question(document_path_cleaned, liste_mot):
     document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
-    separateur = ["!", ".", "?", "..."]
+    separateur = ["!", "." , "?", "..."]
     texte = recuperation_texte(document_path_speeches)
     texte_tab = fct_split(texte, separateur)
     indice_min = float('inf')
@@ -757,4 +754,3 @@ def affinage_reponse(question, reponse):
             reponse = chr(ord(reponse[i]) + 32) + reponse[i + 1:]
     reponse_final = reponse_final + reponse + '.'
     return reponse_final
-

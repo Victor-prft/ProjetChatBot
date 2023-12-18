@@ -22,7 +22,7 @@ demande = """ Veuillez choisir une option :
 -8: Changer de mode
 -9: Sortir
 """
-
+print("abc" in "zabcde")
 transformation_fichier(repertoire_non_traiter)
 matrice = creation_tf_idf(repertoire_propre)
 dico_idf = idf(repertoire_propre)
