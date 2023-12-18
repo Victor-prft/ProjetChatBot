@@ -668,14 +668,14 @@ def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_qu
     return prt_scal/(a*b)
 
 
-def doc_pertinent(liste_tf_idf_question, matrice, correspondance_question, correspondance_liste, correspondance_colonne):
+def doc_pertinent(tab_tf_idf_question, matrice, correspondance_question, correspondance_liste, correspondance_colonne):
     maxi = -float('inf')
     indice_doc = 0
     for colonne in range(len(matrice[0])):
         new_ligne = []
         for indice_mot in range(len(matrice)):
             new_ligne.append(matrice[indice_mot][colonne])
-        calcul_sim = calcul_similarite(liste_tf_idf_question, new_ligne, correspondance_question, correspondance_liste)
+        calcul_sim = calcul_similarite(tab_tf_idf_question, new_ligne, correspondance_question, correspondance_liste)
         if calcul_sim > maxi:
             maxi = calcul_sim
             indice_doc = colonne
@@ -722,7 +722,7 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
 
 def reponse_question(document_path_cleaned, liste_mot):
     document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
-    separateur = ["!", "." , "?", "..."]
+    separateur = ["!", ".", "?", "..."]
     texte = recuperation_texte(document_path_speeches)
     texte_tab = fct_split(texte, separateur)
     indice_min = float('inf')
