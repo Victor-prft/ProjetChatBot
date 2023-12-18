@@ -19,7 +19,9 @@ Lors de la première éxécution du programme, un répertoire Cleaned va être c
 Vous pourrez ensuite choisir les différentes possibilitées que propose notre programme en tapant le numéro de l'option de menu choisi :
 
 Vous pouvez accéder aux fonctionnalités de la partie 1 en tapant 1
+
 Vous pouvez accéder au Chatbot en tapant 2
+
 Vous pouvez sortir du programme en tapant 3
 
 
