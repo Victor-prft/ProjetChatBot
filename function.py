@@ -27,8 +27,8 @@ def nom_president(repertoire: str) -> list:
     """Fonction qui prend en argument un repertoire et qui va créer une liste contenant tous les noms des présidents
     en les récupérant à partir des noms des fichiers
     Entrée : repertoire : str : chemin vers le dossier contenant les textes
-    Sortie : tab : tableau de str : Tableau contenant le nom de tous les présidents ayant écrit un discours présent dans
-                                    le dossier
+    Sortie : tab : list de str : Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le
+                 dossier
     """
     tab_nom = []
     # On récupère dans une liste le nom de tous les fichiers contenus dans le répertoire
@@ -115,8 +115,8 @@ def ponctuation_fichier(contenu, destination=None):
 def liste_fichier(repertoire):
     """Fonction renvoyant à partir d'un répertoire donné un tableau contenant le nom de chacun des fichiers en .txt
     qu'il contient
-    Entrée : repertoire : str : chemin du dossier dont on veut extraire les fichiers
-    Sortie : tableau de str : tableau contenant le nom de tous les fichiers txt présent dans le repertoire"""
+    Entrée: repertoire: str: chemin du dossier dont on veut extraire les fichiers
+    Sortie: list de str: tableau contenant le nom de tous les fichiers txt présent dans le repertoire"""
     tab_fichier = []
     # On parcourt les fichiers
     for fichier in os.listdir(repertoire):
@@ -482,7 +482,7 @@ def a_parler(repertoire, mot):
     Entrée : repertoire : str : Nom du répertoire à analyser
            mot : str : Mot à rechercher
     Sortie : a_le_plus_parler : str : Nom de la personne ayant le plus parler
-            tab_parler : tableau de str : Tableau contenant le nom de tous les auteurs ayant mentionné le mot """
+            tab_parler : list de str : Tableau contenant le nom de tous les auteurs ayant mentionné le mot """
     dico_parler = {}
     # On récupère un tableau avec le nom de tous les fichiers
     tab_fichier = liste_fichier(repertoire)
@@ -622,7 +622,7 @@ def demande_mode(message):
 def premier_dans_une_liste(tableau, repertoire):
     """Fonction qui a partir d'un tableau mis en argument va renvoyer l'auteur ayant utilisé en premier l'un de ces
     termes
-    Entrée : tableau : tableau : tableau contenant tous les éléments recherchés
+    Entrée : tableau : list : tableau contenant tous les éléments recherchés
             repertoire : str : repertoire dans lequel on va chercher les fichiers
     Sortie : premiers_president : str : nom du président ayant utilisé l'un des termes en premier"""
     indice_premier = float('inf')
@@ -640,28 +640,42 @@ def premier_dans_une_liste(tableau, repertoire):
 
 
 def tf_phrase(tab_mot, sont_present):
-    """Fonction qui"""
+    """Fonction qui prend en argument une question sous la forme d'un tableau et un tableau contenant les mots de la
+    question également présent dans le corpus et va renvoyer un dictionnaire associant à chacun de ces mots son score
+    tf
+    Entrée : tab_mot : list : Tableau contenant les mots d'une question
+             sont_present : list : Tableau qui contient les mots présent à la fois dans la question et le corpus
+    Sortie : dico_tf_question : dictionnaire : dictionnaire associant à chaque mot son score Tf dans la question"""
     dico_tf_question = {}
-    for mot in tab_mot:
-        if mot in sont_present:
-            if mot not in dico_tf_question.keys():
-                dico_tf_question[mot] = 1
-            else:
-                dico_tf_question[mot] += 1
+    # on parcourt les mots présent dans la question et le corpus
+    for mot in sont_present:
+        if mot not in dico_tf_question.keys():
+            dico_tf_question[mot] = 1
+        else:
+            dico_tf_question[mot] += 1
     return dico_tf_question
 
 
-def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
+def tf_idf_phrase(dico_idf, dico_tf):
+    """Fonction qui a partir d'un dictionnaire Tf d'une question et le dictionnaire Idf du corpus renvoyer un tableau
+    correspondant au score Tf-idf de la question ainsi qu'un tableau de correspondance
+    Entrée : dico_idf : dictionnaire : Dictionnaire des scores Idf de chaque mot du corpus dans ce dernier
+             dico_tf : dictionnaire : Dictionnaire des scores Tf de chaque mot de la question dans cette dernière
+    Sortie : tab_tf_idf_phrase : list : Tableau contenant le score Tf-idf de la question
+             mot_traiter : list : Tableau qui va permettre de faire correspondre un mot avec son score Tf-idf dans la
+             question"""
     tab_tf_idf_phrase = []
-    for mot in mot_a_traiter:
+    mot_traiter = []
+    for mot in dico_tf.keys():
+        mot_traiter.append(mot)
         tab_tf_idf_phrase.append(dico_tf[mot] * dico_idf[mot])
-    return tab_tf_idf_phrase, mot_a_traiter
+    return tab_tf_idf_phrase, mot_traiter
 
 
 def token_question(texte_sale):
     """Cette fonction sert à transformer la question dite sale en une liste de mot propre
-        Entrée : texte_sale : str
-        Sortie : list"""
+        Entrée : texte_sale : str : Texte de la question avant toute transformation
+        Sortie : list : Tableau ou chaque élément est un mot de la question posé"""
     # Appelle de la fonction minuscule
     txt = minuscule(texte_sale)
     # Appelle de la fonction ponctuation
@@ -689,7 +703,7 @@ def produit_scalaire(liste_question_a, liste_doc_b, correspondance_question, cor
                 liste_doc_b : list
                 correspondance_question : list
                 correspondance_liste : list
-       Sortie : res = float"""
+       Sortie : res : float"""
     res = 0
     for i in range(len(liste_question_a)):
         mot = correspondance_question[i]
@@ -749,6 +763,9 @@ def doc_pertinent(tab_tf_idf_question, matrice, correspondance_question, corresp
 
 
 def transformation_cleaned_speeches(nom_fichier):
+    """Fonction qui renvoie l'équivalent dans le répertoire speeches d'un fichier dans le répértoire cleaned
+    Entrée : nom_fichier : str
+    Sortie : str"""
     liste = fct_split(nom_fichier, ['/'])
     return f'./Speeches/{liste[-1]}'
 
@@ -767,6 +784,12 @@ def mot_question_max_tf_idf(question, dico_idf):
 
 
 def maximum_indice_tableau(tableau, document, correspondance):
+    """Fonction qui va prendre en argument un tableau contenant le score Tf-idf d'une question, un document et une
+    liste de correspondance pour renvoyer une liste des mot possédant le score tf-idf le plus élevé dans le document
+    Entrée : tableau : list
+             document : str
+             correspondance : list
+    Sortie : list"""
     tab_max = []
     element_max = -float("inf")
     for indice in range(len(tableau)):
@@ -780,7 +803,19 @@ def maximum_indice_tableau(tableau, document, correspondance):
 
 
 def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, correspondance_matrice_colonne):
+    """Fonction centrale de la génération de la réponse car elle appelle toutes les autres fonctions nécessaires
+    pour le traitement de la question. Elle prend en argument diverses informations calculer précedemment pour optimiser
+    le temps d'éxécution
+    Entrée : question : list
+             dico_idf : dictionnaire
+             matrice : list
+             correspondance_mot_matrice : list
+             correspondance_matrice_colonne : list
+    Sortie : str
+             """
+    # on récupère la liste contenant le score Tf-idf de la question
     tab_tf_idf_question, correspondance_mot_question = mot_question_max_tf_idf(question, dico_idf)
+    # Si cette liste est vide cela signifie qu'aucun des mots n'est en commun entre
     if len(tab_tf_idf_question) == 0:
         return "Désolé nous ne pouvons pas vous fournir de réponse"
     document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question,
@@ -792,6 +827,7 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
 
 
 def reponse_question(document_path_cleaned, liste_mot):
+    """"""
     document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
     separateur = ["!", ".", "?", "..."]
     texte = recuperation_texte(document_path_speeches)
