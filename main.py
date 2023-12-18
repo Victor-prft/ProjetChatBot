@@ -48,7 +48,7 @@ while running:
             running = demande_continuer()
         elif choix == "3":
             president = input("Veuillez rentrer le nom d'un président\n")
-            print(repete_president(repertoire_propre, president, mot_les_moins_important))
+            print(rep_president(repertoire_propre, president, mot_les_moins_important))
             print()
             running = demande_continuer()
         elif choix == "4" or choix == "5":
@@ -82,7 +82,7 @@ while running:
             print("Choix non valide veuillez recommencer")
     elif choix_menu == "2":
         question = input("Saisissez votre question : ")
-        print(generation_reponse(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne))
+        print(generation_rep(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne))
         print()
         continuer = demande_continuer()
         if continuer:
