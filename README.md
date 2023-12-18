@@ -16,8 +16,11 @@ Voici les différentes fonctionnalités de notre programme:
 -Afficher tout les mots à la fois important et cité par tout les présidents
 
 Lors de la première éxécution du programme, un répertoire Cleaned va être crée automatiquement contenant les fichiers .txt dit "Nettoyé"
-Vous pourrez ensuite choisir les différentes possibilitées que propose notre programme en tapant le numéro de l'option choisi
-Si vous souhaitez arreter le programme, taper 8
+Vous pourrez ensuite choisir les différentes possibilitées que propose notre programme en tapant le numéro de l'option de menu choisi :
+
+Vous pouvez accéder aux fonctionnalités de la partie 1 en tapant 1
+Vous pouvez accéder au Chatbot en tapant 2
+Vous pouvez sortir du programme en tapant 3
 
 
 
