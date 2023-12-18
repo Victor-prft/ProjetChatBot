@@ -4,8 +4,8 @@ import math
 
 def prenom_president(nom: str) -> str:
     """Cette fonction renvoie le prénom d'un président en fonction du nom mis en argument
-    Entrée: nom: str: nom du président pour lequelle on veut le prénom
-    Sortie: un str contenant le prénom du président concerné"""
+    Entrée : nom : str : nom du président pour lequel on veut le prénom
+    Sortie : un str contenant le prénom du président concerné"""
     # Chemin vers un fichier contenant le nom de tous les présidents associée à leur prénom
     fichier = "./Ressource/nom_president.txt"
     # ouverture du fichier en mode lecture
@@ -627,12 +627,19 @@ def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
 
 
 def token_question(texte_sale):
+    """Cette fonction sert à transformer la question dites sale en une liste de mot propre
+        Entrée : texte_sale : str
+        Sortie : list"""
     txt = minuscule(texte_sale)
     texte_propre = ponctuation_fichier(txt)
     return fct_split(texte_propre, ' ')
 
 
 def mots_present(tab_mot, dico_idf):
+    """Cette fonction ressort tous les mots de la liste qui sont présents dans les clées du dictionnaire
+       Entrée : tab_mot : list
+                dico_idf : dict
+       Sortie : sont_present : list"""
     sont_present = []
     for element in tab_mot:
         if element in dico_idf.keys() and element not in sont_present:
@@ -746,7 +753,7 @@ def affinage_reponse(question, reponse):
     tab_question = fct_split(question, [" "])
     starter = tab_question[0]
     if starter in question_starters.keys():
-        reponse_final = question_starters[starter] + " "
+        reponse_final = question_starters[starter] + ' '
         if starter != "Peux-tu":
             i = 0
             while reponse[i] == " ":
