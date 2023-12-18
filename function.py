@@ -44,6 +44,13 @@ def nom_president(repertoire: str) -> list:
 
 
 def minuscule(contenu, destination=None):
+    """Fonction qui prend en argument une chaine de caractere et qui soit renvoie soit sa version minuscule si jamais
+    aucune destination lui est fournie ou écris le contenu dans un dossier si jamais on lui donne un fichier de
+    destinattion.
+    Entrée: contenue: str: chaine de carectere qui doit être mis en minuscule
+            destination: str: chemin vers le fichier dans lequel on veut écrire le texte
+    Sortie: texte: str: Si aucun fichier de destination ne lui est fourni
+    """
     texte = ''
     for caractere in contenu:
         # Cas où le caractère est une majuscule
@@ -61,6 +68,13 @@ def minuscule(contenu, destination=None):
 
 
 def ponctuation_fichier(contenu, destination=None):
+    """Fonction qui prend en argument une chaine de caractere et qui soit renvoie soit sa version sans ponctuation
+    si aucune destination lui est fournie ou écris le contenu dans un dossier si jamais on lui donne un fichier de
+    destinattion.
+    Entrée: contenue: str: chaine de carectere qui doit être traiter
+            destination: str: chemin vers le fichier dans lequel on veut écrire le texte
+    Sortie: texte: str: Si aucun fichier de destination ne lui est fourni
+    """
     # Tableau contenant les caractères à transformer par des espaces
     tab_espace = [" ", "-", "'", "."]
     # Tableau contenant les caractères or alphabétique à conserver
@@ -135,7 +149,12 @@ def transformation_fichier(repertoire):
 
 
 def recuperation_texte_avec_mise_en_forme(path):
+    """Fonction qui prend en argument un chemin vers un fichier et va renvoyer un str contenant tous les caracteres y
+    compris les retours à la ligne
+    Entree: path: str: chemin vers un fichier
+    Sortie: texte: contenu du texte sans les retours à la ligne"""
     texte = ''
+    # on ouvre le fichier
     with open(path, "r", encoding="utf-8") as f1:
         for ligne in f1:
             texte = texte + ligne
@@ -152,6 +171,7 @@ def recuperation_texte(path):
         for ligne in f1:
             if ligne != "":
                 if ligne[-1] == "\n":
+                    # On enleve le retour à la ligne
                     ligne = ligne[:len(ligne)-1]
                     ligne += " "
                 texte = texte + ligne
@@ -340,6 +360,13 @@ def creation_tf_idf(repertoire):
 
 
 def recuperation_tf_idf(mot, matrice, correspondance_ligne):
+    """Fonction qui prend en argument une matrice, un mot et la liste de correspondance d'une matrice tf_idf pour
+    obtenir les valeurs du tf_idf du mot dans les textes
+    Entree: mot: str: mot dont on souhaite obtenir le score tf_idf
+            matrice: matrice: matrice tf_idf contenant le mot
+            correspondance_ligne: list: tableau de correspondance ou chaque l'indice d'un mot correspond à l'indice de
+            la ligne associé à ce mot dans la matrice
+    Sortie: matrice[ligne]: list: tableau contenant les scores tf_idf du mot dans les documents"""
     ligne = indice_tab(correspondance_ligne, mot)
     return matrice[ligne]
 
@@ -577,9 +604,9 @@ def demande_continuer():
 
 
 def demande_mode(message):
-    """Fonction qui demande à l'utilisateur le mode souhaité
-    Entrée : None
-    Sortie : """
+    """Fonction qui demande a l'utilisateur le mode souhaité
+    Entrée: message: str: message à afficher
+    Sortie: """
     while True:
         reponse = input(message + "\n")
         if reponse == "1":
@@ -609,6 +636,7 @@ def premier_dans_une_liste(tableau, repertoire):
 
 
 def tf_phrase(tab_mot, sont_present):
+    """Fonction qui"""
     dico_tf_question = {}
     for mot in tab_mot:
         if mot in sont_present:
@@ -785,7 +813,7 @@ def affinage_reponse(question, reponse):
     tab_question = fct_split(question, [" "])
     starter = tab_question[0]
     if starter in question_starters.keys():
-        reponse_final = question_starters[starter] + ' '
+        reponse_final = question_starters[starter]
         if starter != "Peux-tu":
             i = 0
             while reponse[i] == " ":
