@@ -13,7 +13,7 @@ demande_menu = """ Veuillez choisir une option :
 -3: Sortir
 """
 message_demande_mode = """Veuillez choisir une option :
--1: Accéder aux fonctionnalités de la partie I 
+-1: Accéder aux fonctionnalités de la partie I
 -2: Accéder au mode Chatbot
 """
 
