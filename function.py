@@ -1,3 +1,9 @@
+# Projet Python "My First Chatbot"
+# Ce fichier : 'function.py' est le fichier .py comportant toutes les fonctions que nous appelons dans
+#               le fichier 'main.py'.
+# BOUTELIER Arthur
+# PROFFIT Victor
+
 import os
 import math
 

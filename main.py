@@ -1,3 +1,8 @@
+# Projet Python "My First Chatbot"
+# Ce fichier : 'main.py' est le fichier .py appelant toutes les fonctions qui se trouvent dans le fichier 'function.py'.
+# BOUTELIER Arthur
+# PROFFIT Victor
+
 from function import *
 running = True
 repertoire_propre = "./Cleaned"
@@ -9,7 +14,8 @@ demande_menu = """ Veuillez choisir une option :
 """
 message_demande_mode = """Veuillez choisir une option :
 -1: Accéder aux fonctionnalités de la partie I
--2: Accéder au mode Chatbot"""
+-2: Accéder au mode Chatbot
+"""
 
 demande = """ Veuillez choisir une option :
 -1: Afficher les mots les moins important
