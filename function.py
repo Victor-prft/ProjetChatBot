@@ -4,15 +4,15 @@ import math
 
 def prenom_president(nom: str) -> str:
     """Cette fonction renvoie le prénom d'un président en fonction du nom mis en argument
-    Entrée: nom: str: nom du président pour lequelle on veut le prénom
-    Sortie: un str contenant le prénom du président concerné"""
+    Entrée : nom : str : nom du président pour lequel on veut le prénom
+    Sortie : un str contenant le prénom du président concerné"""
     # Chemin vers un fichier contenant le nom de tous les présidents associée à leur prénom
     fichier = "./Ressource/nom_president.txt"
     # ouverture du fichier en mode lecture
     with open(fichier, "r", encoding="utf-8") as f:
         for ligne in f:
             # Les nom et prénom des présidents sont stocké sous la forme nom/prénom on crée donc un tableau grâce à la
-            # fonction split en désignant / comme séparateur
+            # Cette fonction sépare en désignant / comme séparateur
             tab = fct_split(ligne, ["/"])
             # On vérifie si le nom correspond
             if tab[0] == nom:
@@ -26,16 +26,16 @@ def prenom_president(nom: str) -> str:
 def nom_president(repertoire: str) -> list:
     """Fonction qui prend en argument un repertoire et qui va creer une liste contenant tous les noms des présidents
     en les récupérants à partir des noms des fichiers
-    Entrée: repertoire: str: chemin vers le dossier contenant les textes
-    Sortie: tab: tableau de str: Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le
+    Entrée : repertoire : str : chemin vers le dossier contenant les textes
+    Sortie : tab : tableau de str : Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le
                  dossier
     """
     tab_nom = []
-    # On récupére dans une liste le nom de tout les fichiers contenu dans le répertoire
+    # On récupère dans une liste le nom de tous les fichiers contenu dans le répertoire
     tab_fichier = os.listdir(repertoire)
     # On parcourt cette liste
     for element in tab_fichier:
-        # On récupére le nom de la personne l'ayant écrit
+        # On récupère le nom de la personne l'ayant écrit
         nom = qui_a_ecrit(element)
         # On vérifie si on a pas déjà sont nom dans la liste car on ne veut pas de doublon
         if nom not in tab_nom:
@@ -457,15 +457,15 @@ def repete_president(repertoire, president, mot_pas_important):
 
 def qui_a_ecrit(fichier):
     """Fonction qui a partir d'un fichier va renvoyer son auteur
-    Entrée: fichier: str: Nom du fichier
-    Sortie: nom: str: Nom de l'auteur du fichier"""
-    # On spéare le nom en 2 partie pour enlever le Nomination
+    Entrée : fichier : str : Nom du fichier
+    Sortie : nom : str : Nom de l'auteur du fichier"""
+    # On sépare le nom en 2 parties pour enlever le 'Nomination'
     tab_temp = fct_split(fichier, ["_"])
-    # On resépare en 2 partie ce qui reste pour enlever le .txt
+    # On re-sépare en 2 parties ce qui reste pour enlever le .txt
     tab_temp = fct_split(tab_temp[1], ["."])
     nom = tab_temp[0]
-    # On parcourt ce qu'il reste pour enlever tout les caracteres numérqiues qui sont présent dans le cas où l'auteur à
-    # écrit plusieurs texte
+    # On parcourt ce qu'il reste pour enlever tous les caractères numériques qui sont présents dans le cas où l'auteur a
+    # écrit plusieurs textes
     for indice in range(len(nom))[::-1]:
         if not ('A' <= nom[indice] <= 'Z' or 'a' <= nom[indice] <= 'z' or nom[indice] == ' '):
             nom = nom[:indice] + nom[indice + 1:]
@@ -473,32 +473,32 @@ def qui_a_ecrit(fichier):
 
 
 def a_parler(repertoire, mot):
-    """Fonction qui à partir d'un mot et d'un répertoire renvoyer l'auteur ayant le plus utilisé le mot et une liste
-    contenant le nom de tout les auteurs l'ayant utilsé
-    Entrée: repertoire: str: Nom du répertoire à analyser
-           mot: str: Mot à rechercher
-    Sortie: a_le_plus_parler: str: Nom de la personne ayant le plus parler
-            tab_parler: tableau de str: Tableau contenant le nom de tout les auteur ayant mentionner le mot """
+    """Fonction, qui, à partir d'un mot et d'un répertoire renvoyer l'auteur ayant le plus utilisé le mot et une liste
+    contenant le nom de tous les auteurs l'ayant utilisé
+    Entrée : repertoire : str : Nom du répertoire à analyser
+           mot : str : Mot à rechercher
+    Sortie : a_le_plus_parler : str : Nom de la personne ayant le plus parler
+            tab_parler : tableau de str : Tableau contenant le nom de tous les auteurs ayant mentionné le mot """
     dico_parler = {}
-    # On récupere un tableau avec le nom de tout les fichiers
+    # On récupère un tableau avec le nom de tous les fichiers
     tab_fichier = liste_fichier(repertoire)
     tab_parler = []
     maximum = 0
     a_le_plus_parler = []
     # On parcourt les fichiers
     for fichier in tab_fichier:
-        # On récupére son tf
+        # On récupère son tf
         path = f"./Cleaned/{fichier}"
         texte = recuperation_texte(path)
         dico_tf = tf(texte)
         # Si le mot est dans le texte
         if mot in dico_tf.keys():
             auteur = qui_a_ecrit(fichier)
-            # Si c'est la premiere fois que l'on rencontre cette auteur
+            # Si c'est la premiere fois que l'on rencontre cet auteur
             if auteur not in dico_parler.keys():
                 # On met dans le dico la valeur du tf à la clé correspondant au nom de l'auteur
                 dico_parler[auteur] = dico_tf[mot]
-            # Si on l'a déjà rencontré on rajoute le score tf actuel à l'ancienne valeur
+            # Si on l'a déjà rencontré, on rajoute le score tf actuel à l'ancienne valeur
             else:
                 dico_parler[auteur] += dico_tf[mot]
     # On parcourt le dictionnaire pour déterminer le maximum du dico
@@ -513,13 +513,13 @@ def a_parler(repertoire, mot):
 
 
 def mot_evoque_par_tous(repertoire, liste_moins_importante):
-    """ Cette focntion sert a donner la liste des mots les moins importants mais à la différence que les différents
+    """ Cette fonction sert à donner la liste des mots les moins importants, mais à la différence que les différents
         discours d'un même président sont comptés comme un seul discours
         Entrée : un repertoire et liste_moins_importante qui est la liste de mots les moins important
-                repertoire : repertoire contenant dans fichier de type .txt
+                repertoire : repertoire contenant des fichiers de type .txt
                 liste_moins_importante : list
         Sortie : Cette fonction ressort une liste des mots les moins importants.
-                mot_finaux : list"""
+                Mots_finaux : list"""
     liste_president = nom_president(repertoire)
     liste_dico = []
     mot_finaux = []
@@ -528,7 +528,7 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
     for nom in liste_president:
         liste_discours = fichier_discours(repertoire, nom)
         texte_total = ""
-        # On parcours les fichiers
+        # On parcourt les fichiers
         for fichier in liste_discours:
             path = f"./Cleaned/{fichier}"
             texte = recuperation_texte(path)
@@ -536,12 +536,12 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
         dico_president = tf(texte_total)
         liste_dico.append(dico_president)
     petit_dico = plus_petit_dico(liste_dico)
-    # On regarde si le mot appartient à la liste des mot moins importants
+    # On regarde si le mot appartient à la liste des mots moins importants
     for element in petit_dico.keys():
         if element not in liste_moins_importante and element != '':
             cle_petit_dico.append(element)
     for cle in cle_petit_dico:
-        # On test si le nombre de présidents qui on parler est le bon
+        # On regarde si le nombre de présidents qui ont parlé est le bon
         if len(a_parler(repertoire, cle)[1]) == len(liste_president):
             mot_finaux.append(cle)
     return mot_finaux
@@ -549,12 +549,12 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
 
 def premiere_occurence(path, mot_recherche):
     """Fonction qui va ernvoyer l'indice de la premiere occurence d'un mot dans un texte
-    Entrée: fichier: str: Nom du fichier
-           mot_recherche: str: Mot dont on cherche l'indice
-    Sortie: -1: int: mot non  trouvé dans le texte
-            indice_mot: int: premiere indice du mot recherché
+    Entrée : fichier : str : Nom du fichier
+           mot_recherche : str : Mot dont on cherche l'indice
+    Sortie : -1 : int : mot non trouvé dans le texte
+            indice_mot : int : premiere indice du mot recherché
     """
-    # On récupére le texte sous la forme d'un str
+    # On récupère le texte sous la forme d'un str
     texte = recuperation_texte(path)
     tab_texte = fct_split(texte, [" "])
     # On parcourt le texte
@@ -567,23 +567,23 @@ def premiere_occurence(path, mot_recherche):
 
 def premier_a_parler(repertoire: str, mot: str) -> str and int:
     """Fonction qui va à partir d'un répertoire donné en argument renvoyer le premiere auteur à utiliser un mot ainsi
-     que l'emplacement à lequelle il l'utise
-    Entrée: répertoire: str: Répertoire que l'on va étudier
-           mot: str: mot que l'on recherche
-    Sortie: premier: str: Nom du premier auteur à utiliser ce mot
-            indice_premier: int: emplacement de la premiere occurence du mot recherché"""
+     que l'emplacement à lequel il l'utilise
+    Entrée : répertoire : str : Répertoire que l'on va étudier
+           mot : str : mot que l'on recherche
+    Sortie : premier : str : Nom du premier auteur à utiliser ce mot
+            indice_premier : int : emplacement de la premiere occurrence du mot recherché"""
     tab_fichier = liste_fichier(repertoire)
     premier = ''
     # + l'infini
     indice_premier = float("inf")
-    # Parcourt des fichier
+    # Parcourt des fichiers
     for fichier in tab_fichier:
         # Si le mot est dans le fichier
         path = f'./Cleaned/{fichier}'
         if est_present(fichier, mot):
-            # On récupére l'emplacement de sa premiere occurence
+            # On récupère l'emplacement de sa premiere occurrence
             emplacement = premiere_occurence(path, mot)
-            # Si c'est la plus petite on la considere comme étant celle qui a été dite en premier
+            # Si c'est la plus petite, on la considère comme étant celle qui a été dite en premier
             if emplacement < indice_premier:
                 indice_premier = emplacement
                 premier = qui_a_ecrit(fichier)
@@ -592,9 +592,9 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
 
 
 def demande_continuer():
-    """Fonction qui demande a l'utilisateur si il veut continuer
-    Entrée: None
-    Sortie: """
+    """Fonction qui demande à l'utilisateur s'il veut continuer
+    Entrée : None
+    Sortie : """
     while True:
         reponse = input("Voulez vous continuer? oui/non\n")
         if reponse == "oui":
@@ -618,9 +618,9 @@ def demande_mode(message):
 def premier_dans_une_liste(tableau, repertoire):
     """Fonction qui a partir d'un tableau mis en argument va renvoyer l'auteur ayant utilisé en premier l'un de ces
     termes
-    Entrée: tableau: tableau: tableau contenant tout les éléments recherché
-            repertoire: str: repertoire dans lequelle on va cherher les fichiers
-    Sortie: premiers_president: str: nom du président ayant utilisé l'un des termes en premier"""
+    Entrée : tableau : tableau : tableau contenant tous les éléments recherchés
+            repertoire : str : repertoire dans lequel on va chercher les fichiers
+    Sortie : premiers_president : str : nom du président ayant utilisé l'un des termes en premier"""
     indice_premier = float('inf')
     premier_president = ''
     for element in tableau:
@@ -655,13 +655,23 @@ def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
 
 
 def token_question(texte_sale):
+    """Cette fonction sert à transformer la question dite sale en une liste de mot propre
+        Entrée : texte_sale : str
+        Sortie : list"""
+    # Appelle de la fonction minuscule
     txt = minuscule(texte_sale)
+    # Appelle de la fonction ponctuation
     texte_propre = ponctuation_fichier(txt)
     return fct_split(texte_propre, ' ')
 
 
 def mots_present(tab_mot, dico_idf):
+    """Cette fonction ressort tous les mots de la liste qui sont présents dans les clés du dictionnaire
+       Entrée : tab_mot : list
+                dico_idf : dict
+       Sortie : sont_present : list"""
     sont_present = []
+    # Parcourt de la liste tab_mot
     for element in tab_mot:
         if element in dico_idf.keys() and element not in sont_present:
             sont_present.append(element)
@@ -669,6 +679,13 @@ def mots_present(tab_mot, dico_idf):
 
 
 def produit_scalaire(liste_question_a, liste_doc_b, correspondance_question, correspondance_liste):
+    """Cette fonction revoit le produit scalaire entre deux listes comportant les Tf-idf.
+       Nous avons besoin de correspondance_question et correspondance_liste qui sont la correspondance des listes
+       Entrée : liste_question_a : list
+                liste_doc_b : list
+                correspondance_question : list
+                correspondance_liste : list
+       Sortie : res = float"""
     res = 0
     for i in range(len(liste_question_a)):
         mot = correspondance_question[i]
@@ -678,6 +695,9 @@ def produit_scalaire(liste_question_a, liste_doc_b, correspondance_question, cor
 
 
 def norme_vecteur(liste):
+    """Cette fonction revoit la norme du vecteur de la liste. La liste étant comporté de valeur
+       Entrée : liste : list
+       Sortie : math.sqrt(res) : float"""
     res = 0
     if isinstance(liste, list):
         for valeur in liste:
@@ -688,6 +708,13 @@ def norme_vecteur(liste):
 
 
 def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste):
+    """Cette fonction renvoie le calcul de similarité entre un document et la question. On utilise deux listes contenant
+       des valeurs correspondant aux tf_idf de chaque mot qu'on peut retrouver avec les listes correspondances
+       Entrée : liste_question_a : list
+                liste_doc_b : list
+                correspondance_question : list
+                correspondance_liste : list
+       Sortie : prt_scal/(a*b) : float"""
     prt_scal = produit_scalaire(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste)
     a = norme_vecteur(liste_tf_idf_question)
     b = norme_vecteur(liste_tf_idf_doc)
@@ -697,6 +724,13 @@ def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_qu
 
 
 def doc_pertinent(tab_tf_idf_question, matrice, correspondance_question, correspondance_liste, correspondance_colonne):
+    """Cette fonction permet de connaitre quel est le document le plus pertinent en fonction de la question
+       Entrée : tab_tf_idf_question : list
+                matrice : list
+                correspondance_question : list
+                correspondance_liste : list
+                correspondance_colonne : list
+       Sortie : f'./Cleaned/{correspondance_colonne[indice_doc]}' : str"""
     maxi = -float('inf')
     indice_doc = 0
     for colonne in range(len(matrice[0])):
@@ -716,6 +750,11 @@ def transformation_cleaned_speeches(nom_fichier):
 
 
 def mot_question_max_tf_idf(question, dico_idf):
+    """ Cette fonction permet de connaitre à partir de la question le mot ayant le plus grand Tf-idf
+        Entrée : question : str
+                 dico_idf : dict
+        Sortie : tab_tf_idf_question : list
+                 correspondance_mot_question : list"""
     liste_mot_question = token_question(question)
     liste_mot_question_texte = mots_present(liste_mot_question, dico_idf)
     dico_tf_phrase = tf_phrase(liste_mot_question, liste_mot_question_texte)
