@@ -827,8 +827,14 @@ def generation_reponse(question, dico_idf, matrice, correspondance_mot_matrice, 
 
 
 def reponse_question(document_path_cleaned, liste_mot):
-    """"""
+    """Fonction qui va à partir d'une liste de mot est d'un document va renvoyer la première phrase contenant un de ces
+    mots dans ce texte
+    Entree : document_path_cleaned : str
+             liste_mot : list
+    Sortie : str"""
+    # On récupère son équivalent dans Speeches
     document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
+    # On définit les séparateurs qui vont délimiter les phrases
     separateur = ["!", ".", "?", "..."]
     texte = recuperation_texte(document_path_speeches)
     texte_tab = fct_split(texte, separateur)
@@ -848,12 +854,19 @@ def reponse_question(document_path_cleaned, liste_mot):
           
           
 def affinage_reponse(question, reponse):
+    """Fonction final du traitement de la question qui va en fonction de la formulation de la question moduler le début
+    de la réponse
+    Entrée : question : list
+             reponse : str
+    Sortie : str"""
+    # Dictionnaire qui pour chaque début de formulation de question associe un début de réponse
     question_starters = {"Comment": "Après analyse, ", "Pourquoi": "Car, ", "Peux-tu": "Oui, bien sûr!"}
     reponse_final = ''
     tab_question = fct_split(question, [" "])
     starter = tab_question[0]
     if starter in question_starters.keys():
         reponse_final = question_starters[starter]
+        # Si c'est peux-tu on doit enlever la majuscule en début de phrase
         if starter != "Peux-tu":
             i = 0
             while reponse[i] == " ":
