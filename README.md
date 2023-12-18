@@ -6,6 +6,7 @@ Notre Equipe : Arthur BOUTELIER
 Lien du dépot Git : https://github.com/Victor-prft/ProjetChatBot
 
 Voici les différentes fonctionnalités de notre programme:
+
 -Afficher les mots les moins important
 -Afficher les mots avec le plus grand score tf-idf
 -Afficher le/les mot(s) les plus utilisé par un président
