@@ -6,17 +6,17 @@ def prenom_president(nom: str) -> str:
     """Cette fonction renvoie le prénom d'un président en fonction du nom mis en argument
     Entrée : nom : str : nom du président pour lequel on veut le prénom
     Sortie : un str contenant le prénom du président concerné"""
-    # Chemin vers un fichier contenant le nom de tous les présidents associée à leur prénom
+    # Chemin vers un fichier contenant le nom de tous les présidents associés à leur prénom
     fichier = "./Ressource/nom_president.txt"
     # ouverture du fichier en mode lecture
     with open(fichier, "r", encoding="utf-8") as f:
         for ligne in f:
-            # Les nom et prénom des présidents sont stocké sous la forme nom/prénom on crée donc un tableau grâce à la
+            # Les nom et prénom des présidents sont stocké sous la forme nom/prénom, on crée donc un tableau grâce à la
             # Cette fonction sépare en désignant / comme séparateur
             tab = fct_split(ligne, ["/"])
             # On vérifie si le nom correspond
             if tab[0] == nom:
-                # On vérifie qu'il n'y ai pas de retour à la ligne après le prénom associé
+                # On vérifie qu'il n'y a pas de retour à la ligne après le prénom associé
                 if tab[1][-1] == "\n":
                     return tab[1][:len(tab[1])-1]
                 else:
@@ -24,92 +24,92 @@ def prenom_president(nom: str) -> str:
 
 
 def nom_president(repertoire: str) -> list:
-    """Fonction qui prend en argument un repertoire et qui va creer une liste contenant tous les noms des présidents
-    en les récupérants à partir des noms des fichiers
+    """Fonction qui prend en argument un repertoire et qui va créer une liste contenant tous les noms des présidents
+    en les récupérant à partir des noms des fichiers
     Entrée : repertoire : str : chemin vers le dossier contenant les textes
     Sortie : tab : list de str : Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le
                  dossier
     """
     tab_nom = []
-    # On récupère dans une liste le nom de tous les fichiers contenu dans le répertoire
+    # On récupère dans une liste le nom de tous les fichiers contenus dans le répertoire
     tab_fichier = os.listdir(repertoire)
     # On parcourt cette liste
     for element in tab_fichier:
         # On récupère le nom de la personne l'ayant écrit
         nom = qui_a_ecrit(element)
-        # On vérifie si on a pas déjà sont nom dans la liste car on ne veut pas de doublon
+        # On vérifie si on n'a pas déjà son nom dans la liste, car on ne veut pas de doublon
         if nom not in tab_nom:
             tab_nom.append(nom)
     return tab_nom
 
 
 def minuscule(contenu, destination=None):
-    """Fonction qui prend en argument une chaine de caractere et qui soit renvoie soit sa version minuscule si jamais
-    aucune destination lui est fournie ou écris le contenu dans un dossier si jamais on lui donne un fichier de
-    destinattion.
-    Entrée: contenue: str: chaine de carectere qui doit être mis en minuscule
-            destination: str: chemin vers le fichier dans lequel on veut écrire le texte
-    Sortie: texte: str: Si aucun fichier de destination ne lui est fourni
+    """Fonction qui prend en argument une chaine de caractère et qui soit renvoie, soit sa version minuscule si jamais
+    aucune destination lui est fournie ou écrit le contenu dans un dossier si jamais on lui donne un fichier de
+    destination.
+    Entrée : contenue : str : chaine de caractère qui doit être mis en minuscule
+            destination : str : chemin vers le fichier dans lequel on veut écrire le texte
+    Sortie : texte : str : Si aucun fichier de destination ne lui est fourni
     """
     texte = ''
-    for caractere in contenu:
+    for car in contenu:
         # Cas où le caractère est une majuscule
-        if 'A' <= caractere <= 'Z':
+        if 'A' <= car <= 'Z':
             # On le transforme en minuscule
-            caractere = chr(ord(caractere) + 32)
+            car = chr(ord(car) + 32)
             # On écrit le caractère dans le nouveau fichier
-        texte = texte + caractere
+        texte = texte + car
     if destination is None:
         return texte
     else:
         with open(destination, "w", encoding="utf-8") as new:
-            for caractere in texte:
-                new.write(caractere)
+            for car in texte:
+                new.write(car)
 
 
 def ponctuation_fichier(contenu, destination=None):
-    """Fonction qui prend en argument une chaine de caractere et qui soit renvoie soit sa version sans ponctuation
-    si aucune destination lui est fournie ou écris le contenu dans un dossier si jamais on lui donne un fichier de
-    destinattion.
-    Entrée: contenue: str: chaine de carectere qui doit être traiter
-            destination: str: chemin vers le fichier dans lequel on veut écrire le texte
-    Sortie: texte: str: Si aucun fichier de destination ne lui est fourni
+    """Fonction qui prend en argument une chaine de caractère et qui soit renvoie, soit sa version sans ponctuation
+    si aucune destination lui est fournie ou écrit le contenu dans un dossier si jamais on lui donne un fichier de
+    destination.
+    Entrée : contenue : str : chaine de caractère qui doit être traité
+            destination : str : chemin vers le fichier dans lequel on veut écrire le texte
+    Sortie : texte : str : Si aucun fichier de destination ne lui est fourni
     """
     # Tableau contenant les caractères à transformer par des espaces
     tab_espace = [" ", "-", "'", "."]
     # Tableau contenant les caractères or alphabétique à conserver
     tab_garder = ["é", "è", "ù", "à", "â", "ô", "ê", "ç", "\n"]
     texte = ""
-    # Cas du l' on va alterner entre écrire le et la
+    # Cas où l'on va alterner entre écrire le et la
     l_actuel = 0
     l_possible = ["a", "e"]
     # On parcourt les caractères
     for element in contenu:
-        # Cas ou l'on doit conservé le caractères
+        # Cas où l'on doit conserver le caractère
         if 'a' <= element <= 'z' or element in tab_garder:
             texte += element
         else:
-            # Cas ou l'on doit potentiellement transformé l'élément en 1 espace
+            # Cas où l'on doit potentiellement transformer l'élément en 1 espace
             if element in tab_espace:
-                # Cas des apostrophe que l'on remplace par des e ou des a
+                # Cas des apostrophes que l'on remplace par des 'e' ou des 'a'
                 if element == "'":
                     if texte[-1] == 'l':
                         texte = texte + l_possible[l_actuel % 2]
                         l_actuel += 1
                     else:
                         texte = texte + "e"
-                # On écrit l'espace unqiuement si il n'est pas précéder par un saut de ligne, un espace ou un
-                # caractere vide
+                # On écrit l'espace uniquement s'il n'est pas précédé par un saut de ligne, un espace ou un
+                # caractère vide
                 if len(texte) > 0:
                     if texte[-1] != " " and texte[-1] != '' and texte[-1] != '\n':
                         texte += " "
     if destination is None:
         return texte
     else:
-        # On réouvre le fichier pour réecrire la nouvelle version
+        # On ouvre le fichier pour réécrire la nouvelle version
         with open(destination, 'w', encoding="utf-8") as fichier_1:
-            for caractere in texte:
-                fichier_1.write(caractere)
+            for car in texte:
+                fichier_1.write(car)
 
 
 def liste_fichier(repertoire):
@@ -120,26 +120,26 @@ def liste_fichier(repertoire):
     tab_fichier = []
     # On parcourt les fichiers
     for fichier in os.listdir(repertoire):
-        # On ne récupére que les fichiers en .txt
+        # On ne récupère que les fichiers en .txt
         if fichier.endswith(".txt"):
             tab_fichier.append(fichier)
     return tab_fichier
 
 
 def transformation_fichier(repertoire):
-    """Fonction permettant d'appeler les fonctions permettant d'effectuer le traitement de tout les fichiers dans un
+    """Fonction permettant d'appeler les fonctions permettant d'effectuer le traitement de tous les fichiers dans un
     répertoire mis en argument
-    Entrée: repertoire: str: Chaine de caractère contenant le nom du dossier à traiter
-    Sortie: None"""
+    Entrée : repertoire : str : Chaine de caractère contenant le nom du dossier à traiter
+    Sortie : None"""
     # On vérifie si le fichier Cleaned est créé
     if not os.path.exists("Cleaned"):
-        # Si c'est pas le cas on le crée
+        # Si ce n'est pas le cas, on le crée
         os.makedirs("Cleaned")
-    # On récupére la liste contenant le nom de tout les fichiers
+    # On récupère la liste contenant le nom de tous les fichiers
     tab_fichier = liste_fichier(repertoire)
     # On les parcourt
     for fichier in tab_fichier:
-        # On appele les fonctions nécessaire au traitement du texte
+        # On appelle les fonctions nécessaires au traitement du texte
         path = f"./Speeches/{fichier}"
         texte = recuperation_texte_avec_mise_en_forme(path)
         path = f"./Cleaned/{fichier}"
@@ -149,10 +149,10 @@ def transformation_fichier(repertoire):
 
 
 def recuperation_texte_avec_mise_en_forme(path):
-    """Fonction qui prend en argument un chemin vers un fichier et va renvoyer un str contenant tous les caracteres y
+    """Fonction qui prend en argument un chemin vers un fichier et va renvoyer un str contenant tous les caractères y
     compris les retours à la ligne
-    Entree: path: str: chemin vers un fichier
-    Sortie: texte: contenu du texte sans les retours à la ligne"""
+    Entree : path : str : chemin vers un fichier
+    Sortie : texte : contenu du texte sans les retours à la ligne"""
     texte = ''
     # on ouvre le fichier
     with open(path, "r", encoding="utf-8") as f1:
@@ -162,16 +162,16 @@ def recuperation_texte_avec_mise_en_forme(path):
 
 
 def recuperation_texte(path):
-    """Fonction qui a partir d'un texte va renvoyer une chaine de caractere contenant les mots du texte
-    Entrée: fichier: str: Nom du fichier
-    Sortie: texte: str: Chaine de caractere contenant le texte"""
+    """Fonction qui a partir d'un texte va renvoyer une chaine de caractère contenant les mots du texte
+    Entrée : fichier : str : Nom du fichier
+    Sortie : texte : str : Chaine de caractère contenant le texte"""
     texte = ""
     # Ouverture du fichier
     with open(path, "r", encoding="utf-8") as f1:
         for ligne in f1:
             if ligne != "":
                 if ligne[-1] == "\n":
-                    # On enleve le retour à la ligne
+                    # On enlève le retour à la ligne
                     ligne = ligne[:len(ligne)-1]
                     ligne += " "
                 texte = texte + ligne
@@ -181,12 +181,12 @@ def recuperation_texte(path):
 def fichier_discours(repertoire, president):
     """ Cette fonction nous donne tous les discours d'un président dans une liste
         Entrée : un repertoire et le nom du président
-                repertoire : repertoire contenant dans fichier de type .txt
+                repertoire : repertoire contenant des fichiers de type .txt
                 president : str
         Sortie : la sortie est une liste des discours d'un même président
                 liste_discours : list"""
     liste_discours = []
-    # On parcours tous les discours
+    # On parcourt tous les discours
     for discours in liste_fichier(repertoire):
         # On regarde si le nom du président apparait dans le nom du fichier
         if president in discours:
@@ -195,7 +195,7 @@ def fichier_discours(repertoire, president):
 
 
 def maxi_dico(dico, exclusion=None):
-    """Cette fonction sert a donner la plus grande valeur et la clé d'un dictionnaire
+    """Cette fonction sert à donner la plus grande valeur et la clé d'un dictionnaire
         Entrée : dico est le dictionnaire où l'on veut savoir le maximum
                  dico : dict
         Sortie : une liste de deux valeurs :
@@ -206,9 +206,9 @@ def maxi_dico(dico, exclusion=None):
     # Nécessité pour rentrer une première fois dans la boucle
     maxi = -float('inf')
     cle_max = ''
-    # On parcours les clés du dictoinnaire
+    # On parcourt les clés du dictionnaire
     for cle in dico.keys():
-        # On regarde si la valeur dans le dictoinnaire est supérieur à l'ancienne
+        # On regarde si la valeur dans le dictionnaire est supérieur à l'ancienne
         if maxi <= dico[cle]:
             if exclusion is None:
                 cle_max = cle
@@ -220,11 +220,16 @@ def maxi_dico(dico, exclusion=None):
     return [cle_max, maxi]
 
 
-def fct_split(texte, separateur):
+def fct_split(texte, limiteur):
+    """Cette fonction permet de séparer un texte en une liste. Les différentes valeurs de la liste seront celle dans
+       le texte séparé par le délimiteur indiqué
+       Entrée : texte : str
+                limiteur : list
+       Sortie : liste : list"""
     liste = []
     mot = ''
     for element in texte:
-        if element in separateur:
+        if element in limiteur:
             if mot != ('' or ' '):
                 liste.append(mot)
             mot = ''
@@ -236,7 +241,7 @@ def fct_split(texte, separateur):
 
 
 def plus_petit_dico(liste):
-    """ Cette fonction ressort le dictionnaire le plus petit en terme de nombre de clé dans un dico
+    """ Cette fonction ressort le dictionnaire le plus petit, en fonction du nombre de clés dans un dico
         Entrée : une liste comportant des dictionnaires
                 liste : list
         Sortie : le dictionnaire ayant le moins de clé
@@ -244,7 +249,7 @@ def plus_petit_dico(liste):
     # Nécessité pour rentrer une première fois dans la boucle
     mini = float('inf')
     dico_mini = {}
-    # On parcours la liste des dictoinnaires
+    # On parcours la liste des dictionnaires
     for dico in liste:
         # On compare le plus petit dictionnaire à l'actuel
         if len(dico) < mini:
@@ -256,15 +261,16 @@ def plus_petit_dico(liste):
 def est_present(fichier, mot_rechercher):
     """Cette fonction nous indique si un mot est présent ou non dans un fichier.
     Entrée : f est le fichier où l'on veut recherche le mot,
-             mot_rechercher est le mot qui est recherché dans le fichier.
-             f : .txt , mot_rechercher : str
+             mot_rechercher est le mot qui est recherché dans le fichier
+             Fichier : .txt
+             mot_rechercher : str
     Sortie : True si le mot_rechercher est dans le fichier f et False si le mot_rechercher n'est pas dans le fichier """
     # Ouverture du fichier
     with open(fichier, "r", encoding="utf-8") as f1:
         for ligne in f1:
             # Création d'un tableau à partir de la séparation d'un texte où chaque valeur est un mot
             tab_mot = fct_split(ligne, [" "])
-            # On parcours le tableau
+            # On parcourt le tableau
             for mot in tab_mot:
                 if mot[-1] == "\n":
                     mot = mot[:-1]
@@ -274,38 +280,36 @@ def est_present(fichier, mot_rechercher):
 
 
 def tf(texte):
-    """ Fonction qui prend en argument le contenu d'un texte et associé un score tf à chacun des mot qu'il contient
-    Entrée: texte: str: Chaine de caractère correspondant au contenu du texte
-    Sortie: dico: dictionnaire: Dictionnaire associant à chaque mot du texte une valeur entiere correspondant à son
+    """ Fonction qui prend en argument le contenu d'un texte et associé un score tf à chacun des mots qu'il contient
+    Entrée : texte : str : Chaine de caractère correspondant au contenu du texte
+    Sortie : dico : dictionnaire : Dictionnaire associant à chaque mot du texte une valeur entière correspondant à son
                   score tf
     """
     dico = {}
-    # On va creer un tableau ou chaque élément est un mot. Cela est permis par le processus de prétraitement des textes
+    # On va créer un tableau ou chaque élément est un mot. Cela est permis par le processus de prétraitement des textes
     tab_mot = fct_split(texte, [" "])
     # Parcourt les mots
     for mot in tab_mot:
-        # Cas ou le mot a déjà été rencontré
+        # Cas où le mot a déjà été rencontré
         if mot in dico.keys():
             # On rajoute 1 à son score tf
             dico[mot] += 1
         # Cas où c'est la première rencontre
         else:
-            # Le score tf du mot est mise à 1
+            # Le score tf du mot est mis à : 1
             dico[mot] = 1
     return dico
 
 
 def idf(repertoire):
-    """Cette fonction renvoie un dictoinnaire avec comme clé chaque mot du texte et en valeur sont idf
+    """Cette fonction renvoie un dictionnaire avec comme clé chaque mot du texte et en valeur sont idf
             Entrée : le repertoire qu'on veut analyser pour trouver les idf
-                     repertoire : repertoire comtenant des fichiers de type .txt
-            Sortie : la fonction ressort un dictoinnaire :
-                     dictoinnaire.keys() : mot du texte sous type str
-                     dictoinnaaire.values() : float """
+                     repertoire : repertoire contenant des fichiers de type .txt
+            Sortie : dictionnaire : dict"""
     dictionnaire = {}
-    # On crée une liste comptenant tous les fichiers
+    # On crée une liste contenant tous les fichiers
     tab_fichier = liste_fichier(repertoire)
-    # On parcours tous les fichiers
+    # On parcourt tous les fichiers
     for i in range(len(tab_fichier)):
         # On ouvre les fichiers en lecture
         with open(repertoire + "./" + tab_fichier[i], "r", encoding="utf-8") as f1:
@@ -327,34 +331,34 @@ def idf(repertoire):
 
 
 def creation_tf_idf(repertoire):
-    """Fonction renvoyant la matrice tf-idf des documents contenu dans un répertoire mis en argument
-    Entrée: repertoire: str: Nom du dossier où sont contenu les fichiers
-    Sortie: matrice: Matrice: Matrice contenant les scores tf_idf des mots contenu dans les fichiers du répertoire."""
-    # On récupére le nom des fichiers
+    """Fonction renvoyant la matrice Tf-idf des documents contenus dans un répertoire mis en argument
+    Entrée : repertoire : str : Nom du dossier où sont contenus les fichiers
+    Sortie : matrice : list : Matrice contenant les scores tf_idf des mots contenus dans les fichiers du répertoire."""
+    # On récupère le nom des fichiers
     tab_fichier = liste_fichier(repertoire)
-    # On récupére le dictionnaire contenant les scores idf des mots du repertoire
+    # On récupère le dictionnaire contenant les scores idf des mots du repertoire
     dico_idf = idf(repertoire)
-    # On récupere le nombre de ligne et de colonne nécessaire
+    # On récupère le nombre de lignes et de colonne nécessaire
     nb_ligne = len(dico_idf)
     nb_colonne = len(tab_fichier)
     # On initialise la matrice à la taille requise avec des 0.0
     matrice = [[0.0 for _ in range(nb_colonne)] for _ in range(nb_ligne)]
-    # On récupére le tableau de correspondance
+    # On récupère le tableau de correspondance
     cle = correspondance_mot(dico_idf)
     # On va remplir les colonnes 11 par une
     for colonne in range(nb_colonne):
-        # Chaque colonne correpond à un fichier on va donc récupérer les scores tf associé à ce fichier
+        # Chaque colonne correspond à un fichier, on va donc récupérer les scores tf associé à ce fichier
         path = f"./Cleaned/{tab_fichier[colonne]}"
         texte = recuperation_texte(path)
         dico_tf = tf(texte)
         # On parcourt les mots possédant un score tf
         for element in dico_tf.keys():
-            # On récupére la ligne correspondant au mot que l'on est en train de traiter grâce au tableau de
+            # On récupère la ligne correspondant au mot que l'on est en train de traiter grâce au tableau de
             # correspondance
             ligne = indice_tab(cle, element)
             # Si le mot est bien dans le tableau de correspondance
             if ligne != -1:
-                # On calcule son score tf-idf et on le place au bonne endroit
+                # On calcule son score Tf-idf et on le place au bon endroit
                 matrice[ligne][colonne] = dico_tf[element] * dico_idf[element]
     return matrice
 
@@ -362,35 +366,35 @@ def creation_tf_idf(repertoire):
 def recuperation_tf_idf(mot, matrice, correspondance_ligne):
     """Fonction qui prend en argument une matrice, un mot et la liste de correspondance d'une matrice tf_idf pour
     obtenir les valeurs du tf_idf du mot dans les textes
-    Entree: mot: str: mot dont on souhaite obtenir le score tf_idf
-            matrice: matrice: matrice tf_idf contenant le mot
-            correspondance_ligne: list: tableau de correspondance ou chaque l'indice d'un mot correspond à l'indice de
+    Entree : mot : str : mot dont on souhaite obtenir le score tf_idf
+            matrice : matrice : matrice tf_idf contenant le mot
+            correspondance_ligne : list : tableau de correspondance ou chaque l'indice d'un mot correspond à l'indice de
             la ligne associé à ce mot dans la matrice
-    Sortie: matrice[ligne]: list: tableau contenant les scores tf_idf du mot dans les documents"""
+    Sortie : matrice[ligne] : list : tableau contenant les scores tf_idf du mot dans les documents"""
     ligne = indice_tab(correspondance_ligne, mot)
     return matrice[ligne]
 
   
 def correspondance_mot(dico):
-    """ Cette fonction sert à renvoyer toutes les clés d'un dictoinnaire sous forme de liste
-        Entrée : un dictoinnaire
+    """ Cette fonction sert à renvoyer toutes les clés d'un dictionnaire sous forme de liste
+        Entrée : un dictionnaire
                 dico : dict
-        Sortie : une liste comportant toutes les clés du dictoinnaire
+        Sortie : une liste comportant toutes les clés du dictionnaire
                 cle : list"""
     # Création d'une liste
     cle = []
-    # On parcours les clés du dictinnaire pour les ajouter à la liste
+    # On parcourt les clés du dictionnaire pour les ajouter à la liste
     for valeur in dico.keys():
         cle.append(valeur)
     return cle
 
 
 def indice_tab(tab, element):
-    """Fonction a partir d'un tableau et d'un élement renvoi son indice dans le tabelau ou -1 si il n'est pas présent
-    Entrée: tab: list: tableau dans lequelle on cherche l'occurence de l'élément
-           element: pas de type précis: element dont on cherche à otenir l'occurence
-    Sortie: -1: int: Si l'élement n'est pas dans le tableau
-            indice: int: indice de l'élément dans le tableau"""
+    """Fonction à partir d'un tableau et d'un élement renvoi son indice dans le tableau ou -1 s'il n'est pas présent
+    Entrée : tab : tableau : tableau dans lequel on cherche l'occurrence de l'élément
+           element : pas de type précis : element dont on cherche à obtenir l'occurrence
+    Sortie : -1 : int : Si l'élément n'est pas dans le tableau
+            indice : int : indice de l'élément dans le tableau"""
     for indice in range(len(tab)):
         if tab[indice] == element:
             return indice
@@ -398,7 +402,7 @@ def indice_tab(tab, element):
 
   
 def moins_important(dico_idf):
-    """ Cette fonction sert a trouver le ou les mots moins importants des textes. C'est mot sont dient moins
+    """ Cette fonction sert à trouver le ou les mots moins importants des textes. Ces mots sont dit moins
         important si la valeur dans le dico est égal à 0
         Entrée : dico_idf qui est la sortie de la fonction idf
                  dico_idf : dict
@@ -412,9 +416,9 @@ def moins_important(dico_idf):
 
 
 def plus_eleve(matrice, correspondance_ligne):
-    """ Cette fonction sert a trouver le ou les mots plus importants de la matrice. C'est mot sont dient plus
+    """ Cette fonction sert à trouver le ou les mots plus importants de la matrice. Ces mots sont dit plus
         important si la valeur dans le tableau est la plus haute de la matrice
-        Entrée : Matrice qui est une liste de liste comportant la note tf-idf. Correspondance_ligne est la liste de mots
+        Entrée : Matrice qui est une liste de liste comportant la note Tf-idf. Correspondance_ligne est la liste de mots
                 matrice : list
                 correspondance_ligne : list
         Sortie : Cette fonction ressort une liste des mots les plus importants de la matrice.
@@ -423,12 +427,12 @@ def plus_eleve(matrice, correspondance_ligne):
     maximum = -float('inf')
     # On récupère les indices pour les utiliser pour parcourir les lignes du texte
     for indice_ligne in range(len(matrice)):
-        # On parcours chaque ligne
+        # On parcourt chaque ligne
         for score in range(len(matrice[indice_ligne])):
-            # On regarde si le score tf-idf est égal au maximum de la matrice et on ajoute le mot dans la liste
+            # On regarde si le score Tf-idf est égal au maximum de la matrice et on ajoute le mot dans la liste
             if matrice[indice_ligne][score] == maximum:
                 liste_plus_important.append(correspondance_ligne[indice_ligne])
-            # On regarde si le score tf-idf est supérieur à l'ancien maximum de la fonction
+            # On regarde si le score Tf-idf est supérieur à l'ancien maximum de la fonction
             elif matrice[indice_ligne][score] > maximum:
                 # On remplace la liste par la nouvelle valeur max
                 liste_plus_important = [correspondance_ligne[indice_ligne]]
@@ -548,7 +552,7 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
 
 
 def premiere_occurence(path, mot_recherche):
-    """Fonction qui va ernvoyer l'indice de la premiere occurence d'un mot dans un texte
+    """Fonction qui va envoyer l'indice de la premiere occurrence d'un mot dans un texte
     Entrée : fichier : str : Nom du fichier
            mot_recherche : str : Mot dont on cherche l'indice
     Sortie : -1 : int : mot non trouvé dans le texte
@@ -604,9 +608,9 @@ def demande_continuer():
 
 
 def demande_mode(message):
-    """Fonction qui demande a l'utilisateur le mode souhaité
-    Entrée: message: str: message à afficher
-    Sortie: """
+    """Fonction qui demande à l'utilisateur le mode souhaité
+    Entrée : message : str : message à afficher
+    Sortie : """
     while True:
         reponse = input(message + "\n")
         if reponse == "1":
