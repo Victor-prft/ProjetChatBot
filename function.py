@@ -12,7 +12,7 @@ def prenom_president(nom: str) -> str:
     with open(fichier, "r", encoding="utf-8") as f:
         for ligne in f:
             # Les nom et prénom des présidents sont stocké sous la forme nom/prénom on crée donc un tableau grâce à la
-            # fonction split en désignant / comme séparateur
+            # Cette fonction sépare en désignant / comme séparateur
             tab = fct_split(ligne, ["/"])
             # On vérifie si le nom correspond
             if tab[0] == nom:
@@ -26,16 +26,16 @@ def prenom_president(nom: str) -> str:
 def nom_president(repertoire: str) -> list:
     """Fonction qui prend en argument un repertoire et qui va creer une liste contenant tous les noms des présidents
     en les récupérants à partir des noms des fichiers
-    Entrée: repertoire: str: chemin vers le dossier contenant les textes
-    Sortie: tab: tableau de str: Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le
+    Entrée : repertoire : str : chemin vers le dossier contenant les textes
+    Sortie : tab : tableau de str : Tableau contenant le nom de tous les présidents ayant écris un discours présent dans le
                  dossier
     """
     tab_nom = []
-    # On récupére dans une liste le nom de tout les fichiers contenu dans le répertoire
+    # On récupère dans une liste le nom de tous les fichiers contenu dans le répertoire
     tab_fichier = os.listdir(repertoire)
     # On parcourt cette liste
     for element in tab_fichier:
-        # On récupére le nom de la personne l'ayant écrit
+        # On récupère le nom de la personne l'ayant écrit
         nom = qui_a_ecrit(element)
         # On vérifie si on a pas déjà sont nom dans la liste car on ne veut pas de doublon
         if nom not in tab_nom:
@@ -544,7 +544,7 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
     Entrée : répertoire : str : Répertoire que l'on va étudier
            mot : str : mot que l'on recherche
     Sortie : premier : str : Nom du premier auteur à utiliser ce mot
-            indice_premier : int : emplacement de la premiere occurence du mot recherché"""
+            indice_premier : int : emplacement de la premiere occurrence du mot recherché"""
     tab_fichier = liste_fichier(repertoire)
     premier = ''
     # + l'infini
@@ -554,9 +554,9 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
         # Si le mot est dans le fichier
         path = f'./Cleaned/{fichier}'
         if est_present(fichier, mot):
-            # On récupére l'emplacement de sa premiere occurence
+            # On récupère l'emplacement de sa premiere occurrence
             emplacement = premiere_occurence(path, mot)
-            # Si c'est la plus petite on la considere comme étant celle qui a été dite en premier
+            # Si c'est la plus petite, on la considère comme étant celle qui a été dite en premier
             if emplacement < indice_premier:
                 indice_premier = emplacement
                 premier = qui_a_ecrit(fichier)
@@ -565,9 +565,9 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
 
 
 def demande_continuer():
-    """Fonction qui demande a l'utilisateur si il veut continuer
-    Entrée: None
-    Sortie: """
+    """Fonction qui demande à l'utilisateur s'il veut continuer
+    Entrée : None
+    Sortie : """
     while True:
         reponse = input("Voulez vous continuer? oui/non\n")
         if reponse == "oui":
@@ -577,9 +577,9 @@ def demande_continuer():
 
 
 def demande_mode(message):
-    """Fonction qui demande a l'utilisateur le mode souhaité
-    Entrée: None
-    Sortie: """
+    """Fonction qui demande à l'utilisateur le mode souhaité
+    Entrée : None
+    Sortie : """
     while True:
         reponse = input(message + "\n")
         if reponse == "1":
@@ -630,7 +630,9 @@ def token_question(texte_sale):
     """Cette fonction sert à transformer la question dite sale en une liste de mot propre
         Entrée : texte_sale : str
         Sortie : list"""
+    # Appelle de la fonction minuscule
     txt = minuscule(texte_sale)
+    # Appelle de la fonction ponctuation
     texte_propre = ponctuation_fichier(txt)
     return fct_split(texte_propre, ' ')
 
@@ -641,6 +643,7 @@ def mots_present(tab_mot, dico_idf):
                 dico_idf : dict
        Sortie : sont_present : list"""
     sont_present = []
+    # Parcourt de la liste tab_mot
     for element in tab_mot:
         if element in dico_idf.keys() and element not in sont_present:
             sont_present.append(element)
@@ -677,7 +680,7 @@ def norme_vecteur(liste):
 
 
 def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste):
-    """Cette fonction renvoit le calcul de similarité entre un document et la question. On utilise deux listes contenant
+    """Cette fonction renvoie le calcul de similarité entre un document et la question. On utilise deux listes contenant
        des valeurs correspondant aux tf_idf de chaque mot qu'on peut retrouver avec les listes correspondances
        Entrée : liste_question_a : list
                 liste_doc_b : list
