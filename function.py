@@ -591,9 +591,9 @@ def demande_mode(message):
 def premier_dans_une_liste(tableau, repertoire):
     """Fonction qui a partir d'un tableau mis en argument va renvoyer l'auteur ayant utilisé en premier l'un de ces
     termes
-    Entrée: tableau: tableau: tableau contenant tout les éléments recherché
-            repertoire: str: repertoire dans lequelle on va cherher les fichiers
-    Sortie: premiers_president: str: nom du président ayant utilisé l'un des termes en premier"""
+    Entrée : tableau : tableau : tableau contenant tous les éléments recherchés
+            repertoire : str : repertoire dans lequel on va chercher les fichiers
+    Sortie : premiers_president : str : nom du président ayant utilisé l'un des termes en premier"""
     indice_premier = float('inf')
     premier_president = ''
     for element in tableau:
@@ -627,7 +627,7 @@ def tf_idf_phrase(dico_idf, dico_tf, mot_a_traiter):
 
 
 def token_question(texte_sale):
-    """Cette fonction sert à transformer la question dites sale en une liste de mot propre
+    """Cette fonction sert à transformer la question dite sale en une liste de mot propre
         Entrée : texte_sale : str
         Sortie : list"""
     txt = minuscule(texte_sale)
@@ -636,7 +636,7 @@ def token_question(texte_sale):
 
 
 def mots_present(tab_mot, dico_idf):
-    """Cette fonction ressort tous les mots de la liste qui sont présents dans les clées du dictionnaire
+    """Cette fonction ressort tous les mots de la liste qui sont présents dans les clés du dictionnaire
        Entrée : tab_mot : list
                 dico_idf : dict
        Sortie : sont_present : list"""
@@ -648,6 +648,13 @@ def mots_present(tab_mot, dico_idf):
 
 
 def produit_scalaire(liste_question_a, liste_doc_b, correspondance_question, correspondance_liste):
+    """Cette fonction revoit le produit scalaire entre deux listes comportant les Tf-idf.
+       Nous avons besoin de correspondance_question et correspondance_liste qui sont la correspondance des listes
+       Entrée : liste_question_a : list
+                liste_doc_b : list
+                correspondance_question : list
+                correspondance_liste : list
+       Sortie : res = float"""
     res = 0
     for i in range(len(liste_question_a)):
         mot = correspondance_question[i]
@@ -657,6 +664,9 @@ def produit_scalaire(liste_question_a, liste_doc_b, correspondance_question, cor
 
 
 def norme_vecteur(liste):
+    """Cette fonction revoit la norme du vecteur de la liste. La liste étant comporté de valeur
+       Entrée : liste : list
+       Sortie : math.sqrt(res) : float"""
     res = 0
     if isinstance(liste, list):
         for valeur in liste:
@@ -667,6 +677,13 @@ def norme_vecteur(liste):
 
 
 def calcul_similarite(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste):
+    """Cette fonction renvoit le calcul de similarité entre un document et la question. On utilise deux listes contenant
+       des valeurs correspondant aux tf_idf de chaque mot qu'on peut retrouver avec les listes correspondances
+       Entrée : liste_question_a : list
+                liste_doc_b : list
+                correspondance_question : list
+                correspondance_liste : list
+       Sortie : prt_scal/(a*b) : float"""
     prt_scal = produit_scalaire(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question, correspondance_liste)
     a = norme_vecteur(liste_tf_idf_question)
     b = norme_vecteur(liste_tf_idf_doc)
