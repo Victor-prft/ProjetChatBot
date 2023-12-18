@@ -362,7 +362,11 @@ def creation_tf_idf(repertoire):
 def recuperation_tf_idf(mot, matrice, correspondance_ligne):
     """Fonction qui prend en argument une matrice, un mot et la liste de correspondance d'une matrice tf_idf pour
     obtenir les valeurs du tf_idf du mot dans les textes
-    Entree: mot: str: mot dont on souhaite obtenir le score tf_idf"""
+    Entree: mot: str: mot dont on souhaite obtenir le score tf_idf
+            matrice: matrice: matrice tf_idf contenant le mot
+            correspondance_ligne: list: tableau de correspondance ou chaque l'indice d'un mot correspond à l'indice de
+            la ligne associé à ce mot dans la matrice
+    Sortie: matrice[ligne]: list: tableau contenant les scores tf_idf du mot dans les documents"""
     ligne = indice_tab(correspondance_ligne, mot)
     return matrice[ligne]
 
@@ -601,7 +605,7 @@ def demande_continuer():
 
 def demande_mode(message):
     """Fonction qui demande a l'utilisateur le mode souhaité
-    Entrée: None
+    Entrée: message: str: message à afficher
     Sortie: """
     while True:
         reponse = input(message + "\n")
@@ -632,6 +636,7 @@ def premier_dans_une_liste(tableau, repertoire):
 
 
 def tf_phrase(tab_mot, sont_present):
+    """Fonction qui"""
     dico_tf_question = {}
     for mot in tab_mot:
         if mot in sont_present:
