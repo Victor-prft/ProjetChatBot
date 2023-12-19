@@ -19,11 +19,11 @@ message_demande_mode = """Veuillez choisir une option :
 demande = """ Veuillez choisir une option :
 -1: Afficher les mots les moins important
 -2: Afficher le mot avec le plus grand score tf-idf
--3: Afficher le/les mot(s) les plus utilisé par un président
--4: Afficher le/les président(s) qui a/ont le plus dit un mot
--5: Afficher tout les présidents qui ont dit un mot
--6: Afficher le premier président ayant parlé de certains termes
--7: Afficher tout les mots à la fois important et cité par tout les présidents
+-3: Afficher le/les mot(s) les plus utilisé par un auteur
+-4: Afficher le/les auteur(s) qui a/ont le plus dit un mot
+-5: Afficher tout les auteurs qui ont dit un mot
+-6: Afficher le premier auteur ayant parlé de certains termes
+-7: Afficher tout les mots à la fois important et cité par tout les auteurs
 -8: Changer de mode
 -9: Sortir
 """
