@@ -32,9 +32,11 @@ message_thematique = """ Veuillez choisir une thématique entre celle possible :
 -1: Discours de président
 -2: Education
 -3: L'égalité Homme Femme"""
+
 nom_theme = ""
 repertoire_propre = ""
 repertoire_non_traiter = ""
+
 while nom_theme == "":
     theme = int(input(message_thematique + "\n"))
     if theme == 1:
@@ -51,6 +53,7 @@ while nom_theme == "":
         repertoire_non_traiter = "./Speeches/Egalite_homme_femme"
     else:
         print("Theme non valide veuillez recommencer")
+
 
 transformation_fichier(repertoire_non_traiter, nom_theme)
 matrice = creation_tf_idf(repertoire_propre)
@@ -123,3 +126,7 @@ while running:
         running = False
     else:
         print("Choix non valide veuillez recommencer")
+
+# Egalite homme femme - Comment la femme est égal à l'homme ?
+# Discours de président - Quel est la nation la plus forte ?
+# Education - Donne une preuve de la puissance de l'éducation
