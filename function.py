@@ -132,7 +132,7 @@ def liste_fichier(repertoire):
     return tab_fichier
 
 
-def transformation_fichier(repertoire):
+def transformation_fichier(repertoire, mode):
     """Fonction permettant d'appeler les fonctions permettant d'effectuer le traitement de tous les fichiers dans un
     répertoire mis en argument
     Entrée : repertoire : str : Chaine de caractère contenant le nom du dossier à traiter
@@ -141,14 +141,17 @@ def transformation_fichier(repertoire):
     if not os.path.exists("Cleaned"):
         # Si ce n'est pas le cas, on le crée
         os.makedirs("Cleaned")
+    if not os.path.exists(f"Cleaned/{mode}"):
+        # Si ce n'est pas le cas, on le crée
+        os.makedirs(f"Cleaned/{mode}")
     # On récupère la liste contenant le nom de tous les fichiers
     tab_fichier = liste_fichier(repertoire)
     # On les parcourt
     for fichier in tab_fichier:
         # On appelle les fonctions nécessaires au traitement du texte
-        path = f"./Speeches/{fichier}"
+        path = f"./Speeches/{mode}/{fichier}"
         texte = recuperation_texte_avec_mise_en_forme(path)
-        path = f"./Cleaned/{fichier}"
+        path = f"./Cleaned/{mode}/{fichier}"
         minuscule(texte, path)
         texte = recuperation_texte_avec_mise_en_forme(path)
         ponctuation_fichier(texte, path)
@@ -318,7 +321,7 @@ def idf(repertoire):
     # On parcourt tous les fichiers
     for i in range(len(tab_fichier)):
         # On ouvre les fichiers en lecture
-        with open(repertoire + "./" + tab_fichier[i], "r", encoding="utf-8") as f1:
+        with open(repertoire + "/" + tab_fichier[i], "r", encoding="utf-8") as f1:
             for ligne in f1:
                 # Création d'un tableau à partir de la séparation d'une ligne où chaque valeur est un mot
                 tab_mot = fct_split(ligne, [" "])
@@ -330,7 +333,7 @@ def idf(repertoire):
                         somme = 0
                         # On regarde si le mot est dans les autres textes
                         for f in range(i, len(tab_fichier)):
-                            if est_present(f"./Cleaned/{tab_fichier[f]}", mot):
+                            if est_present(f"{repertoire}/{tab_fichier[f]}", mot):
                                 somme += 1
                         dictionnaire[mot] = math.log((len(tab_fichier)/somme), 10)
     return dictionnaire
@@ -354,7 +357,7 @@ def creation_tf_idf(repertoire):
     # On va remplir les colonnes 11 par une
     for colonne in range(nb_colonne):
         # Chaque colonne correspond à un fichier, on va donc récupérer les scores tf associé à ce fichier
-        path = f"./Cleaned/{tab_fichier[colonne]}"
+        path = repertoire + "/" + tab_fichier[colonne]
         texte = recuperation_texte(path)
         dico_tf = tf(texte)
         # On parcourt les mots possédant un score tf
@@ -457,7 +460,7 @@ def rep_president(repertoire, president, mot_pas_important):
     texte_total = ""
     # On parcourt tous les discours d'un même président
     for fichier in liste_discours:
-        path = f"./Cleaned/{fichier}"
+        path = f"{repertoire}/{fichier}"
         texte = recuperation_texte(path)
         # Concaténation des textes d'un même président
         texte_total += texte
@@ -498,7 +501,7 @@ def a_parler(repertoire, mot):
     # On parcourt les fichiers
     for fichier in tab_fichier:
         # On récupère son tf
-        path = f"./Cleaned/{fichier}"
+        path = f"{repertoire}/{fichier}"
         texte = recuperation_texte(path)
         dico_tf = tf(texte)
         # Si le mot est dans le texte
@@ -540,7 +543,7 @@ def mot_evoque_par_tous(repertoire, liste_moins_importante):
         texte_total = ""
         # On parcourt les fichiers
         for fichier in liste_discours:
-            path = f"./Cleaned/{fichier}"
+            path = f"{repertoire}/{fichier}"
             texte = recuperation_texte(path)
             texte_total += texte
         dico_president = tf(texte_total)
@@ -589,8 +592,8 @@ def premier_a_parler(repertoire: str, mot: str) -> str and int:
     # Parcourt des fichiers
     for fichier in tab_fichier:
         # Si le mot est dans le fichier
-        path = f'./Cleaned/{fichier}'
-        if est_present(fichier, mot):
+        path = f'{repertoire}/{fichier}'
+        if est_present(path, mot):
             # On récupère l'emplacement de sa premiere occurrence
             emplacement = premiere_occurrence(path, mot)
             # Si c'est la plus petite, on la considère comme étant celle qui a été dite en premier
@@ -747,7 +750,8 @@ def calcul_simi(liste_tf_idf_question, liste_tf_idf_doc, correspondance_question
     return prt_scal/(a*b)
 
 
-def doc_pertinent(tab_tf_idf_question, matrice, correspondance_question, correspondance_liste, correspondance_colonne):
+def doc_pertinent(tab_tf_idf_question, matrice, correspondance_question, correspondance_liste, correspondance_colonne,
+                  mode):
     """Cette fonction permet de connaitre quel est le document le plus pertinent en fonction de la question
        Entrée : tab_tf_idf_question : list
                 matrice : list
@@ -765,15 +769,15 @@ def doc_pertinent(tab_tf_idf_question, matrice, correspondance_question, corresp
         if calcul_sim > maxi:
             maxi = calcul_sim
             indice_doc = colonne
-    return f'./Cleaned/{correspondance_colonne[indice_doc]}'
+    return f'./Cleaned/{mode}/{correspondance_colonne[indice_doc]}'
 
 
-def transformation_cleaned_speeches(nom_fichier):
+def transformation_cleaned_speeches(nom_fichier, mode):
     """Fonction qui renvoie l'équivalent dans le répertoire sale d'un fichier dans le répértoire cleaned
     Entrée : nom_fichier : str
     Sortie : str"""
     liste = fct_split(nom_fichier, ['/'])
-    return f'./Speeches/{liste[-1]}'
+    return f'./Speeches/{mode}/{liste[-1]}'
 
 
 def mot_question_max_tf_idf(question, dico_idf):
@@ -808,7 +812,7 @@ def maximum_indice_tableau(tableau, document, correspondance):
     return tab_max
 
 
-def generation_rep(question, dico_idf, matrice, correspondance_mot_matrice, correspondance_matrice_colonne):
+def generation_rep(question, dico_idf, matrice, correspondance_mot_matrice, correspondance_matrice_colonne, mode):
     """Fonction centrale de la génération de la réponse, car elle appelle toutes les autres fonctions nécessaires
     pour le traitement de la question. Elle prend en argument diverses informations calculé précédemment pour optimiser
     le temps d'exécution.
@@ -825,21 +829,21 @@ def generation_rep(question, dico_idf, matrice, correspondance_mot_matrice, corr
     if len(tab_tf_idf_question) == 0:
         return "Désolé nous ne pouvons pas vous fournir de réponse"
     document_pertinent = doc_pertinent(tab_tf_idf_question, matrice, correspondance_mot_question,
-                                       correspondance_mot_matrice, correspondance_matrice_colonne)
+                                       correspondance_mot_matrice, correspondance_matrice_colonne, mode)
     tab_max_indice = maximum_indice_tableau(tab_tf_idf_question, document_pertinent, correspondance_mot_question)
     tab_mot_max = [correspondance_mot_question[i] for i in tab_max_indice]
-    rep = rep_question(document_pertinent, tab_mot_max)
+    rep = rep_question(document_pertinent, tab_mot_max, mode)
     return affinage_rep(question, rep)
 
 
-def rep_question(document_path_cleaned, liste_mot):
+def rep_question(document_path_cleaned, liste_mot, mode):
     """Fonction qui va à partir d'une liste de mot est d'un document va renvoyer la première phrase contenant un de ces
     mots dans ce texte
     Entree : document_path_cleaned : str
              liste_mot : list
     Sortie : str"""
     # On récupère son équivalent dans le repertoire sale
-    document_path_speeches = transformation_cleaned_speeches(document_path_cleaned)
+    document_path_speeches = transformation_cleaned_speeches(document_path_cleaned, mode)
     # On définit les séparateurs qui vont délimiter les phrases
     limiteur = ["!", ".", "?", "..."]
     texte = recuperation_texte(document_path_speeches)

@@ -5,8 +5,7 @@
 
 from function import *
 running = True
-repertoire_propre = "./Cleaned"
-repertoire_non_traiter = "./Speeches"
+
 demande_menu = """ Veuillez choisir une option :
 -1: Accéder aux fonctionnalités de la partie I
 -2: Accéder au mode Chatbot
@@ -29,12 +28,37 @@ demande = """ Veuillez choisir une option :
 -9: Sortir
 """
 
-transformation_fichier(repertoire_non_traiter)
+message_thematique = """ Veuillez choisir une thématique entre celle possible :
+-1: discours de président
+-2: Education
+-3: L'égalité Homme Femme"""
+nom_theme = ""
+repertoire_propre = ""
+repertoire_non_traiter = ""
+while nom_theme == "":
+    theme = int(input(message_thematique + "\n"))
+    if theme == 1:
+        nom_theme = "Politique"
+        repertoire_propre = "./Cleaned/Politique"
+        repertoire_non_traiter = "./Speeches/Politique"
+    elif theme == 2:
+        nom_theme = "Education"
+        repertoire_propre = "./Cleaned/Education"
+        repertoire_non_traiter = "./Speeches/Education"
+    elif theme == 3:
+        nom_theme = "Politique"
+        repertoire_propre = "./Cleaned/Education"
+        repertoire_non_traiter = "./Speeches/Education"
+    else:
+        print("Theme non valide veuillez recommencer")
+
+transformation_fichier(repertoire_non_traiter, nom_theme)
 matrice = creation_tf_idf(repertoire_propre)
 dico_idf = idf(repertoire_propre)
 correspondance_ligne = correspondance_mot(dico_idf)
-correspondance_colonne = liste_fichier('./Cleaned')
+correspondance_colonne = liste_fichier(repertoire_propre)
 mot_les_moins_important = moins_important(dico_idf)
+
 choix_menu = None
 
 
@@ -53,7 +77,7 @@ while running:
             print()
             running = demande_continuer()
         elif choix == "3":
-            president = input("Veuillez rentrer le nom d'un président\n")
+            president = input("Veuillez rentrer le nom d'un auteur\n")
             print(rep_president(repertoire_propre, president, mot_les_moins_important))
             print()
             running = demande_continuer()
@@ -88,7 +112,7 @@ while running:
             print("Choix non valide veuillez recommencer")
     elif choix_menu == "2":
         question = input("Saisissez votre question : ")
-        print(generation_rep(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne))
+        print(generation_rep(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne, nom_theme))
         print()
         continuer = demande_continuer()
         if continuer:
