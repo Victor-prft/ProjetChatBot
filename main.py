@@ -36,6 +36,7 @@ nom_theme = ""
 repertoire_propre = ""
 repertoire_non_traiter = ""
 while nom_theme == "":
+    print()
     theme = int(input(message_thematique + "\n"))
     if theme == 1:
         nom_theme = "Politique"
