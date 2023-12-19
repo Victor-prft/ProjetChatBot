@@ -29,7 +29,7 @@ demande = """ Veuillez choisir une option :
 """
 
 message_thematique = """ Veuillez choisir une thématique entre celle possible :
--1: discours de président
+-1: Discours de président
 -2: Education
 -3: L'égalité Homme Femme"""
 nom_theme = ""
@@ -46,9 +46,9 @@ while nom_theme == "":
         repertoire_propre = "./Cleaned/Education"
         repertoire_non_traiter = "./Speeches/Education"
     elif theme == 3:
-        nom_theme = "Politique"
-        repertoire_propre = "./Cleaned/Education"
-        repertoire_non_traiter = "./Speeches/Education"
+        nom_theme = "Egalite_homme_femme"
+        repertoire_propre = "./Cleaned/Egalite_homme_femme"
+        repertoire_non_traiter = "./Speeches/Egalite_homme_femme"
     else:
         print("Theme non valide veuillez recommencer")
 
