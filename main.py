@@ -5,8 +5,7 @@
 
 from function import *
 running = True
-repertoire_propre = "./Cleaned"
-repertoire_non_traiter = "./Speeches"
+
 demande_menu = """ Veuillez choisir une option :
 -1: Accéder aux fonctionnalités de la partie I
 -2: Accéder au mode Chatbot
@@ -29,12 +28,20 @@ demande = """ Veuillez choisir une option :
 -9: Sortir
 """
 
-transformation_fichier(repertoire_non_traiter)
-matrice = creation_tf_idf(repertoire_propre)
-dico_idf = idf(repertoire_propre)
-correspondance_ligne = correspondance_mot(dico_idf)
-correspondance_colonne = liste_fichier('./Cleaned')
-mot_les_moins_important = moins_important(dico_idf)
+message_thematique = """ Veuillez choisir une thématique entre celle possible :
+-1: discours de président
+-2:
+-3:"""
+
+#repertoire_propre = "./Cleaned"
+#repertoire_non_traiter = "./Speeches"
+#transformation_fichier(repertoire_non_traiter)
+#matrice = creation_tf_idf(repertoire_propre)
+#dico_idf = idf(repertoire_propre)
+#correspondance_ligne = correspondance_mot(dico_idf)
+#correspondance_colonne = liste_fichier('./Cleaned')
+#mot_les_moins_important = moins_important(dico_idf)
+
 choix_menu = None
 
 
@@ -43,6 +50,14 @@ while running:
         print()
         choix_menu = input(demande_menu)
     if choix_menu == "1":
+        repertoire_propre = "./Cleaned"
+        repertoire_non_traiter = "./Speeches"
+        transformation_fichier(repertoire_non_traiter)
+        matrice = creation_tf_idf(repertoire_propre)
+        dico_idf = idf(repertoire_propre)
+        correspondance_ligne = correspondance_mot(dico_idf)
+        correspondance_colonne = liste_fichier('./Cleaned')
+        mot_les_moins_important = moins_important(dico_idf)
         choix = input(demande)
         if choix == "1":
             print(mot_les_moins_important)
@@ -87,14 +102,25 @@ while running:
         else:
             print("Choix non valide veuillez recommencer")
     elif choix_menu == "2":
-        question = input("Saisissez votre question : ")
-        print(generation_rep(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne))
+        question_thematique = input(message_thematique)
         print()
-        continuer = demande_continuer()
-        if continuer:
-            choix_menu = demande_mode(message_demande_mode)
-        elif not continuer:
-            running = False
+        if question_thematique == '1':
+            question = input("Saisissez votre question : ")
+            repertoire_propre = "./Cleaned"
+            repertoire_non_traiter = "./Speeches"
+            transformation_fichier(repertoire_non_traiter)
+            matrice = creation_tf_idf(repertoire_propre)
+            dico_idf = idf(repertoire_propre)
+            correspondance_ligne = correspondance_mot(dico_idf)
+            correspondance_colonne = liste_fichier('./Cleaned')
+            mot_les_moins_important = moins_important(dico_idf)
+            print(generation_rep(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne))
+            print()
+            continuer = demande_continuer()
+            if continuer:
+                choix_menu = demande_mode(message_demande_mode)
+            elif not continuer:
+                running = False
     elif choix_menu == "3":
         print("Merci d'avoir utilisé notre programme")
         running = False
