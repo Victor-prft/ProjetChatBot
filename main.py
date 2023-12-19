@@ -36,7 +36,6 @@ nom_theme = ""
 repertoire_propre = ""
 repertoire_non_traiter = ""
 while nom_theme == "":
-    print()
     theme = int(input(message_thematique + "\n"))
     if theme == 1:
         nom_theme = "Politique"
@@ -59,7 +58,6 @@ dico_idf = idf(repertoire_propre)
 correspondance_ligne = correspondance_mot(dico_idf)
 correspondance_colonne = liste_fichier(repertoire_propre)
 mot_les_moins_important = moins_important(dico_idf)
-
 choix_menu = None
 
 

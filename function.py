@@ -99,11 +99,12 @@ def ponctuation_fichier(contenu, destination=None):
             if element in tab_espace:
                 # Cas des apostrophes que l'on remplace par des 'e' ou des 'a'
                 if element == "'":
-                    if texte[-1] == 'l':
-                        texte = texte + l_possible[l_actuel % 2]
-                        l_actuel += 1
-                    else:
-                        texte = texte + "e"
+                    if len(texte) > 0:
+                        if texte[-1] == 'l':
+                            texte = texte + l_possible[l_actuel % 2]
+                            l_actuel += 1
+                        else:
+                            texte = texte + "e"
                 # On écrit l'espace uniquement s'il n'est pas précédé par un saut de ligne, un espace ou un
                 # caractère vide
                 if len(texte) > 0:
