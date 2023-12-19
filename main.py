@@ -16,7 +16,7 @@ message_demande_mode = """Veuillez choisir une option :
 -2: Accéder au mode Chatbot
 """
 
-demande = """ Veuillez choisir une option :
+demande = """Veuillez choisir une option :
 -1: Afficher les mots les moins important
 -2: Afficher le mot avec le plus grand score tf-idf
 -3: Afficher le/les mot(s) les plus utilisé par un auteur
@@ -28,7 +28,7 @@ demande = """ Veuillez choisir une option :
 -9: Sortir
 """
 
-message_thematique = """ Veuillez choisir une thématique entre celle possible :
+message_thematique = """Veuillez choisir une thématique entre celle possible :
 -1: Discours de président
 -2: Education
 -3: L'égalité Homme Femme"""
@@ -38,6 +38,7 @@ repertoire_propre = ""
 repertoire_non_traiter = ""
 
 while nom_theme == "":
+    print()
     theme = int(input(message_thematique + "\n"))
     if theme == 1:
         nom_theme = "Politique"
