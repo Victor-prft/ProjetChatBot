@@ -31,23 +31,26 @@ demande = """ Veuillez choisir une option :
 message_thematique = """ Veuillez choisir une thématique entre celle possible :
 -1: discours de président
 -2: Education
--3:"""
+-3: L'égalité Homme Femme"""
 nom_theme = ""
 repertoire_propre = ""
 repertoire_non_traiter = ""
-theme = int(input(message_thematique + "\n"))
-if theme == 1:
-    nom_theme = "Politique"
-    repertoire_propre = "./Cleaned/Politique"
-    repertoire_non_traiter = "./Speeches/Politique"
-elif theme == 2:
-    nom_theme = "Education"
-    repertoire_propre = "./Cleaned/Education"
-    repertoire_non_traiter = "./Speeches/Education"
-elif theme == 3:
-    nom_theme = "Politique"
-    repertoire_propre = "./Cleaned/Education"
-    repertoire_non_traiter = "./Speeches/Education"
+while nom_theme == "":
+    theme = int(input(message_thematique + "\n"))
+    if theme == 1:
+        nom_theme = "Politique"
+        repertoire_propre = "./Cleaned/Politique"
+        repertoire_non_traiter = "./Speeches/Politique"
+    elif theme == 2:
+        nom_theme = "Education"
+        repertoire_propre = "./Cleaned/Education"
+        repertoire_non_traiter = "./Speeches/Education"
+    elif theme == 3:
+        nom_theme = "Politique"
+        repertoire_propre = "./Cleaned/Education"
+        repertoire_non_traiter = "./Speeches/Education"
+    else:
+        print("Theme non valide veuillez recommencer")
 
 transformation_fichier(repertoire_non_traiter, nom_theme)
 matrice = creation_tf_idf(repertoire_propre)
