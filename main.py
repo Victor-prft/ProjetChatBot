@@ -30,17 +30,31 @@ demande = """ Veuillez choisir une option :
 
 message_thematique = """ Veuillez choisir une thématique entre celle possible :
 -1: discours de président
--2:
+-2: Education
 -3:"""
+nom_theme = ""
+repertoire_propre = ""
+repertoire_non_traiter = ""
+theme = int(input(message_thematique + "\n"))
+if theme == 1:
+    nom_theme = "Politique"
+    repertoire_propre = "./Cleaned/Politique"
+    repertoire_non_traiter = "./Speeches/Politique"
+elif theme == 2:
+    nom_theme = "Education"
+    repertoire_propre = "./Cleaned/Education"
+    repertoire_non_traiter = "./Speeches/Education"
+elif theme == 3:
+    nom_theme = "Politique"
+    repertoire_propre = "./Cleaned/Education"
+    repertoire_non_traiter = "./Speeches/Education"
 
-#repertoire_propre = "./Cleaned"
-#repertoire_non_traiter = "./Speeches"
-#transformation_fichier(repertoire_non_traiter)
-#matrice = creation_tf_idf(repertoire_propre)
-#dico_idf = idf(repertoire_propre)
-#correspondance_ligne = correspondance_mot(dico_idf)
-#correspondance_colonne = liste_fichier('./Cleaned')
-#mot_les_moins_important = moins_important(dico_idf)
+transformation_fichier(repertoire_non_traiter, nom_theme)
+matrice = creation_tf_idf(repertoire_propre)
+dico_idf = idf(repertoire_propre)
+correspondance_ligne = correspondance_mot(dico_idf)
+correspondance_colonne = liste_fichier(repertoire_propre)
+mot_les_moins_important = moins_important(dico_idf)
 
 choix_menu = None
 
@@ -50,14 +64,6 @@ while running:
         print()
         choix_menu = input(demande_menu)
     if choix_menu == "1":
-        repertoire_propre = "./Cleaned"
-        repertoire_non_traiter = "./Speeches"
-        transformation_fichier(repertoire_non_traiter)
-        matrice = creation_tf_idf(repertoire_propre)
-        dico_idf = idf(repertoire_propre)
-        correspondance_ligne = correspondance_mot(dico_idf)
-        correspondance_colonne = liste_fichier('./Cleaned')
-        mot_les_moins_important = moins_important(dico_idf)
         choix = input(demande)
         if choix == "1":
             print(mot_les_moins_important)
@@ -68,7 +74,7 @@ while running:
             print()
             running = demande_continuer()
         elif choix == "3":
-            president = input("Veuillez rentrer le nom d'un président\n")
+            president = input("Veuillez rentrer le nom d'un auteur\n")
             print(rep_president(repertoire_propre, president, mot_les_moins_important))
             print()
             running = demande_continuer()
@@ -102,25 +108,14 @@ while running:
         else:
             print("Choix non valide veuillez recommencer")
     elif choix_menu == "2":
-        question_thematique = input(message_thematique)
+        question = input("Saisissez votre question : ")
+        print(generation_rep(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne, nom_theme))
         print()
-        if question_thematique == '1':
-            question = input("Saisissez votre question : ")
-            repertoire_propre = "./Cleaned"
-            repertoire_non_traiter = "./Speeches"
-            transformation_fichier(repertoire_non_traiter)
-            matrice = creation_tf_idf(repertoire_propre)
-            dico_idf = idf(repertoire_propre)
-            correspondance_ligne = correspondance_mot(dico_idf)
-            correspondance_colonne = liste_fichier('./Cleaned')
-            mot_les_moins_important = moins_important(dico_idf)
-            print(generation_rep(question, dico_idf, matrice, correspondance_ligne, correspondance_colonne))
-            print()
-            continuer = demande_continuer()
-            if continuer:
-                choix_menu = demande_mode(message_demande_mode)
-            elif not continuer:
-                running = False
+        continuer = demande_continuer()
+        if continuer:
+            choix_menu = demande_mode(message_demande_mode)
+        elif not continuer:
+            running = False
     elif choix_menu == "3":
         print("Merci d'avoir utilisé notre programme")
         running = False
